@@ -653,6 +653,192 @@ export const courses = [
 	}
 ];
 
+
+export const course_obj = {
+	"CS-6250": {
+		"Course": "Computer Networks",
+		"Rating": 3.49,
+		"Difficulty": 2.43,
+		"Workload": 8.93,
+		"Reviews": 481
+	},
+	"CS-6035": {
+		"Course": "Introduction to Information Security",
+		"Rating": 3.44,
+		"Difficulty": 2.54,
+		"Workload": 10.39,
+		"Reviews": 469
+	},
+	"CS-7641": {
+		"Course": "Machine Learning",
+		"Rating": 3.14,
+		"Difficulty": 4.12,
+		"Workload": 21.97,
+		"Reviews": 447
+	},
+	"CS-6515": {
+		"Course": "Introduction to Graduate Algorithms",
+		"Rating": 3.33,
+		"Difficulty": 4.05,
+		"Workload": 19.12,
+		"Reviews": 446
+	},
+	"CS-7646": {
+		"Course": "Machine Learning for Trading",
+		"Rating": 3.93,
+		"Difficulty": 2.61,
+		"Workload": 11.75,
+		"Reviews": 436
+	},
+	"CS-6300": {
+		"Course": "Software Development Process",
+		"Rating": 3.56,
+		"Difficulty": 2.32,
+		"Workload": 9.07,
+		"Reviews": 352
+	},
+	"CS-6200": {
+		"Course": "Graduate Introduction to Operating Systems",
+		"Rating": 4.36,
+		"Difficulty": 3.68,
+		"Workload": 18.43,
+		"Reviews": 346
+	},
+	"CS-7637": {
+		"Course": "Knowledge-Based AI",
+		"Rating": 3.53,
+		"Difficulty": 3.08,
+		"Workload": 14.22,
+		"Reviews": 341
+	},
+	"CS-7638": {
+		"Course": "Artificial Intelligence Techniques for Robotics",
+		"Rating": 3.93,
+		"Difficulty": 3.01,
+		"Workload": 12.99,
+		"Reviews": 311
+	},
+	"CSE-6242": {
+		"Course": "Data and Visual Analytics",
+		"Rating": 2.91,
+		"Difficulty": 3.23,
+		"Workload": 15.97,
+		"Reviews": 291
+	},
+	"CS-6601": {
+		"Course": "Artificial Intelligence",
+		"Rating": 4.05,
+		"Difficulty": 4.08,
+		"Workload": 22.71,
+		"Reviews": 286
+	},
+	"CS-6400": {
+		"Course": "Database Systems Concepts and Design",
+		"Rating": 2.58,
+		"Difficulty": 2.88,
+		"Workload": 11.24,
+		"Reviews": 266
+	},
+	"CS-6750": {
+		"Course": "Human-Computer Interaction",
+		"Rating": 4.05,
+		"Difficulty": 2.55,
+		"Workload": 12.19,
+		"Reviews": 259
+	},
+	"CS-6310": {
+		"Course": "Software Architecture and Design",
+		"Rating": 2.95,
+		"Difficulty": 2.61,
+		"Workload": 11.87,
+		"Reviews": 217
+	},
+	"CS-7642": {
+		"Course": "Reinforcement Learning and Decision Making",
+		"Rating": 3.92,
+		"Difficulty": 4.18,
+		"Workload": 22.42,
+		"Reviews": 212
+	},
+	"CS-6476": {
+		"Course": "Introduction to Computer Vision",
+		"Rating": 3.75,
+		"Difficulty": 4.07,
+		"Workload": 21.72,
+		"Reviews": 205
+	},
+	"CS-6475": {
+		"Course": "Computational Photography",
+		"Rating": 3.56,
+		"Difficulty": 3.24,
+		"Workload": 16.95,
+		"Reviews": 188
+	},
+	"ISYE-6501": {
+		"Course": "Introduction to Analytics Modeling",
+		"Rating": 4.12,
+		"Difficulty": 2.82,
+		"Workload": 9.98,
+		"Reviews": 171
+	},
+	"CS-6340": {
+		"Course": "Advanced Topics in Software Analysis and Testing",
+		"Rating": 3.55,
+		"Difficulty": 3.22,
+		"Workload": 12.69,
+		"Reviews": 156
+	},
+	"CS-6262": {
+		"Course": "Network Security",
+		"Rating": 3.19,
+		"Difficulty": 3,
+		"Workload": 12.71,
+		"Reviews": 137
+	},
+	"CS-6210": {
+		"Course": "Advanced Operating Systems",
+		"Rating": 4.03,
+		"Difficulty": 4.15,
+		"Workload": 17.13,
+		"Reviews": 132
+	},
+	"CS-6290": {
+		"Course": "High-Performance Computer Architecture",
+		"Rating": 3.82,
+		"Difficulty": 3.65,
+		"Workload": 15.41,
+		"Reviews": 128
+	},
+	"CSE-6040": {
+		"Course": "Computing for Data Analysis: Methods and Tools",
+		"Rating": 4.3,
+		"Difficulty": 3.14,
+		"Workload": 10.12,
+		"Reviews": 123
+	},
+	"MGT-6203": {
+		"Course": "Data Analytics in Business",
+		"Rating": 2.26,
+		"Difficulty": 1.93,
+		"Workload": 5.76,
+		"Reviews": 122
+	},
+	"ISYE-6644": {
+		"Course": "Simulation",
+		"Rating": 4.31,
+		"Difficulty": 3.29,
+		"Workload": 11.46,
+		"Reviews": 116
+	},
+	"CS-6440": {
+		"Course": "Introduction to Health Informatics",
+		"Rating": 2.69,
+		"Difficulty": 2.28,
+		"Workload": 10.11,
+		"Reviews": 111
+	}
+};
+
 export const specs = [
 	{
 		"name": "Robotics",

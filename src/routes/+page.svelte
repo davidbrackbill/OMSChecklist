@@ -1,5 +1,11 @@
 <script>
-    import { courses, specs, names, spec_search } from "../lib/data.js";
+    import {
+        courses,
+        specs,
+        names,
+        spec_search,
+        course_obj,
+    } from "../lib/data.js";
     import Bucket from "../lib/Bucket.svelte";
 
     let active_courses = new Set();
@@ -13,6 +19,18 @@
             : active_courses.add(item);
         active_courses = active_courses;
     }
+    $: average_difficulty = active_courses.size
+        ? [...active_courses].reduce(
+              (a, b) => a + course_obj[b]["Difficulty"],
+              0,
+          ) / active_courses.size
+        : 0;
+    $: total_workload = active_courses.size
+        ? [...active_courses].reduce(
+              (a, b) => a + course_obj[b]["Workload"],
+              0,
+          ) * 15
+        : 0;
 
     let active_specs = new Set(["Computing Systems"]);
     function toggle_specs(item) {
@@ -79,6 +97,9 @@
         <p>Select a specialization!</p>
     </div>
 {/if}
+
+<p>Average difficulty: {average_difficulty.toFixed(2)}</p>
+<p>Expected workload: {Math.ceil(total_workload)} hours</p>
 
 <div class="flexcenter">
     <p class="m-5">Courses: {active_courses.size}</p>
