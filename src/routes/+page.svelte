@@ -1,11 +1,5 @@
 <script>
-    import {
-        courses,
-        specs,
-        names,
-        spec_search,
-        course_obj,
-    } from "../lib/data.js";
+    import { courses, specs, spec_search } from "../lib/data.js";
     import Bucket from "../lib/Bucket.svelte";
 
     let active_courses = new Set();
@@ -21,15 +15,13 @@
     }
     $: average_difficulty = active_courses.size
         ? [...active_courses].reduce(
-              (a, b) => a + course_obj[b]["Difficulty"],
+              (a, b) => a + courses[b]["Difficulty"],
               0,
           ) / active_courses.size
         : 0;
     $: total_workload = active_courses.size
-        ? [...active_courses].reduce(
-              (a, b) => a + course_obj[b]["Workload"],
-              0,
-          ) * 15
+        ? [...active_courses].reduce((a, b) => a + courses[b]["Workload"], 0) *
+          15
         : 0;
 
     let active_specs = new Set(["Computing Systems"]);
@@ -118,7 +110,7 @@
         <td>Workload</td>
         <td>Reviews</td>
     </tr>
-    {#each courses as { Course, Code, Rating, Difficulty, Workload, Reviews }}
+    {#each Object.values(courses) as { Course, Code, Rating, Difficulty, Workload, Reviews }}
         <tr
             class={row_class(Code, active_rows, active_courses)}
             on:click={() => toggle_courses(Code)}
