@@ -1,5 +1,5 @@
 <script>
-    import { courses, specs, spec_search } from "../lib/data.js";
+    import { courses, specs } from "../lib/data.js";
     import Bucket from "../lib/Bucket.svelte";
 
     let active_courses = new Set();
@@ -41,7 +41,7 @@
             active_spec = ["", ""];
         } else {
             active_spec = [spec, category];
-            active_rows = spec_search[spec][category];
+            active_rows = specs[spec][category]["courses"];
         }
     }
 
@@ -58,22 +58,23 @@
     }
 </script>
 
-<p>Active: {active_rows}</p>
+<p>Highlighted: {active_rows}</p>
+<p>Selected: {[...active_courses]}</p>
 
 <div class="flexw mb-20">
     <p class="m-5">Specializations:</p>
-    {#each specs as { name }}
+    {#each Object.keys(specs) as name}
         <button on:click={() => toggle_specs(name)} class="m-5">{name}</button>
     {/each}
 </div>
 
-{#each specs as { name, buckets }}
+{#each Object.entries(specs) as [name, buckets]}
     {#if active_specs.has(name)}
         <div class="flex">
             <div class="w-175">
                 <h1 class="wrap">{name}</h1>
             </div>
-            {#each buckets as bucket}
+            {#each Object.values(buckets) as bucket}
                 <div
                     on:click={() => toggle_rows(name, bucket.category)}
                     class={spec_class(name, bucket.category, active_spec)}

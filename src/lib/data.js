@@ -651,231 +651,191 @@ export const courses = {
 
 export const course_codes = Object.keys(courses);
 
-export const specs = [
-	{
-		"name": "Robotics",
-		"buckets": [
-			{
-				"category": "Algorithms",
-				"count": 1,
-				"courses": [
-					"CS-6505",
-					"CS-6515",
-					"CS-6520",
-					"CS-6550",
-					"CS-7520",
-					"CS-7530",
-					"CSE-6140"
-				]
-			},
-			{
-				"category": "AI/ML",
-				"count": 1,
-				"courses": [
-					"CS-6601",
-					"CS-7641"
-				]
-			},
-			{
-				"category": "Directives",
-				"count": 3,
-				"courses": [
-					"CS-6475",
-					"CS-6476",
-					"CS-7499",
-					"CS-7636",
-					"CS-7639",
-					"CS-7644",
-					"CS-7650",
-					"CS-7630",
-					"CS-7631",
-					"CS-7633",
-					"CS-7638",
-					"CS-7648",
-					"CS-7649"
-				]
-			},
-			{
-				"category": "Perception",
-				"count": 1,
-				"courses": [
-					"CS-6475",
-					"CS-6476",
-					"CS-7499",
-					"CS-7636",
-					"CS-7639",
-					"CS-7644",
-					"CS-7650"
-				]
-			},
-			{
-				"category": "Robotics",
-				"count": 1,
-				"courses": [
-					"CS-7630",
-					"CS-7631",
-					"CS-7633",
-					"CS-7638",
-					"CS-7648",
-					"CS-7649"
-				]
-			},
-			{
-				"category": "Electives",
-				"count": 4,
-				"courses": course_codes
-			}
-		]
-	},
-
-	{
-		"name": "Computing Systems",
-		"buckets": [
-			{
-				"category": "Algorithms",
-				"count": 1,
-				"courses": [
-					"CS-6505",
-					"CS-6515"
-				]
-			},
-			{
-				"category": "Core",
-				"count": 2,
-				"courses": [
-					"CS-6210",
-					"CS-6241",
-					"CS-6250",
-					"CS-6290",
-					"CS-6300",
-					"CS-6301",
-					"CS-6390",
-					"CS-6400"
-				]
-			},
-			{
-				"category": "Directives",
-				"count": 3,
-				"courses": [
-					"CS-6035",
-					"CS-6200",
-					"CS-6220",
-					"CS-6235",
-					"CS-6238",
-					"CS-6260",
-					"CS-6262",
-					"CS-6263",
-					"CS-6291",
-					"CS-6310",
-					"CS-6340",
-					"CS-6365",
-					"CS-6422",
-					"CS-6550",
-					"CS-6675",
-					"CS-7210",
-					"CS-7260",
-					"CS-7270",
-					"CS-7280",
-					"CS-7290",
-					"CS-7292",
-					"CS-7560",
-					"CS-8803-FPL",
-					"CSE-6220",
-					"CS-6211",
-					"CS-7400",
-					"CS-8803-O08",
-					"CS-8803-O21"
-				]
-			},
-			{
-				"category": "Electives",
-				"count": 4,
-				"courses": course_codes
-			}
-		],
-	},
-	{
-		"name": "Interactive Intelligence",
-		"buckets": [
-			{
-				"category": "Algorithms",
-				"count": 1,
-				"courses": [
-					"CSE-6140",
-					"CS-6300",
-					"CS-6301",
-					"CS-6505",
-					"CS-6515"
-				]
-			},
-			{
-				"category": "AI",
-				"count": 2,
-				"courses": [
-					"CS-6601",
-					"CS-7637",
-					"CS-7641"
-				]
-			},
-			{
-				"category": "Directives",
-				"count": 2,
-				"courses": [
-					"CS-6440",
-					"CS-6460",
-					"CS-6465",
-					"CS-6471",
-					"CS-6603",
-					"CS-6750",
-					"CS-6476",
-					"CS-7631",
-					"CS-7632",
-					"CS-7633",
-					"CS-7634",
-					"CS-7643",
-					"CS-7647",
-					"CS-7650",
-					"CS-6795",
-					"CS-7610",
-					"CS-7651",
-					"CS-8803"
-				]
-			},
-			{
-				"category": "Electives",
-				"count": 5,
-				"courses": course_codes
-			}
-		]
-	}
-];
-
-export const spec_search = {
+export const specs = {
 	"Robotics": {
-		"Algorithms": ["CS-6505", "CS-6515", "CS-6520", "CS-6550", "CS-7520", "CS-7530", "CSE-6140"],
-		"AI/ML": ["CS-6601", "CS-7641"],
-		"Directives": ["CS-6475", "CS-6476", "CS-7499", "CS-7636", "CS-7639", "CS-7644", "CS-7650", "CS-7630", "CS-7631", "CS-7633", "CS-7638", "CS-7648", "CS-7649"],
-		"Perception": ["CS-6475", "CS-6476", "CS-7499", "CS-7636", "CS-7639", "CS-7644", "CS-7650"],
-		"Robotics": ["CS-7630", "CS-7631", "CS-7633", "CS-7638", "CS-7648", "CS-7649"],
-		"Electives": course_codes
+		"Algorithms": {
+			"category": "Algorithms",
+			"count": 1,
+			"courses": [
+				"CS-6505",
+				"CS-6515",
+				"CS-6520",
+				"CS-6550",
+				"CS-7520",
+				"CS-7530",
+				"CSE-6140"
+			]
+		},
+		"AI/ML": {
+			"category": "AI/ML",
+			"count": 1,
+			"courses": [
+				"CS-6601",
+				"CS-7641"
+			]
+		},
+		"Directives": {
+			"category": "Directives",
+			"count": 3,
+			"courses": [
+				"CS-6475",
+				"CS-6476",
+				"CS-7499",
+				"CS-7636",
+				"CS-7639",
+				"CS-7644",
+				"CS-7650",
+				"CS-7630",
+				"CS-7631",
+				"CS-7633",
+				"CS-7638",
+				"CS-7648",
+				"CS-7649"
+			]
+		},
+		"Perception": {
+			"category": "Perception",
+			"count": 1,
+			"courses": [
+				"CS-6475",
+				"CS-6476",
+				"CS-7499",
+				"CS-7636",
+				"CS-7639",
+				"CS-7644",
+				"CS-7650"
+			]
+		},
+		"Robotics": {
+			"category": "Robotics",
+			"count": 1,
+			"courses": [
+				"CS-7630",
+				"CS-7631",
+				"CS-7633",
+				"CS-7638",
+				"CS-7648",
+				"CS-7649"
+			]
+		},
+		"Electives": {
+			"category": "Electives",
+			"count": 4,
+			"courses": course_codes
+		}
 	},
 	"Computing Systems": {
-		"Algorithms": ["CS-6505", "CS-6515"],
-		"Core": ["CS-6210", "CS-6241", "CS-6250", "CS-6290", "CS-6300", "CS-6301", "CS-6390", "CS-6400"],
-		"Directives": ["CS-6035", "CS-6200", "CS-6220", "CS-6235", "CS-6238", "CS-6260", "CS-6262", "CS-6263", "CS-6291", "CS-6310", "CS-6340", "CS-6365", "CS-6422", "CS-6550", "CS-6675", "CS-7210", "CS-7260", "CS-7270", "CS-7280", "CS-7290", "CS-7292", "CS-7560", "CS-8803-FPL", "CSE-6220", "CS-6211", "CS-7400", "CS-8803-O08", "CS-8803-O21"],
-		"Electives": course_codes
+		"Algorithms": {
+			"category": "Algorithms",
+			"count": 1,
+			"courses": [
+				"CS-6505",
+				"CS-6515"
+			]
+		},
+		"Core": {
+			"category": "Core",
+			"count": 2,
+			"courses": [
+				"CS-6210",
+				"CS-6241",
+				"CS-6250",
+				"CS-6290",
+				"CS-6300",
+				"CS-6301",
+				"CS-6390",
+				"CS-6400"
+			]
+		},
+		"Directives": {
+			"category": "Directives",
+			"count": 3,
+			"courses": [
+				"CS-6035",
+				"CS-6200",
+				"CS-6220",
+				"CS-6235",
+				"CS-6238",
+				"CS-6260",
+				"CS-6262",
+				"CS-6263",
+				"CS-6291",
+				"CS-6310",
+				"CS-6340",
+				"CS-6365",
+				"CS-6422",
+				"CS-6550",
+				"CS-6675",
+				"CS-7210",
+				"CS-7260",
+				"CS-7270",
+				"CS-7280",
+				"CS-7290",
+				"CS-7292",
+				"CS-7560",
+				"CS-8803-FPL",
+				"CSE-6220",
+				"CS-6211",
+				"CS-7400",
+				"CS-8803-O08",
+				"CS-8803-O21"
+			]
+		},
+		"Electives": {
+			"category": "Electives",
+			"count": 4,
+			"courses": course_codes
+		}
 	},
 	"Interactive Intelligence": {
-		"Algorithms": ["CSE-6140", "CS-6300", "CS-6301", "CS-6505", "CS-6515"],
-		"AI": ["CS-6601", "CS-7637", "CS-7641"],
-		"Directives": [
-			"CS-6440", "CS-6460", "CS-6465", "CS-6471", "CS-6603", "CS-6750",
-			"CS-6476", "CS-7631", "CS-7632", "CS-7633", "CS-7634", "CS-7643",
-			"CS-7647", "CS-7650", "CS-8803", "CS-6795",
-			"CS-7610", "CS-7651"
-		],
-		"Electives": course_codes
+		"Algorithms": {
+			"category": "Algorithms",
+			"count": 1,
+			"courses": [
+				"CSE-6140",
+				"CS-6300",
+				"CS-6301",
+				"CS-6505",
+				"CS-6515"
+			]
+		},
+		"AI": {
+			"category": "AI",
+			"count": 2,
+			"courses": [
+				"CS-6601",
+				"CS-7637",
+				"CS-7641"
+			]
+		},
+		"Directives": {
+			"category": "Directives",
+			"count": 2,
+			"courses": [
+				"CS-6440",
+				"CS-6460",
+				"CS-6465",
+				"CS-6471",
+				"CS-6603",
+				"CS-6750",
+				"CS-6476",
+				"CS-7631",
+				"CS-7632",
+				"CS-7633",
+				"CS-7634",
+				"CS-7643",
+				"CS-7647",
+				"CS-7650",
+				"CS-6795",
+				"CS-7610",
+				"CS-7651",
+				"CS-8803"
+			]
+		},
+		"Electives": {
+			"category": "Electives",
+			"count": 5,
+			"courses": course_codes
+		},
 	}
-};
-
-
+}
