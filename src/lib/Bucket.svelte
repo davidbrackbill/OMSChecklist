@@ -1,19 +1,22 @@
 <script>
-    export let category, count, courses, active_courses;
-    const course_set = new Set(courses);
-    $: bubbles = course_set.intersection(active_courses);
-    $: satisfied = bubbles.size;
+    export let spec, category, count, listed, active_spec, toggle_rows;
+
+    function _class(spec, category, active_spec) {
+        let [s, c] = active_spec;
+        if (s === spec && c === category) return "g-highlight";
+        return "";
+    }
 </script>
 
-<div class="column">
-    <table>
-        {#each bubbles as course}
+<div class="column" on:click={() => toggle_rows(spec, category)}>
+    <table class={_class(spec, category, active_spec)}>
+        {#each listed as course}
             <tr>{course}</tr>
         {/each}
     </table>
     <div class="flex">
         <h3>{category}</h3>
-        <p>{satisfied}/{count}</p>
+        <p>{listed.length}/{count}</p>
     </div>
 </div>
 
@@ -23,9 +26,14 @@
     }
 
     .column {
-        margin: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
         display: flex;
         flex-direction: column;
+    }
+
+    .g-highlight {
+        background-color: #e8f8ec;
     }
 
     table {

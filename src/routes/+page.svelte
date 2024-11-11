@@ -1,6 +1,6 @@
 <script>
     import { courses, specs } from "../lib/data.js";
-    import Bucket from "../lib/Bucket.svelte";
+    import BucketDivider from "../lib/BucketDivider.svelte";
 
     let active_courses = new Set();
     const clear_courses = () => {
@@ -45,21 +45,12 @@
         }
     }
 
-    function spec_class(spec, category, active_spec) {
-        let [s, c] = active_spec;
-        if (s === spec && c === category) return "g-highlight";
-        return "";
-    }
-
     function row_class(code, active_rows, active_courses) {
         if (active_courses.has(code)) return "b-highlight";
         if (active_rows.includes(code)) return "g-highlight";
         return "";
     }
 </script>
-
-<p>Highlighted: {active_rows}</p>
-<p>Selected: {[...active_courses]}</p>
 
 <div class="flexw mb-20">
     <p class="m-5">Specializations:</p>
@@ -68,21 +59,9 @@
     {/each}
 </div>
 
-{#each Object.entries(specs) as [name, buckets]}
+{#each Object.keys(specs) as name}
     {#if active_specs.has(name)}
-        <div class="flex">
-            <div class="w-175">
-                <h1 class="wrap">{name}</h1>
-            </div>
-            {#each Object.values(buckets) as bucket}
-                <div
-                    on:click={() => toggle_rows(name, bucket.category)}
-                    class={spec_class(name, bucket.category, active_spec)}
-                >
-                    <Bucket {...bucket} {active_courses} />
-                </div>
-            {/each}
-        </div>
+        <BucketDivider {name} {toggle_rows} {active_courses} {active_spec} />
     {/if}
 {/each}
 {#if active_specs.size == 0}
@@ -155,17 +134,8 @@
         background-color: #e8f8ec;
     }
 
-    .wrap {
-        text-wrap: wrap;
-    }
-
     .bold * {
         font-weight: bold;
-    }
-
-    .w-175 {
-        max-width: 175px;
-        min-width: 175px;
     }
 
     .m-5 {
