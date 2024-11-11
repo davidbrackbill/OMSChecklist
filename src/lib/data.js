@@ -255,9 +255,9 @@ export const courses = {
 		"Workload": 7.97,
 		"Reviews": 95
 	},
-	"CS-6263\nECE-8813": {
+	"CS-6263": {
 		"Course": "Introduction to Cyber-Physical Systems Security",
-		"Code": "CS-6263\nECE-8813",
+		"Code": "CS-6263", // ECE-8813
 		"Rating": 3.35,
 		"Difficulty": 2.6,
 		"Workload": 10,
@@ -359,9 +359,9 @@ export const courses = {
 		"Workload": 15.47,
 		"Reviews": 38
 	},
-	"CS-7639\nECE-8823": {
+	"CS-7639": {
 		"Course": "Cyber Physical Design and Analysis",
-		"Code": "CS-7639\nECE-8823",
+		"Code": "CS-7639", //ECE-8823
 		"Rating": 2.86,
 		"Difficulty": 3.11,
 		"Workload": 11.7,
@@ -463,9 +463,9 @@ export const courses = {
 		"Workload": 4.69,
 		"Reviews": 16
 	},
-	"CS-6747\nECE-6747": {
+	"CS-6747": {
 		"Course": "Advanced Topics in Malware Analysis",
-		"Code": "CS-6747\nECE-6747",
+		"Code": "CS-6747",  //ECE-6747
 		"Rating": 4.29,
 		"Difficulty": 3.43,
 		"Workload": 14.93,
@@ -527,9 +527,9 @@ export const courses = {
 		"Workload": 5.56,
 		"Reviews": 9
 	},
-	"MGT-6748\nCSE-6748\nISYE-6748": {
+	"MGT-6748": {
 		"Course": "Applied Analytics Practicum",
-		"Code": "MGT-6748\nCSE-6748\nISYE-6748",
+		"Code": "MGT-6748", // CSE-6748 ISYE-6748
 		"Rating": 3.78,
 		"Difficulty": 2,
 		"Workload": 12.56,
@@ -575,9 +575,9 @@ export const courses = {
 		"Workload": 19.17,
 		"Reviews": 6
 	},
-	"CSE-6742\nINTA-6742": {
+	"CSE-6742": {
 		"Course": "Modeling, Simulation and Military Gaming",
-		"Code": "CSE-6742\nINTA-6742",
+		"Code": "CSE-6742", // INTA-6742
 		"Rating": 3.67,
 		"Difficulty": 1.83,
 		"Workload": 5.67,
