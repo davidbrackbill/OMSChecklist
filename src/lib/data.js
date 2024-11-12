@@ -649,14 +649,16 @@ export const courses = {
 	}
 }
 
-export const course_codes = Object.keys(courses);
+export const course_codes = new Set(Object.keys(courses));
+
+console.log(course_codes);
 
 export const specs = {
 	"Robotics": {
 		"Algorithms": {
 			"category": "Algorithms",
 			"count": 1,
-			"courses": [
+			"courses": new Set([
 				"CS-6505",
 				"CS-6515",
 				"CS-6520",
@@ -664,20 +666,20 @@ export const specs = {
 				"CS-7520",
 				"CS-7530",
 				"CSE-6140"
-			]
+			])
 		},
 		"AI/ML": {
 			"category": "AI/ML",
 			"count": 1,
-			"courses": [
+			"courses": new Set([
 				"CS-6601",
 				"CS-7641"
-			]
+			])
 		},
 		"Directives": {
 			"category": "Directives",
 			"count": 3,
-			"courses": [
+			"courses": new Set([
 				"CS-6475",
 				"CS-6476",
 				"CS-7499",
@@ -691,12 +693,12 @@ export const specs = {
 				"CS-7638",
 				"CS-7648",
 				"CS-7649"
-			]
+			])
 		},
 		"Perception": {
 			"category": "Perception",
 			"count": 1,
-			"courses": [
+			"courses": new Set([
 				"CS-6475",
 				"CS-6476",
 				"CS-7499",
@@ -704,19 +706,19 @@ export const specs = {
 				"CS-7639",
 				"CS-7644",
 				"CS-7650"
-			]
+			])
 		},
 		"Robotics": {
 			"category": "Robotics",
 			"count": 1,
-			"courses": [
+			"courses": new Set([
 				"CS-7630",
 				"CS-7631",
 				"CS-7633",
 				"CS-7638",
 				"CS-7648",
 				"CS-7649"
-			]
+			])
 		},
 		"Electives": {
 			"category": "Electives",
@@ -728,15 +730,15 @@ export const specs = {
 		"Algorithms": {
 			"category": "Algorithms",
 			"count": 1,
-			"courses": [
+			"courses": new Set([
 				"CS-6505",
 				"CS-6515"
-			]
+			])
 		},
 		"Core": {
 			"category": "Core",
 			"count": 2,
-			"courses": [
+			"courses": new Set([
 				"CS-6210",
 				"CS-6241",
 				"CS-6250",
@@ -745,12 +747,12 @@ export const specs = {
 				"CS-6301",
 				"CS-6390",
 				"CS-6400"
-			]
+			])
 		},
 		"Directives": {
 			"category": "Directives",
 			"count": 3,
-			"courses": [
+			"courses": new Set([
 				"CS-6035",
 				"CS-6200",
 				"CS-6220",
@@ -779,7 +781,7 @@ export const specs = {
 				"CS-7400",
 				"CS-8803-O08",
 				"CS-8803-O21"
-			]
+			])
 		},
 		"Electives": {
 			"category": "Electives",
@@ -791,27 +793,27 @@ export const specs = {
 		"Algorithms": {
 			"category": "Algorithms",
 			"count": 1,
-			"courses": [
+			"courses": new Set([
 				"CSE-6140",
 				"CS-6300",
 				"CS-6301",
 				"CS-6505",
 				"CS-6515"
-			]
+			])
 		},
 		"AI": {
 			"category": "AI",
 			"count": 2,
-			"courses": [
+			"courses": new Set([
 				"CS-6601",
 				"CS-7637",
 				"CS-7641"
-			]
+			])
 		},
 		"Directives": {
 			"category": "Directives",
 			"count": 2,
-			"courses": [
+			"courses": new Set([
 				"CS-6440",
 				"CS-6460",
 				"CS-6465",
@@ -830,12 +832,12 @@ export const specs = {
 				"CS-7610",
 				"CS-7651",
 				"CS-8803"
-			]
+			])
 		},
 		"Electives": {
 			"category": "Electives",
 			"count": 5,
 			"courses": course_codes
-		},
+		}
 	}
-}
+};

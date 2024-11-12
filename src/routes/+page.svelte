@@ -1,5 +1,5 @@
 <script>
-    import { courses, specs } from "../lib/data.js";
+    import { courses, specs, course_codes } from "../lib/data.js";
     import BucketDivider from "../lib/BucketDivider.svelte";
 
     let active_courses = new Set();
@@ -32,12 +32,12 @@
         active_specs = active_specs;
     }
 
-    let active_rows = [];
+    let active_rows = course_codes;
     let active_spec = ["", ""];
     function toggle_rows(spec, category) {
         let [s, c] = active_spec;
         if (s === spec && c === category) {
-            active_rows = [];
+            active_rows = course_codes;
             active_spec = ["", ""];
         } else {
             active_spec = [spec, category];
@@ -45,9 +45,8 @@
         }
     }
 
-    function row_class(code, active_rows, active_courses) {
+    function row_class(code, active_courses) {
         if (active_courses.has(code)) return "b-highlight";
-        if (active_rows.includes(code)) return "g-highlight";
         return "";
     }
 </script>
@@ -91,17 +90,19 @@
         <td>Reviews</td>
     </tr>
     {#each Object.values(courses) as { Course, Code, Rating, Difficulty, Workload, Reviews }}
-        <tr
-            class={row_class(Code, active_rows, active_courses)}
-            on:click={() => toggle_courses(Code)}
-        >
-            <td><button>{Code}</button></td>
-            <td>{Course}</td>
-            <td>{Rating}</td>
-            <td>{Difficulty}</td>
-            <td>{Workload}</td>
-            <td>{Reviews}</td>
-        </tr>
+        {#if active_rows.has(Code)}
+            <tr
+                on:click={() => toggle_courses(Code)}
+                class={row_class(Code, active_courses)}
+            >
+                <td><button>{Code}</button></td>
+                <td>{Course}</td>
+                <td>{Rating}</td>
+                <td>{Difficulty}</td>
+                <td>{Workload}</td>
+                <td>{Reviews}</td>
+            </tr>
+        {/if}
     {/each}
 </table>
 
