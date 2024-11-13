@@ -650,8 +650,8 @@ export const courses = {
 }
 
 const course_list = Object.values(courses),
-	Code_asc = course_list.toSorted((a, b) => a.localeCompare(b)),
-	Course_asc = course_list.toSorted((a, b) => a.localeCompare(b)),
+	Code_asc = course_list.toSorted((a, b) => a.Code.localeCompare(b.Code)),
+	Course_asc = course_list.toSorted((a, b) => a.Course.localeCompare(b.Course)),
 	Rating_asc = course_list.toSorted((a, b) => a.Rating - b.Rating),
 	Difficulty_asc = course_list.toSorted((a, b) => a.Difficulty - b.Difficulty),
 	Workload_asc = course_list.toSorted((a, b) => a.Workload - b.Workload)

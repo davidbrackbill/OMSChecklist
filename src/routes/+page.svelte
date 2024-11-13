@@ -76,10 +76,10 @@
     {/each}
 </div>
 
-{#each Object.keys(specs) as name}
-    {#if active_specs.has(name)}
-        <BucketDivider {name} {toggle_rows} {active_courses} {active_spec} />
-    {/if}
+<p class="m-5">Filtering for: {active_spec[0] ? active_spec : ""}</p>
+
+{#each active_specs as name}
+    <BucketDivider {name} {toggle_rows} {active_courses} {active_spec} />
 {/each}
 {#if active_specs.size == 0}
     <div class="flex">
@@ -87,11 +87,8 @@
     </div>
 {/if}
 
-{#if active_spec[0] != ""}
-    <p>Filtering for: {active_spec}</p>
-{/if}
-<p>Average difficulty: {average_difficulty.toFixed(2)}</p>
-<p>Expected workload: {Math.ceil(total_workload)} hours</p>
+<p class="m-5">Average difficulty: {average_difficulty.toFixed(2)}</p>
+<p class="m-5">Expected workload: {Math.ceil(total_workload)} hours</p>
 
 <div class="flexcenter">
     <p class="m-5">Courses: {active_courses.size}</p>
