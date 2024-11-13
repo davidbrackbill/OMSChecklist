@@ -649,9 +649,30 @@ export const courses = {
 	}
 }
 
-export const course_codes = new Set(Object.keys(courses));
+const course_list = Object.values(courses),
+	Code_asc = course_list.toSorted((a, b) => a.localeCompare(b)),
+	Course_asc = course_list.toSorted((a, b) => a.localeCompare(b)),
+	Rating_asc = course_list.toSorted((a, b) => a.Rating - b.Rating),
+	Difficulty_asc = course_list.toSorted((a, b) => a.Difficulty - b.Difficulty),
+	Workload_asc = course_list.toSorted((a, b) => a.Workload - b.Workload)
+	;
 
-console.log(course_codes);
+export const sorted_courses = {
+	Reviews_desc: course_list,
+	Reviews_asc: course_list.toReversed(),
+	Code_asc,
+	Code_desc: Code_asc.toReversed(),
+	Course_asc,
+	Course_desc: Course_asc.toReversed(),
+	Rating_asc,
+	Rating_desc: Rating_asc.toReversed(),
+	Difficulty_asc,
+	Difficulty_desc: Difficulty_asc.toReversed(),
+	Workload_asc,
+	Workload_desc: Workload_asc.toReversed(),
+}
+
+export const course_codes = new Set(Object.keys(courses));
 
 export const specs = {
 	"Robotics": {

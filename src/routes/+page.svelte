@@ -1,6 +1,24 @@
 <script>
-    import { courses, specs, course_codes } from "../lib/data.js";
+    import {
+        courses,
+        specs,
+        course_codes,
+        sorted_courses,
+    } from "../lib/data.js";
     import BucketDivider from "../lib/BucketDivider.svelte";
+
+    let sort_criteria = ["Reviews", "desc"];
+    function sort(column) {
+        let [c, s] = sort_criteria;
+        if (c == column) {
+            sort_criteria[1] = s === "desc" ? "asc" : "desc";
+        } else {
+            sort_criteria = [column, "desc"];
+        }
+        console.log(column, "!");
+        console.log(sort_criteria.join("_"));
+        console.log(sorted_courses[sort_criteria.join("_")]);
+    }
 
     let active_courses = new Set();
     const clear_courses = () => {
@@ -69,6 +87,9 @@
     </div>
 {/if}
 
+{#if active_spec[0] != ""}
+    <p>Filtering for: {active_spec}</p>
+{/if}
 <p>Average difficulty: {average_difficulty.toFixed(2)}</p>
 <p>Expected workload: {Math.ceil(total_workload)} hours</p>
 
@@ -82,14 +103,14 @@
 
 <table cellspacing="0" cellpadding="0">
     <tr class="bold">
-        <td>Code</td>
-        <td>Course</td>
-        <td>Rating</td>
-        <td>Difficulty</td>
-        <td>Workload</td>
-        <td>Reviews</td>
+        <td on:click={() => sort("Code")}>Code</td>
+        <td on:click={() => sort("Course")}>Course</td>
+        <td on:click={() => sort("Rating")}>Rating</td>
+        <td on:click={() => sort("Difficulty")}>Difficulty</td>
+        <td on:click={() => sort("Workload")}>Workload</td>
+        <td on:click={() => sort("Reviews")}>Reviews</td>
     </tr>
-    {#each Object.values(courses) as { Course, Code, Rating, Difficulty, Workload, Reviews }}
+    {#each sorted_courses[sort_criteria.join("_")] as { Course, Code, Rating, Difficulty, Workload, Reviews }}
         {#if active_rows.has(Code)}
             <tr
                 on:click={() => toggle_courses(Code)}
@@ -137,6 +158,10 @@
 
     .bold * {
         font-weight: bold;
+    }
+
+    .italic * {
+        font-weight: italic;
     }
 
     .m-5 {
