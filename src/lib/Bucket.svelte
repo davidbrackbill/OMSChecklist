@@ -1,8 +1,7 @@
 <script>
     export let spec, category, count, listed, active_spec, toggle_rows;
 
-    function active(active_spec) {
-        let [s, c] = active_spec;
+    function active([s, c]) {
         if (s === spec && c === category) return "category active";
         return "category";
     }

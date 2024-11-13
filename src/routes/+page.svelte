@@ -15,11 +15,9 @@
         } else {
             sort_criteria = [column, "desc"];
         }
-        console.log(column, "!");
-        console.log(sort_criteria.join("_"));
-        console.log(sorted_courses[sort_criteria.join("_")]);
     }
 
+    let course_load = 1;
     let active_courses = new Set();
     const clear_courses = () => {
         active_courses.clear();
@@ -37,9 +35,13 @@
               0,
           ) / active_courses.size
         : 0;
-    $: total_workload = active_courses.size
-        ? [...active_courses].reduce((a, b) => a + courses[b]["Workload"], 0) *
-          15
+    $: average_workload = active_courses.size
+        ? (Math.min(course_load, active_courses.size) *
+              [...active_courses].reduce(
+                  (a, b) => a + courses[b]["Workload"],
+                  0,
+              )) /
+          active_courses.size
         : 0;
 
     let active_specs = new Set(["Computing Systems"]);
@@ -76,7 +78,13 @@
     {/each}
 </div>
 
-<p class="m-5">Filtering for: {active_spec[0] ? active_spec : ""}</p>
+<div class="flexcenter mb-10">
+    <p class="m-5">Courses: {active_courses.size}</p>
+    <button on:click={clear_courses}>Clear</button>
+    {#each active_courses as Code}
+        <button on:click={() => toggle_courses(Code)}>{Code}</button>
+    {/each}
+</div>
 
 {#each active_specs as name}
     <BucketDivider {name} {toggle_rows} {active_courses} {active_spec} />
@@ -88,15 +96,14 @@
 {/if}
 
 <p class="m-5">Average difficulty: {average_difficulty.toFixed(2)}</p>
-<p class="m-5">Expected workload: {Math.ceil(total_workload)} hours</p>
+<p class="m-5">Average weekly workload: {Math.ceil(average_workload)} hours</p>
 
-<div class="flexcenter">
-    <p class="m-5">Courses: {active_courses.size}</p>
-    <button on:click={clear_courses}>Clear</button>
-    {#each active_courses as Code}
-        <button on:click={() => toggle_courses(Code)}>{Code}</button>
+<label class="m-5" for="course_load">Courses per semester:</label>
+<select name="course_load" id="course_load" bind:value={course_load}>
+    {#each { length: 3 } as _, i}
+        <option value={i+1}>{i+1}</option>
     {/each}
-</div>
+</select>
 
 <table cellspacing="0" cellpadding="0">
     <tr class="bold">
@@ -163,6 +170,10 @@
 
     .m-5 {
         margin: 5px;
+    }
+
+    .mb-10 {
+        margin-bottom: 10px;
     }
 
     .mb-20 {
