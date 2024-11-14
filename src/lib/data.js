@@ -743,7 +743,7 @@ export const specs = {
 		},
 		"Electives": {
 			"category": "Electives",
-			"count": 4,
+			"count": 5,
 			"courses": course_codes
 		}
 	},
