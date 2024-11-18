@@ -86,6 +86,7 @@
     {/each}
 </div>
 
+
 {#each active_specs as name}
     <BucketDivider {name} {toggle_rows} {active_courses} {active_spec} />
 {/each}
@@ -95,13 +96,13 @@
     </div>
 {/if}
 
-<p class="m-5">Average difficulty: {average_difficulty.toFixed(2)}</p>
-<p class="m-5">Average weekly workload: {Math.ceil(average_workload)} hours</p>
+<p>Average difficulty: {average_difficulty.toFixed(2)}</p>
+<p>Average weekly workload: {Math.ceil(average_workload)} hours</p>
 
-<label class="m-5" for="course_load">Courses per semester:</label>
+<label>Courses per semester:</label>
 <select name="course_load" id="course_load" bind:value={course_load}>
     {#each { length: 3 } as _, i}
-        <option value={i+1}>{i+1}</option>
+        <option value={i + 1}>{i + 1}</option>
     {/each}
 </select>
 
