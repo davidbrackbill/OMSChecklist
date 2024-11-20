@@ -133,53 +133,7 @@
 </table>
 
 <style>
-    /* Classes */
-    .flex {
-        display: flex;
-    }
-    .flexw {
-        height: 20px;
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .flexw button {
-        margin-left: 5px;
-    }
-    .flexcenter {
-        display: flex;
-        align-items: center;
-    }
-    .flexcenter button {
-        margin-left: 5px;
-    }
 
-    .b-highlight {
-        background-color: #d4ebf2;
-    }
-
-    .g-highlight {
-        background-color: #e8f8ec;
-    }
-
-    .bold * {
-        font-weight: bold;
-    }
-
-    .italic * {
-        font-weight: italic;
-    }
-
-    .m-5 {
-        margin: 5px;
-    }
-
-    .mb-10 {
-        margin-bottom: 10px;
-    }
-
-    .mb-20 {
-        margin-bottom: 20px;
-    }
     /* Scopes */
     td {
         padding: 2px;
