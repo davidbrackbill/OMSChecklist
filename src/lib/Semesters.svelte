@@ -21,28 +21,13 @@
             group: "shared",
             animation: 150,
             onSort({ from, to }) {
-                let _to = Number(to.dataset.id);
-                let _from = Number(from.dataset.id);
-                semesters[_to] = Array.from(to.children, (c) => c.innerText);
-                semesters[_from] = Array.from(
-                    from.children,
-                    (c) => c.innerText,
-                );
+                let t = Number(to.dataset.id);
+                let f = Number(from.dataset.id);
+                semesters[t] = Array.from(to.children, (c) => c.innerText);
+                semesters[f] = Array.from(from.children, (c) => c.innerText);
             },
         });
     }
-
-    // $: averages = compute_averages(semesters);
-    // function compute_averages(semesters) {
-    //     let averages = [];
-    //     for (let i = 0; i < num_semesters; i++) {
-    //         averages[i] = [
-    //             average_difficulty(semesters[i]),
-    //             workload(semesters[i]),
-    //         ];
-    //     }
-    //     return averages;
-    // }
 
     function average_difficulty(codes) {
         console.log("avg_diff", codes);
@@ -56,8 +41,6 @@
         return codes.reduce((a, b) => a + courses[b]["Workload"], 0);
     }
 </script>
-
-<!-- {JSON.stringify(averages)} -->
 
 {#each semesters as semester, i}
     <div class="flexc">
