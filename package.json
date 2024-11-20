@@ -16,6 +16,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@neodrag/svelte": "^2.0.6"
+		"sortablejs": "^1.15.3"
 	}
 }
