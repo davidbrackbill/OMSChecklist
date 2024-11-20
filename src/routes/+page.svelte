@@ -117,7 +117,6 @@
         border-radius: 5px;
     }
 
-    /* Scopes */
     td {
         padding: 2px;
         min-width: 100px;

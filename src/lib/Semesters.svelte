@@ -4,6 +4,7 @@
     export let active_courses;
 
     let course_load = 1;
+    let buckets_populated = 0;
     let draggable_tooltip = true;
 
     $: semesters = divide_courses(active_courses, course_load);
@@ -13,6 +14,12 @@
         while (arr.length) {
             res.push(arr.splice(0, course_load));
         }
+        // Don't ever let buckets delete from under Sortablejs;
+        // it will hang the app. So, make sure to keep any buckets
+        // alive as empty buckets.
+        buckets_populated = Math.max(res.length, buckets_populated);
+        for (let i = 0; i < (buckets_populated - res.length); i++)
+            res.push([]);
         return res;
     }
 
@@ -33,7 +40,7 @@
     function average_difficulty(codes) {
         if (codes.length === 0) return 0;
         let sum = codes.reduce((a, b) => a + courses[b]["Difficulty"], 0);
-        return (sum / codes.length).toFixed(2);
+        return (sum / codes.length).toFixed(1);
     }
 
     function workload(codes) {
@@ -46,7 +53,7 @@
 </script>
 
 <div class="flex">
-    <div class="w-175 flexc">
+    <div class="w-175 flex-c">
         <div class="mt-40" />
         {#if semesters.length > 1 && draggable_tooltip}
             <small
@@ -56,18 +63,16 @@
     </div>
     {#each semesters as semester, i}
         <div class="column">
-            <div use:init_sortable class="table mb-20" data-id={i}>
+            <div use:init_sortable class="table" data-id={i}>
                 {#each semester as course}
                     <tr data-id={course}>{course}</tr>
                 {/each}
             </div>
-            <div class="category mt--35">
-                <p>&#128548 {average_difficulty(semesters[i])}</p>
-                <p>&#9203 {workload(semesters[i])}</p>
+            <div class="category mt--45">
+                <p>&#128548 {average_difficulty(semester)}</p>
+                <p>&#9203 {workload(semester)}</p>
             </div>
-            <div class="category mt-10">
-                <h3>Semester {i + 1}</h3>
-            </div>
+            <h3 class="category mt-10">Semester {i + 1}</h3>
         </div>
     {/each}
 </div>
@@ -91,7 +96,8 @@
         width: 125px;
         height: 75px;
         border: 1px solid black;
-        margin: 10px;
+        margin-right : 10px;
+        margin-bottom: 20px;
         padding: 10px;
         border-radius: 4px;
     }
