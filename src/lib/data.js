@@ -860,5 +860,180 @@ export const specs = {
 			"count": 5,
 			"courses": course_codes
 		}
+	},
+	"HCI": {
+		"Mobile": {
+			"category": "Mobile",
+			"count": 1,
+			"courses": new Set([
+				"CS-7470"
+			])
+		},
+		"HCI": {
+			"category": "HCI",
+			"count": 1,
+			"courses": new Set([
+				"CS-6750"
+			])
+		},
+		"Directives": {
+			"category": "Directives",
+			"count": 3,
+			"courses": new Set([
+				"CS-6010",
+				"CS-6320",
+				"CS-6435",
+				"CS-6455",
+				"CS-6457",
+				"CS-6460",
+				"CS-6465",
+				"CS-6470",
+				"CS-6795",
+				"CS-7465",
+				"CS-7467",
+				"CS-7790",
+				"CS-6440",
+				"CS-6730",
+				"CS-6763",
+				"CS-6770",
+				"CS-7450",
+				"CS-7451",
+				"CS-7460",
+				"CS-7470",
+				"CS-7632"
+			])
+		},
+		"Design": {
+			"category": "Design",
+			"count": 1,
+			"courses": new Set([
+				"CS-6010",
+				"CS-6320",
+				"CS-6435",
+				"CS-6455",
+				"CS-6457",
+				"CS-6460",
+				"CS-6465",
+				"CS-6470",
+				"CS-6795",
+				"CS-7465",
+				"CS-7467",
+				"CS-7790"
+			])
+		},
+		"Interaction": {
+			"category": "Interaction",
+			"count": 1,
+			"courses": new Set([
+				"CS-6440",
+				"CS-6730",
+				"CS-6763",
+				"CS-6770",
+				"CS-7450",
+				"CS-7451",
+				"CS-7460",
+				"CS-7470",
+				"CS-7632"
+			])
+		},
+		"Electives": {
+			"category": "Electives",
+			"count": 5,
+			"courses": course_codes
+		}
+	},
+	"ML": {
+		"Algorithms": {
+			"category": "Algorithms",
+			"count": 1,
+			"courses": new Set([
+				"CS-6505",
+				"CS-6515",
+				"CS-6520",
+				"CS-6550",
+				"CS-7510",
+				"CS-7520",
+				"CS-7530",
+				"CSE-6140"
+			])
+		},
+		"ML": {
+			"category": "ML",
+			"count": 1,
+			"courses": new Set([
+				"CS-7641",
+				"CSE-6740"
+			])
+		},
+		"Directives": {
+			"category": "Directives",
+			"count": 3,
+			"courses": new Set([
+				"CS-6220",
+				"CS-6476",
+				"CS-6603",
+				"CS-7280",
+				"CS-7535",
+				"CS-7540",
+				"CS-7545",
+				"CS-7616",
+				"CS-7626",
+				"CS-7642",
+				"CS-7643",
+				"CS-7644",
+				"CS-7646",
+				"CS-7650",
+				"CS-8803",
+				"CSE-6240",
+				"CSE-6242",
+				"CSE-6250",
+				"ISYE-6416",
+				"ISYE-6420",
+				"ISYE-6664"
+			])
+		},
+		"Electives": {
+			"category": "Electives",
+			"count": 5,
+			"courses": course_codes
+		}
+	},
+	"Computer Graphics": {
+		"Graphics": {
+			"category": "Graphics",
+			"count": 1,
+			"courses": new Set([
+				"CS-6491",
+				"CS-6457",
+				"CS-7496"
+			])
+		},
+		"Algorithms": {
+			"category": "Algorithms",
+			"count": 1,
+			"courses": new Set([
+				"CS-6505",
+				"CS-6515"
+			])
+		},
+		"Directives": {
+			"category": "Directives",
+			"count": 3,
+			"courses": new Set([
+				"CS-6457",
+				"CS-6475",
+				"CS-6476",
+				"CS-6491",
+				"CS-6492",
+				"CS-6730",
+				"CS-7450",
+				"CS-7496"
+			])
+		},
+		"Electives": {
+			"category": "Electives",
+			"count": 15,
+			"courses": course_codes
+		}
 	}
 };
