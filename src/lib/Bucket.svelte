@@ -1,5 +1,5 @@
 <script>
-    export let spec, category, count, listed, active_spec, toggle_rows;
+    export let spec, category, count, listed, active_bucket, toggle_rows;
 
     function active([s, c]) {
         if (s === spec && c === category) return "category active";
@@ -13,7 +13,7 @@
             <tr>{course}</tr>
         {/each}
     </div>
-    <div class={active(active_spec)}>
+    <div class={active(active_bucket)}>
         <h3>{category}</h3>
         <p>&nbsp;{listed.length}/{count}</p>
     </div>
@@ -21,7 +21,7 @@
 
 <style>
     .column {
-        margin-left: 10px;
+
         margin-right: 10px;
         margin-bottom: 10px;
         display: flex;

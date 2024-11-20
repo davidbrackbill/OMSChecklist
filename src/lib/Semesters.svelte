@@ -1,18 +1,18 @@
 <script>
     import Sortable from "sortablejs";
     import { courses } from "../lib/data.js";
-    export let active_courses, course_load;
+    export let active_courses;
+
+    let course_load = 1;
+    let draggable_tooltip = true;
 
     $: semesters = divide_courses(active_courses, course_load);
-    $: num_semesters = semesters.length;
     function divide_courses(active_courses, course_load) {
         let arr = [...active_courses];
         let res = [];
         while (arr.length) {
             res.push(arr.splice(0, course_load));
         }
-        // empty end bucket
-        res.push([]);
         return res;
     }
 
@@ -21,6 +21,7 @@
             group: "shared",
             animation: 150,
             onSort({ from, to }) {
+                draggable_tooltip = false;
                 let t = Number(to.dataset.id);
                 let f = Number(from.dataset.id);
                 semesters[t] = Array.from(to.children, (c) => c.innerText);
@@ -30,35 +31,62 @@
     }
 
     function average_difficulty(codes) {
-        console.log("avg_diff", codes);
         if (codes.length === 0) return 0;
         let sum = codes.reduce((a, b) => a + courses[b]["Difficulty"], 0);
         return (sum / codes.length).toFixed(2);
     }
 
     function workload(codes) {
-        if (!codes) return 0;
-        return codes.reduce((a, b) => a + courses[b]["Workload"], 0);
+        return Math.floor(
+            codes.reduce((a, b) => a + courses[b]["Workload"], 0),
+        );
     }
+
+    // TODO: merge with bucket styles
 </script>
 
-{#each semesters as semester, i}
-    <div class="flexc">
-        {#key semester}
-            <p>Average difficulty: {average_difficulty(semester)}</p>
-            <p>Workload: {workload(semester)} hours per week</p>
-        {/key}
+<div class="flex">
+    <div class="w-175 flexc">
+        <div class="mt-40" />
+        {#if semesters.length > 1 && draggable_tooltip}
+            <small
+                >Courses are draggable, try moving them between semesters!
+            </small>
+        {/if}
     </div>
-    <div use:init_sortable class="table mb-20" data-id={i}>
-        {#each semester as course}
-            <div data-id={course}>{course}</div>
-        {/each}
-    </div>
-{/each}
-
-<div use:init_sortable class="table mb-20" data-id={num_semesters} />
+    {#each semesters as semester, i}
+        <div class="column">
+            <div use:init_sortable class="table mb-20" data-id={i}>
+                {#each semester as course}
+                    <tr data-id={course}>{course}</tr>
+                {/each}
+            </div>
+            <div class="category mt--35">
+                <p>&#128548 {average_difficulty(semesters[i])}</p>
+                <p>&#9203 {workload(semesters[i])}</p>
+            </div>
+            <div class="category mt-10">
+                <h3>Semester {i + 1}</h3>
+            </div>
+        </div>
+    {/each}
+</div>
 
 <style>
+    .category {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        height: 20px;
+    }
+
+    .column {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
     .table {
         width: 125px;
         height: 75px;

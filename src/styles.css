@@ -8,6 +8,11 @@
     flex-wrap: wrap;
 }
 
+.flex-c {
+    display: flex;
+    flex-direction: column;
+}
+
 .flexw button {
     margin-left: 5px;
 }
@@ -37,6 +42,10 @@
     font-weight: italic;
 }
 
+.p-5 {
+    padding: 5px;
+}
+
 .m-5 {
     margin: 5px;
 }
@@ -51,6 +60,18 @@
 
 .mb-20 {
     margin-bottom: 20px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-40 {
+    margin-top: 40px;
+}
+
+.mt--35 {
+    margin-top: -35px;
 }
 
 .w-175 {

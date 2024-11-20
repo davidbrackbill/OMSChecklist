@@ -1,10 +1,5 @@
 <script>
-    import {
-        courses,
-        specs,
-        course_codes,
-        sorted_courses,
-    } from "../lib/data.js";
+    import { specs, course_codes, sorted_courses } from "../lib/data.js";
     import Semesters from "$lib/Semesters.svelte";
     import BucketDivider from "$lib/BucketDivider.svelte";
 
@@ -18,7 +13,6 @@
         }
     }
 
-    let course_load = 2;
     let active_courses = new Set();
     const clear_courses = () => {
         active_courses.clear();
@@ -31,7 +25,7 @@
         active_courses = active_courses;
     }
 
-    let active_specs = new Set(["Computing Systems"]);
+    let active_specs = new Set();
     function toggle_specs(item) {
         active_specs.has(item)
             ? active_specs.delete(item)
@@ -40,7 +34,7 @@
     }
 
     let active_table_rows = course_codes;
-    let active_bucket = ["", ""];
+    let active_bucket = [null, null];
     function toggle_rows(spec, category) {
         let [s, c] = active_bucket;
         if (s === spec && c === category) {
@@ -59,47 +53,37 @@
 </script>
 
 <div class="flexw mb-20">
-    <p class="m-5">Specializations:</p>
+    <b class="mt-10">Specializations:</b>
     {#each Object.keys(specs) as name}
-        <button on:click={() => toggle_specs(name)} class="m-5">{name}</button>
+        <button on:click={() => toggle_specs(name)} class="m-5 mt-10"
+            >{name}</button
+        >
     {/each}
 </div>
+{#if active_specs.size == 0}
+    <small>Pick one or multiple!</small>
+{/if}
+
+{#each active_specs as name}
+    <BucketDivider {name} {toggle_rows} {active_courses} {active_bucket}>
+        {#if active_specs.size == 1}
+            <small
+                >Click a specialization to find courses that satisfy it!</small
+            >
+        {/if}
+    </BucketDivider>
+{/each}
+
+<Semesters {active_courses} />
 
 <div class="flexcenter mb-10">
-    <p class="m-5">Courses: {active_courses.size}</p>
-    <button on:click={clear_courses}>Clear</button>
+    <b class="m-5">Courses:</b>
+    <p>{active_courses.size}</p>
+    <button class="thickbutton" on:click={clear_courses}>Clear</button>
     {#each active_courses as Code}
         <button on:click={() => toggle_courses(Code)}>{Code}</button>
     {/each}
 </div>
-
-<label class="m-5">Default courses per semester:</label>
-<select name="course_load" id="course_load" bind:value={course_load}>
-    {#each { length: 3 } as _, i}
-        <option value={i + 1} selected={i + 1 === course_load ? "selected" : ""}
-            >{i + 1}
-        </option>
-    {/each}
-</select>
-
-<div class="flex">
-    <h2 class="w-175">Semesters</h2>
-    <Semesters {active_courses} {course_load} />
-</div>
-
-{#each active_specs as name}
-    <BucketDivider
-        {name}
-        {toggle_rows}
-        {active_courses}
-        active_spec={active_bucket}
-    />
-{/each}
-{#if active_specs.size == 0}
-    <div class="flex">
-        <p>Select a specialization!</p>
-    </div>
-{/if}
 
 <table cellspacing="0" cellpadding="0">
     <tr class="bold">
@@ -128,6 +112,11 @@
 </table>
 
 <style>
+    .thickbutton {
+        border-width: 2px;
+        border-radius: 5px;
+    }
+
     /* Scopes */
     td {
         padding: 2px;

@@ -1,7 +1,9 @@
 <script>
     import { specs } from "../lib/data.js";
     import Bucket from "../lib/Bucket.svelte";
-    export let name, toggle_rows, active_courses, active_spec;
+    export let name, toggle_rows, active_courses, active_bucket;
+
+    $: bucket_tooltip = active_bucket[0] == null
 
     const buckets = specs[name];
     const keys = Object.keys(buckets);
@@ -33,6 +35,9 @@
 <div class="flex">
     <div class="w-175">
         <h1 class="wrap">{name}</h1>
+        {#if bucket_tooltip}
+            <slot />
+        {/if}
     </div>
     {#each Object.values(buckets) as { category, count }, i}
         <Bucket
@@ -40,7 +45,7 @@
             {category}
             {count}
             listed={bucket_courses[i]}
-            {active_spec}
+            {active_bucket}
             {toggle_rows}
         />
     {/each}

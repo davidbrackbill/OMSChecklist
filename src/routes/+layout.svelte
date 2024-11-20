@@ -2,12 +2,7 @@
     import "../styles.css";
 </script>
 
-<div>
+<div class="m-5">
     <slot></slot>
 </div>
 
-<style>
-    div {
-        margin: 5px;
-    }
-</style>
