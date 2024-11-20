@@ -5,7 +5,8 @@
         course_codes,
         sorted_courses,
     } from "../lib/data.js";
-    import BucketDivider from "../lib/BucketDivider.svelte";
+    import Semesters from "$lib/Semesters.svelte";
+    import BucketDivider from "$lib/BucketDivider.svelte";
 
     let sort_criteria = ["Reviews", "desc"];
     function sort(column) {
@@ -17,7 +18,7 @@
         }
     }
 
-    let course_load = 1;
+    let course_load = 2;
     let active_courses = new Set();
     const clear_courses = () => {
         active_courses.clear();
@@ -29,20 +30,6 @@
             : active_courses.add(item);
         active_courses = active_courses;
     }
-    $: average_difficulty = active_courses.size
-        ? [...active_courses].reduce(
-              (a, b) => a + courses[b]["Difficulty"],
-              0,
-          ) / active_courses.size
-        : 0;
-    $: average_workload = active_courses.size
-        ? (Math.min(course_load, active_courses.size) *
-              [...active_courses].reduce(
-                  (a, b) => a + courses[b]["Workload"],
-                  0,
-              )) /
-          active_courses.size
-        : 0;
 
     let active_specs = new Set(["Computing Systems"]);
     function toggle_specs(item) {
@@ -52,16 +39,16 @@
         active_specs = active_specs;
     }
 
-    let active_rows = course_codes;
-    let active_spec = ["", ""];
+    let active_table_rows = course_codes;
+    let active_bucket = ["", ""];
     function toggle_rows(spec, category) {
-        let [s, c] = active_spec;
+        let [s, c] = active_bucket;
         if (s === spec && c === category) {
-            active_rows = course_codes;
-            active_spec = ["", ""];
+            active_table_rows = course_codes;
+            active_bucket = ["", ""];
         } else {
-            active_spec = [spec, category];
-            active_rows = specs[spec][category]["courses"];
+            active_bucket = [spec, category];
+            active_table_rows = specs[spec][category]["courses"];
         }
     }
 
@@ -86,25 +73,33 @@
     {/each}
 </div>
 
+<label class="m-5">Default courses per semester:</label>
+<select name="course_load" id="course_load" bind:value={course_load}>
+    {#each { length: 3 } as _, i}
+        <option value={i + 1} selected={i + 1 === course_load ? "selected" : ""}
+            >{i + 1}
+        </option>
+    {/each}
+</select>
+
+<div class="flex">
+    <h2 class="w-175">Semesters</h2>
+    <Semesters {active_courses} {course_load} />
+</div>
 
 {#each active_specs as name}
-    <BucketDivider {name} {toggle_rows} {active_courses} {active_spec} />
+    <BucketDivider
+        {name}
+        {toggle_rows}
+        {active_courses}
+        active_spec={active_bucket}
+    />
 {/each}
 {#if active_specs.size == 0}
     <div class="flex">
         <p>Select a specialization!</p>
     </div>
 {/if}
-
-<p>Average difficulty: {average_difficulty.toFixed(2)}</p>
-<p>Average weekly workload: {Math.ceil(average_workload)} hours</p>
-
-<label>Courses per semester:</label>
-<select name="course_load" id="course_load" bind:value={course_load}>
-    {#each { length: 3 } as _, i}
-        <option value={i + 1}>{i + 1}</option>
-    {/each}
-</select>
 
 <table cellspacing="0" cellpadding="0">
     <tr class="bold">
@@ -116,7 +111,7 @@
         <td on:click={() => sort("Reviews")}>Reviews</td>
     </tr>
     {#each sorted_courses[sort_criteria.join("_")] as { Course, Code, Rating, Difficulty, Workload, Reviews }}
-        {#if active_rows.has(Code)}
+        {#if active_table_rows.has(Code)}
             <tr
                 on:click={() => toggle_courses(Code)}
                 class={row_class(Code, active_courses)}
@@ -133,7 +128,6 @@
 </table>
 
 <style>
-
     /* Scopes */
     td {
         padding: 2px;
