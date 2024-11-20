@@ -18,7 +18,7 @@
         // it will hang the app. So, make sure to keep any buckets
         // alive as empty buckets.
         buckets_populated = Math.max(res.length, buckets_populated);
-        for (let i = 0; i < (buckets_populated - res.length); i++)
+        while (res.length < buckets_populated)
             res.push([]);
         return res;
     }
