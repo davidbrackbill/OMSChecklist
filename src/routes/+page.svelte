@@ -64,9 +64,9 @@
     <small>Pick one or multiple!</small>
 {/if}
 
-{#each active_specs as name}
+{#each active_specs as name, i}
     <BucketDivider {name} {toggle_rows} {active_courses} {active_bucket}>
-        {#if active_specs.size == 1}
+        {#if active_specs.size && i == 0}
             <small
                 >Click a specialization to find courses that satisfy it!</small
             >
@@ -76,7 +76,7 @@
 
 <Semesters {active_courses} />
 
-<div class="flexcenter mb-10">
+<div class="flexcenter mt--10">
     <b class="m-5">Courses:</b>
     <p>{active_courses.size}</p>
     <button class="thickbutton" on:click={clear_courses}>Clear</button>

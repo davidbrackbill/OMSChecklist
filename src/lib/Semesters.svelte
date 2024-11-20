@@ -87,7 +87,6 @@
     }
 
     .column {
-        margin-bottom: 20px;
         display: flex;
         flex-direction: column;
     }
@@ -96,7 +95,7 @@
         width: 125px;
         height: 75px;
         border: 1px solid black;
-        margin-right : 10px;
+        margin-right: 10px;
         margin-bottom: 20px;
         padding: 10px;
         border-radius: 4px;
