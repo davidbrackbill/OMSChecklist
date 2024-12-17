@@ -1,10 +1,8 @@
 <script>
-    import Sortable from "sortablejs";
-    import { courses } from "../lib/data.js";
+    import Semester from "./semester.svelte";
     export let active_courses;
 
-    let course_load = 1;
-    let buckets_populated = 0;
+    const course_load = 1;
     let draggable_tooltip = true;
 
     $: semesters = divide_courses(active_courses, course_load);
@@ -14,38 +12,7 @@
         while (arr.length) {
             res.push(arr.splice(0, course_load));
         }
-        // Don't ever let buckets delete from under Sortablejs;
-        // it will hang the app. So, make sure to keep any buckets
-        // alive as empty buckets.
-        buckets_populated = Math.max(res.length, buckets_populated);
-        while (res.length < buckets_populated) res.push([]);
         return res;
-    }
-
-    function init_sortable(list) {
-        return new Sortable(list, {
-            group: "shared",
-            animation: 150,
-            onSort({ from, to }) {
-                draggable_tooltip = false;
-                let t = Number(to.dataset.id);
-                let f = Number(from.dataset.id);
-                semesters[t] = Array.from(to.children, (c) => c.innerText);
-                semesters[f] = Array.from(from.children, (c) => c.innerText);
-            },
-        });
-    }
-
-    function average_difficulty(codes) {
-        if (codes.length === 0) return 0;
-        let sum = codes.reduce((a, b) => a + courses[b]["Difficulty"], 0);
-        return (sum / codes.length).toFixed(1);
-    }
-
-    function workload(codes) {
-        return Math.floor(
-            codes.reduce((a, b) => a + courses[b]["Workload"], 0),
-        );
     }
 </script>
 
@@ -57,17 +24,9 @@
             </small>
         {/if}
     </div>
-    {#each semesters as semester, i}
+    {#each semesters as codes, i}
         <button>
-            <div class="courses bucket flex-c" use:init_sortable data-id={i}>
-                {#each semester as course}
-                    <div data-id={course}>{course}</div>
-                {/each}
-                <div class="stats flex">
-                    <div>&#128548{average_difficulty(semester)}</div>
-                    <div>&#9203{workload(semester)}</div>
-                </div>
-            </div>
+            <Semester {codes} />
             <h3>Semester {i + 1}</h3>
         </button>
     {/each}
@@ -82,20 +41,5 @@
     button {
         background-color: transparent;
         border: none;
-    }
-
-    .courses {
-        margin-bottom: 10px;
-    }
-
-    .bottom {
-        align-content: flex-end;
-    }
-
-    .stats {
-        justify-content: center;
-        gap: 6%;
-        margin-bottom: 0.1em;
-        margin-top: auto;
     }
 </style>
