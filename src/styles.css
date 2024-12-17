@@ -2,6 +2,10 @@
     display: flex;
 }
 
+.wrap {
+    flex-wrap:wrap;
+}
+
 .flexw {
     height: 20px;
     display: flex;
@@ -11,6 +15,12 @@
 .flex-c {
     display: flex;
     flex-direction: column;
+}
+
+.flex-cw {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .flexw button {
@@ -24,6 +34,30 @@
 
 .flexcenter button {
     margin-left: 5px;
+}
+
+.gap1p { gap: 1% };
+
+.grid {
+    display: grid;
+}
+
+.bucket {
+        padding: 10px;
+        border-radius: 4px;
+        width: 125px;
+        height: 78px;
+        border: 1px solid black;
+        margin-right: 10px;
+    }
+
+.sidebar-width {
+    max-width: 175px;
+    min-width: 175px;
+}
+
+.wrap-t {
+    text-wrap: wrap;
 }
 
 .b-highlight {

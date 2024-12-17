@@ -18,8 +18,7 @@
         // it will hang the app. So, make sure to keep any buckets
         // alive as empty buckets.
         buckets_populated = Math.max(res.length, buckets_populated);
-        while (res.length < buckets_populated)
-            res.push([]);
+        while (res.length < buckets_populated) res.push([]);
         return res;
     }
 
@@ -48,13 +47,10 @@
             codes.reduce((a, b) => a + courses[b]["Workload"], 0),
         );
     }
-
-    // TODO: merge with bucket styles
 </script>
 
-<div class="flex">
-    <div class="w-175 flex-c">
-        <div class="mt-40" />
+<div class="flex wrap">
+    <div class="mb-20 sidebar-width bottom">
         {#if semesters.length > 1 && draggable_tooltip}
             <small
                 >Courses are draggable, try moving them between semesters!
@@ -62,42 +58,44 @@
         {/if}
     </div>
     {#each semesters as semester, i}
-        <div class="column">
-            <div use:init_sortable class="table" data-id={i}>
+        <button>
+            <div class="courses bucket flex-c" use:init_sortable data-id={i}>
                 {#each semester as course}
-                    <tr data-id={course}>{course}</tr>
+                    <div data-id={course}>{course}</div>
                 {/each}
+                <div class="stats flex">
+                    <div>&#128548{average_difficulty(semester)}</div>
+                    <div>&#9203{workload(semester)}</div>
+                </div>
             </div>
-            <div class="category mt--45">
-                <p>&#128548 {average_difficulty(semester)}</p>
-                <p>&#9203 {workload(semester)}</p>
-            </div>
-            <h3 class="category mt-10">Semester {i + 1}</h3>
-        </div>
+            <h3>Semester {i + 1}</h3>
+        </button>
     {/each}
 </div>
 
 <style>
-    .category {
-        display: flex;
-        align-items: center;
+    h3 {
+        margin-top: -0.2em;
+        justify-self: center;
+    }
+
+    button {
+        background-color: transparent;
+        border: none;
+    }
+
+    .courses {
+        margin-bottom: 10px;
+    }
+
+    .bottom {
+        align-content: flex-end;
+    }
+
+    .stats {
         justify-content: center;
-        border-radius: 8px;
-        height: 20px;
-    }
-
-    .column {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .table {
-        width: 125px;
-        height: 75px;
-        border: 1px solid black;
-        margin-right: 10px;
-        margin-bottom: 20px;
-        padding: 10px;
-        border-radius: 4px;
+        gap: 6%;
+        margin-bottom: 0.1em;
+        margin-top: auto;
     }
 </style>

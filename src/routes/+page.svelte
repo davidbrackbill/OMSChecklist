@@ -1,7 +1,7 @@
 <script>
     import { specs, course_codes, sorted_courses } from "../lib/data.js";
-    import Semesters from "$lib/Semesters.svelte";
-    import BucketDivider from "$lib/BucketDivider.svelte";
+    import Semesters from "$lib/semesters.svelte";
+    import BucketDivider from "$lib/bucket-divider.svelte";
 
     let sort_criteria = ["Reviews", "desc"];
     function sort(column) {

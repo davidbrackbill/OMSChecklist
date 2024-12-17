@@ -1,6 +1,6 @@
 <script>
     import { specs } from "../lib/data.js";
-    import Bucket from "../lib/Bucket.svelte";
+    import Bucket from "../lib/bucket.svelte";
     export let name, toggle_rows, active_courses, active_bucket;
 
     $: bucket_tooltip = active_bucket[0] == null
@@ -11,7 +11,7 @@
         (category) => new Set(buckets[category]["courses"]),
     );
 
-    // Each time active_courses changes, recalculates
+    // Each time `active_courses` changes, recalculates
     function divide_courses(active_courses) {
         let courses = Array.from({ length: keys.length }, () => []);
         active_courses.forEach((course) => {
@@ -33,8 +33,8 @@
 </script>
 
 <div class="flex">
-    <div class="w-175">
-        <h1 class="wrap">{name}</h1>
+    <div class="sidebar-width">
+        <h1 class="wrap-t">{name}</h1>
         {#if bucket_tooltip}
             <slot />
         {/if}
@@ -50,19 +50,3 @@
         />
     {/each}
 </div>
-
-<style>
-    /* Classes */
-    .flex {
-        display: flex;
-    }
-
-    .wrap {
-        text-wrap: wrap;
-    }
-
-    .w-175 {
-        max-width: 175px;
-        min-width: 175px;
-    }
-</style>
