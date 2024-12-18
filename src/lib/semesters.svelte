@@ -3,9 +3,11 @@
     export let active_courses;
 
     const max_semesters = 20;
-    let tooltip = true;
-
     let pinned = {};
+    let tooltip = true;
+    // Once a course has been pinned, hide the tooltip
+    $: tooltip = tooltip ? !Object.keys(pinned).length : false;
+
     $: semesters = update_semesters(active_courses);
     $: active = semesters.filter((a) => a.length);
     function update_semesters(active_courses) {
@@ -38,35 +40,29 @@
 
         return res;
     }
-
-    // Once a course has been pinned, hide the tooltip
-    $: tooltip = tooltip ? !Object.keys(pinned).length : false;
 </script>
 
-<div class="flex wrap">
-    <div class="mb-20 sidebar-width bottom">
+<div class="grid">
+    <div class="sidebar-width sb">
         {#if tooltip && active.length > 1}
             <small
                 >Courses are draggable, try moving them between semesters!
             </small>
         {/if}
     </div>
-    {#each active as codes, index}
-        <button>
+    <div>
+        {#each active as codes, index}
             <Semester bind:pinned {codes} {index} />
-            <h3>Semester {index + 1}</h3>
-        </button>
-    {/each}
+        {/each}
+    </div>
 </div>
 
 <style>
-    h3 {
-        margin-top: -0.2em;
-        justify-self: center;
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 8fr;
     }
-
-    button {
-        background-color: transparent;
-        border: none;
+    .sb {
+        grid-row: 1 / -1;
     }
 </style>

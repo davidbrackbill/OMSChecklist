@@ -41,26 +41,39 @@
     }
 </script>
 
-<div class="flex-c courses bucket">
-    <section
-        use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
-        on:consider={consider}
-        on:finalize={finalize}
-        style="flex-basis: 75px;"
-    >
-        {#each items as item (item.id)}
-            <div animate:flip={{ duration: flipDurationMs }}>
-                <div class="course-text">{courses[item.code]["Course"]}</div>
-            </div>
-        {/each}
-    </section>
-    <div class="flex stats">
-        <div>&#128548{average_difficulty(items)}</div>
-        <div>&#9203{workload(items)}</div>
+<button>
+    <div class="flex-c courses bucket">
+        <section
+            use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
+            on:consider={consider}
+            on:finalize={finalize}
+            style="flex-basis: 75px;"
+        >
+            {#each items as item (item.id)}
+                <div animate:flip={{ duration: flipDurationMs }}>
+                    <div class="course-text">
+                        {courses[item.code]["Course"]}
+                    </div>
+                </div>
+            {/each}
+        </section>
+        <div class="flex stats">
+            <div>&#128548{average_difficulty(items)}</div>
+            <div>&#9203{workload(items)}</div>
+        </div>
     </div>
-</div>
+    <h3>Semester {index + 1}</h3>
+</button>
 
 <style>
+    button {
+        background-color: transparent;
+        border: none;
+    }
+    h3 {
+        margin-top: -0.2em;
+        justify-self: center;
+    }
     .course-text {
         line-height: 90%;
         font-size: 0.8em;

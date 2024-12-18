@@ -7,7 +7,7 @@
     }
 </script>
 
-<button class="flex-c center" on:click={() => toggle_rows(spec, category)}>
+<button on:click={() => toggle_rows(spec, category)}>
     <div class="flex-cw bucket">
         {#each listed as course}
             <div>{course}</div>

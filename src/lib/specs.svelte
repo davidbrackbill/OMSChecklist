@@ -3,7 +3,7 @@
     import Spec from "../lib/spec.svelte";
     export let name, toggle_rows, active_courses, active_bucket;
 
-    $: bucket_tooltip = active_bucket[0] == null
+    $: bucket_tooltip = active_bucket[0] == null;
 
     const buckets = specs[name];
     const keys = Object.keys(buckets);
@@ -32,21 +32,33 @@
     $: bucket_courses = divide_courses(active_courses);
 </script>
 
-<div class="flex">
-    <div class="sidebar-width">
+<div class="grid">
+    <div class="sidebar-width sb">
         <h1 class="wrap-t">{name}</h1>
         {#if bucket_tooltip}
             <slot />
         {/if}
     </div>
-    {#each Object.values(buckets) as { category, count }, i}
-        <Spec
-            spec={name}
-            {category}
-            {count}
-            listed={bucket_courses[i]}
-            {active_bucket}
-            {toggle_rows}
-        />
-    {/each}
+    <div>
+        {#each Object.values(buckets) as { category, count }, i}
+            <Spec
+                spec={name}
+                {category}
+                {count}
+                listed={bucket_courses[i]}
+                {active_bucket}
+                {toggle_rows}
+            />
+        {/each}
+    </div>
 </div>
+
+<style>
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 8fr;
+    }
+    .sb {
+        grid-row: 1 / -1;
+    }
+</style>
