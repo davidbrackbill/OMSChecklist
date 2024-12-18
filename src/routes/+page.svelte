@@ -28,13 +28,13 @@
     }
 </script>
 
-<div class="flexw mb-20">
-    <b class="mt-10">Specializations:</b>
-    {#each Object.keys(specs) as name}
-        <button on:click={() => toggle_specs(name)} class="m-5 mt-10"
-            >{name}</button
-        >
-    {/each}
+<div class="grid gap">
+    <b>Specializations:</b>
+    <div class="flex wrap gap">
+        {#each Object.keys(specs) as name}
+            <button on:click={() => toggle_specs(name)}>{name}</button>
+        {/each}
+    </div>
 </div>
 {#if active_specs.size == 0}
     <small>Pick one or multiple!</small>
@@ -53,3 +53,12 @@
 <Semesters {active_courses} />
 
 <Table bind:active_courses {active_table_rows} />
+
+<style>
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+        align-content: start;
+    }
+    .gap { gap: .4em;}
+</style>
