@@ -6,8 +6,6 @@
     export let flipDurationMs = 200;
 
     /* Svelte-dnd */
-    $: codes = codes ?? [];
-    console.log("Semester", index, codes);
 
     // Give codes an id for svelte-dnd to use
     $: items = codes.map((code) => ({ code, id: code }));
@@ -21,7 +19,6 @@
         if (items.length === 0) delete pinned[index];
         else pinned[index] = items.map((o) => o.code);
         pinned = pinned;
-        console.debug(index, e.detail.info.trigger);
     };
 
     /* Stats */

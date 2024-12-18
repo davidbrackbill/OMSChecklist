@@ -7,17 +7,14 @@
 
     let pinned = {};
     $: semesters = update_semesters(active_courses);
-    $: active = semesters.filter(a => a.length);
+    $: active = semesters.filter((a) => a.length);
     function update_semesters(active_courses) {
         if (!active_courses.size) {
             return [[]];
         }
         let res = new Array(max_semesters).fill().map((_) => []);
         let seen = new Set();
-        console.log("Pinned", pinned);
-        console.log("Active", active_courses);
         for (const [semester, courses] of Object.entries(pinned)) {
-            console.log("S", semester);
             for (const [i, course] of courses.entries()) {
                 if (active_courses.has(course)) {
                     res[semester].push(course);
@@ -39,7 +36,6 @@
         }
         active_courses.difference(seen).forEach(add);
 
-        console.log("Semesters", res);
         return res;
     }
 </script>
@@ -53,10 +49,10 @@
         {/if}
     </div>
     {#each active as codes, index}
-            <button>
-                <Semester bind:pinned {codes} {index} />
-                <h3>Semester {index + 1}</h3>
-            </button>
+        <button>
+            <Semester bind:pinned {codes} {index} />
+            <h3>Semester {index + 1}</h3>
+        </button>
     {/each}
 </div>
 
