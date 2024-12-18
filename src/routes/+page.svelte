@@ -25,7 +25,7 @@
         active_courses = active_courses;
     }
 
-    let active_specs = new Set();
+    let active_specs = new Set(["Computing Systems"]);
     function toggle_specs(item) {
         active_specs.has(item)
             ? active_specs.delete(item)
@@ -68,7 +68,7 @@
     <BucketDivider {name} {toggle_rows} {active_courses} {active_bucket}>
         {#if active_specs.size && i == 0}
             <small
-                >Click a specialization to find courses that satisfy it!</small
+                >Click on a specialization to find courses that satisfy it!</small
             >
         {/if}
     </BucketDivider>

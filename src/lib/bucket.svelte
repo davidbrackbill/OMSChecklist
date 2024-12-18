@@ -10,7 +10,7 @@
 <button class="flex-c center" on:click={() => toggle_rows(spec, category)}>
     <div class="flex-cw bucket">
         {#each listed as course}
-            <div class="overflow">{course}</div>
+            <div>{course}</div>
         {/each}
     </div>
     <div class={active(active_bucket)}>

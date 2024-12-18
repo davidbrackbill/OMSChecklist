@@ -675,6 +675,69 @@ export const sorted_courses = {
 export const course_codes = new Set(Object.keys(courses));
 
 export const specs = {
+	"Computing Systems": {
+		"Algorithms": {
+			"category": "Algorithms",
+			"count": 1,
+			"courses": new Set([
+				"CS-6505",
+				"CS-6515"
+			])
+		},
+		"Core": {
+			"category": "Core",
+			"count": 2,
+			"courses": new Set([
+				"CS-6210",
+				"CS-6241",
+				"CS-6250",
+				"CS-6290",
+				"CS-6300",
+				"CS-6301",
+				"CS-6390",
+				"CS-6400"
+			])
+		},
+		"Directives": {
+			"category": "Directives",
+			"count": 3,
+			"courses": new Set([
+				"CS-6035",
+				"CS-6200",
+				"CS-6220",
+				"CS-6235",
+				"CS-6238",
+				"CS-6260",
+				"CS-6262",
+				"CS-6263",
+				"CS-6291",
+				"CS-6310",
+				"CS-6340",
+				"CS-6365",
+				"CS-6422",
+				"CS-6550",
+				"CS-6675",
+				"CS-7210",
+				"CS-7260",
+				"CS-7270",
+				"CS-7280",
+				"CS-7290",
+				"CS-7292",
+				"CS-7560",
+				"CS-8803-FPL",
+				"CSE-6220",
+				"CS-6211",
+				"CS-7400",
+				"CS-8803-O08",
+				"CS-8803-O21"
+			])
+		},
+		"Electives": {
+			"category": "Electives",
+			"count": 4,
+			"courses": course_codes
+		}
+	},
 	"Robotics": {
 		"Algorithms": {
 			"category": "Algorithms",
@@ -744,69 +807,6 @@ export const specs = {
 		"Electives": {
 			"category": "Electives",
 			"count": 5,
-			"courses": course_codes
-		}
-	},
-	"Computing Systems": {
-		"Algorithms": {
-			"category": "Algorithms",
-			"count": 1,
-			"courses": new Set([
-				"CS-6505",
-				"CS-6515"
-			])
-		},
-		"Core": {
-			"category": "Core",
-			"count": 2,
-			"courses": new Set([
-				"CS-6210",
-				"CS-6241",
-				"CS-6250",
-				"CS-6290",
-				"CS-6300",
-				"CS-6301",
-				"CS-6390",
-				"CS-6400"
-			])
-		},
-		"Directives": {
-			"category": "Directives",
-			"count": 3,
-			"courses": new Set([
-				"CS-6035",
-				"CS-6200",
-				"CS-6220",
-				"CS-6235",
-				"CS-6238",
-				"CS-6260",
-				"CS-6262",
-				"CS-6263",
-				"CS-6291",
-				"CS-6310",
-				"CS-6340",
-				"CS-6365",
-				"CS-6422",
-				"CS-6550",
-				"CS-6675",
-				"CS-7210",
-				"CS-7260",
-				"CS-7270",
-				"CS-7280",
-				"CS-7290",
-				"CS-7292",
-				"CS-7560",
-				"CS-8803-FPL",
-				"CSE-6220",
-				"CS-6211",
-				"CS-7400",
-				"CS-8803-O08",
-				"CS-8803-O21"
-			])
-		},
-		"Electives": {
-			"category": "Electives",
-			"count": 4,
 			"courses": course_codes
 		}
 	},
