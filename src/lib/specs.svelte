@@ -4,7 +4,7 @@
     export let name, toggle_rows, active_courses, active_bucket, i;
 
     let tooltip = true;
-    $: tooltip = tooltip ? (i === 0 && active_bucket[0] == null): false;
+    $: tooltip = tooltip ? i === 0 && active_bucket[0] == null : false;
     const buckets = specs[name];
     const keys = Object.keys(buckets);
     const bucket_sets = keys.map(
@@ -31,35 +31,30 @@
     }
 </script>
 
-<div class="grid">
-    <div class="sidebar-width sb">
+<div class="flex wrap">
+    <div class="sidebar-width">
         <h2 class="wrap-t">{name}</h2>
-        {#if tooltip }
+        {#if tooltip}
             <small
                 >Click on a specialization to find courses that satisfy it!</small
             >
         {/if}
     </div>
-    <div>
-        {#each Object.values(buckets) as { category, count }, i}
-            <Spec
-                spec={name}
-                {category}
-                {count}
-                listed={bucket_courses[i]}
-                {active_bucket}
-                {toggle_rows}
-            />
-        {/each}
-    </div>
+    {#each Object.values(buckets) as { category, count }, i}
+        <Spec
+            spec={name}
+            {category}
+            {count}
+            listed={bucket_courses[i]}
+            {active_bucket}
+            {toggle_rows}
+        />
+    {/each}
 </div>
 
 <style>
-    .grid {
-        display: grid;
-        grid-template-columns: 1fr 8fr;
-    }
-    .sb {
-        grid-row: 1 / -1;
+    h2 {
+        margin-top: .4em;
+        margin-bottom: .1em;
     }
 </style>
