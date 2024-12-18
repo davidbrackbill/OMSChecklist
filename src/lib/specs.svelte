@@ -1,6 +1,6 @@
 <script>
     import { specs } from "../lib/data.js";
-    import Bucket from "../lib/bucket.svelte";
+    import Spec from "../lib/spec.svelte";
     export let name, toggle_rows, active_courses, active_bucket;
 
     $: bucket_tooltip = active_bucket[0] == null
@@ -40,7 +40,7 @@
         {/if}
     </div>
     {#each Object.values(buckets) as { category, count }, i}
-        <Bucket
+        <Spec
             spec={name}
             {category}
             {count}

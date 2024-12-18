@@ -1,6 +1,6 @@
 <script>
-    import { specs, course_codes, sorted_courses } from "../lib/data.js";
-    import Buckets from "$lib/buckets.svelte";
+    import { specs, course_codes } from "../lib/data.js";
+    import Specs from "$lib/specs.svelte";
     import Semesters from "$lib/semesters.svelte";
     import Table from "$lib/table.svelte";
 
@@ -26,7 +26,6 @@
             active_table_rows = specs[spec][category]["courses"];
         }
     }
-
 </script>
 
 <div class="flexw mb-20">
@@ -42,13 +41,13 @@
 {/if}
 
 {#each active_specs as name, i}
-    <Buckets {name} {toggle_rows} {active_courses} {active_bucket}>
+    <Specs {name} {toggle_rows} {active_courses} {active_bucket}>
         {#if active_specs.size && i == 0}
             <small
                 >Click on a specialization to find courses that satisfy it!</small
             >
         {/if}
-    </Buckets>
+    </Specs>
 {/each}
 
 <Semesters {active_courses} />
