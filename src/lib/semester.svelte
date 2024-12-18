@@ -3,10 +3,14 @@
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
     export let codes, index, pinned;
-    export let flipDurationMs = 200;
+
+    const flipDurationMs = 100;
+    const dropTargetStyle = {
+        border: "solid rgba(0, 255, 255, 0.2)",
+        "border-radius": "4px",
+    };
 
     /* Svelte-dnd */
-
     // Give codes an id for svelte-dnd to use
     $: items = codes.map((code) => ({ code, id: code }));
 
@@ -22,7 +26,6 @@
     };
 
     /* Stats */
-
     function average_difficulty(items) {
         if (items.length === 0) return 0;
         let codes = items.map((o) => o.code);
@@ -40,7 +43,7 @@
 
 <div class="flex-c courses bucket">
     <section
-        use:dndzone={{ items, flipDurationMs }}
+        use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
         on:consider={consider}
         on:finalize={finalize}
         style="flex-basis: 75px;"
