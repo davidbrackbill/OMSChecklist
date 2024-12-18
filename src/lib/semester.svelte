@@ -2,7 +2,7 @@
     import { courses } from "$lib/data.js";
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
-    export let codes;
+    export let codes, index;
     export let flipDurationMs = 200;
 
     let pinned = false;
@@ -13,17 +13,22 @@
     };
     const finalize = (e) => {
         items = e.detail.items;
-        pinned = true;
-        console.log(pinned);
+        console.log(index, e.detail.info.trigger);
+        if (e.detail.info.trigger === "droppedIntoZone")
+            pinned = true;
+        else if (e.detail.info.trigger === "droppedIntoAnother" && items.length === 0)
+            pinned = false;
     };
 
-    function average_difficulty(codes) {
-        if (codes.length === 0) return 0;
+    function average_difficulty(items) {
+        if (items.length === 0) return 0;
+        let codes = items.map((o) => o.code);
         let sum = codes.reduce((a, b) => a + courses[b]["Difficulty"], 0);
         return (sum / codes.length).toFixed(1);
     }
 
-    function workload(codes) {
+    function workload(items) {
+        let codes = items.map((o) => o.code);
         return Math.floor(
             codes.reduce((a, b) => a + courses[b]["Workload"], 0),
         );
@@ -43,9 +48,9 @@
             </div>
         {/each}
     </section>
-    <div draggable="false" class="flex stats">
-        <div>&#128548{average_difficulty(codes)}</div>
-        <div>&#9203{workload(codes)}</div>
+    <div class="flex stats">
+        <div>&#128548{average_difficulty(items)}</div>
+        <div>&#9203{workload(items)}</div>
     </div>
 </div>
 
