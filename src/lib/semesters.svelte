@@ -4,16 +4,30 @@
 
     const max_semesters = 20;
     let draggable_tooltip = true;
-    let pinned = {};
 
-    $: semesters = divide_courses(active_courses);
-    function divide_courses(active_courses) {
-        if (!active_courses.size) return [[]];
-        let seen = new Set();
+    let pinned = {};
+    $: semesters = update_semesters(active_courses);
+    $: active = semesters.filter(a => a.length);
+    function update_semesters(active_courses) {
+        if (!active_courses.size) {
+            return [[]];
+        }
         let res = new Array(max_semesters).fill().map((_) => []);
-        for (const [i, courses] of Object.entries(pinned)) {
-            res[i] = courses;
-            for (const course of courses) seen.add(course);
+        let seen = new Set();
+        console.log("Pinned", pinned);
+        console.log("Active", active_courses);
+        for (const [semester, courses] of Object.entries(pinned)) {
+            console.log("S", semester);
+            for (const [i, course] of courses.entries()) {
+                if (active_courses.has(course)) {
+                    res[semester].push(course);
+                    seen.add(course);
+                } else if (courses.length > 1) {
+                    courses.splice(i, 1);
+                } else {
+                    delete pinned[semester];
+                }
+            }
         }
 
         let i = 0;
@@ -21,12 +35,11 @@
             if (i in pinned || res[i].length) {
                 i++;
                 add(course);
-                }
-            else 
-                res[i++] = [course];
+            } else res[i++] = [course];
         }
-        active_courses.difference(seen).forEach(add)
+        active_courses.difference(seen).forEach(add);
 
+        console.log("Semesters", res);
         return res;
     }
 </script>
@@ -39,13 +52,11 @@
             </small>
         {/if}
     </div>
-    {#each semesters as codes, index}
-        {#if codes.length}
-        <button>
-            <Semester bind:pinned {codes} {index} />
-            <h3>Semester {index + 1}</h3>
-        </button>
-        {/if}
+    {#each active as codes, index}
+            <button>
+                <Semester bind:pinned {codes} {index} />
+                <h3>Semester {index + 1}</h3>
+            </button>
     {/each}
 </div>
 
