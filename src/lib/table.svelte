@@ -1,5 +1,5 @@
 <script>
-    import {sorted_courses } from "../lib/data.js";
+    import { sorted_courses } from "../lib/data.js";
     export let active_courses, active_table_rows;
 
     const clear_courses = () => {
@@ -28,7 +28,7 @@
     }
 </script>
 
-<div class="flexcenter mt--10">
+<div class="flex center mt--10">
     <b class="m-5">Courses:</b>
     <p>{active_courses.size}</p>
     <button class="thickbutton" on:click={clear_courses}>Clear</button>
@@ -72,5 +72,9 @@
     td {
         padding: 2px;
         min-width: 100px;
+    }
+
+    .b-highlight {
+        background-color: #d4ebf2;
     }
 </style>
