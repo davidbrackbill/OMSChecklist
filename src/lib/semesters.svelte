@@ -2,12 +2,13 @@
     import Semester from "./semester.svelte";
     export let active_courses;
 
-    const max_semesters = 20;
-    let pinned = {};
-    let tooltip = true;
     // Once a course has been pinned, hide the tooltip
+    export let tooltip = true;
     $: tooltip = tooltip ? !Object.keys(pinned).length : false;
 
+    const max_semesters = 20;
+
+    let pinned = {};
     $: semesters = update_semesters(active_courses);
     $: active = semesters.filter((a) => a.length);
     function update_semesters(active_courses) {
@@ -42,27 +43,8 @@
     }
 </script>
 
-<div class="grid">
-    <div class="sidebar-width sb">
-        {#if tooltip && active.length > 1}
-            <small
-                >Courses are draggable, try moving them between semesters!
-            </small>
-        {/if}
-    </div>
-    <div>
-        {#each active as codes, index}
-            <Semester bind:pinned {codes} {index} />
-        {/each}
-    </div>
+<div class="flex wrap">
+    {#each active as codes, index}
+        <Semester bind:pinned {codes} {index} />
+    {/each}
 </div>
-
-<style>
-    .grid {
-        display: grid;
-        grid-template-columns: 1fr 8fr;
-    }
-    .sb {
-        grid-row: 1 / -1;
-    }
-</style>

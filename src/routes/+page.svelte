@@ -5,6 +5,7 @@
     import Table from "$lib/table.svelte";
 
     let active_courses = new Set();
+    let draggable_tooltip = true;
 
     let active_specs = new Set(["Computing Systems"]);
     function toggle_specs(item) {
@@ -41,17 +42,20 @@
 {/if}
 
 {#each active_specs as name, i}
-    <Specs {name} {toggle_rows} {active_courses} {active_bucket}>
-        {#if active_specs.size && i == 0}
-            <small
-                >Click on a specialization to find courses that satisfy it!</small
-            >
-        {/if}
-    </Specs>
+    <Specs
+        {name}
+        {toggle_rows}
+        {active_courses}
+        {active_bucket}
+        {i}
+    />
 {/each}
 
-<Semesters {active_courses} />
+<Semesters bind:tooltip={draggable_tooltip} {active_courses} />
 
+{#if draggable_tooltip && active_courses.size > 1}
+    <small>Courses are draggable, try moving them between semesters! </small>
+{/if}
 <Table bind:active_courses {active_table_rows} />
 
 <style>
@@ -60,5 +64,7 @@
         grid-template-columns: 1fr 5fr;
         align-content: start;
     }
-    .gap { gap: .4em;}
+    .gap {
+        gap: 0.4em;
+    }
 </style>

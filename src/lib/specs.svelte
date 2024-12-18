@@ -1,17 +1,17 @@
 <script>
     import { specs } from "../lib/data.js";
     import Spec from "../lib/spec.svelte";
-    export let name, toggle_rows, active_courses, active_bucket;
+    export let name, toggle_rows, active_courses, active_bucket, i;
 
-    $: bucket_tooltip = active_bucket[0] == null;
-
+    let tooltip = true;
+    $: tooltip = tooltip ? (i === 0 && active_bucket[0] == null): false;
     const buckets = specs[name];
     const keys = Object.keys(buckets);
     const bucket_sets = keys.map(
         (category) => new Set(buckets[category]["courses"]),
     );
 
-    // Each time `active_courses` changes, recalculates
+    $: bucket_courses = divide_courses(active_courses);
     function divide_courses(active_courses) {
         let courses = Array.from({ length: keys.length }, () => []);
         active_courses.forEach((course) => {
@@ -29,14 +29,15 @@
         });
         return courses;
     }
-    $: bucket_courses = divide_courses(active_courses);
 </script>
 
 <div class="grid">
     <div class="sidebar-width sb">
-        <h1 class="wrap-t">{name}</h1>
-        {#if bucket_tooltip}
-            <slot />
+        <h2 class="wrap-t">{name}</h2>
+        {#if tooltip }
+            <small
+                >Click on a specialization to find courses that satisfy it!</small
+            >
         {/if}
     </div>
     <div>
