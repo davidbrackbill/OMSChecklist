@@ -1,7 +1,7 @@
 <script>
     import { specs, course_codes, sorted_courses } from "../lib/data.js";
     import Semesters from "$lib/semesters.svelte";
-    import BucketDivider from "$lib/bucket-divider.svelte";
+    import Buckets from "$lib/buckets.svelte";
 
     let sort_criteria = ["Reviews", "desc"];
     function sort(column) {
@@ -65,13 +65,13 @@
 {/if}
 
 {#each active_specs as name, i}
-    <BucketDivider {name} {toggle_rows} {active_courses} {active_bucket}>
+    <Buckets {name} {toggle_rows} {active_courses} {active_bucket}>
         {#if active_specs.size && i == 0}
             <small
                 >Click on a specialization to find courses that satisfy it!</small
             >
         {/if}
-    </BucketDivider>
+    </Buckets>
 {/each}
 
 <Semesters {active_courses} />
