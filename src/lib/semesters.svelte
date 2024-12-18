@@ -3,7 +3,7 @@
     export let active_courses;
 
     const max_semesters = 20;
-    let draggable_tooltip = true;
+    let tooltip = true;
 
     let pinned = {};
     $: semesters = update_semesters(active_courses);
@@ -38,11 +38,14 @@
 
         return res;
     }
+
+    // Once a course has been pinned, hide the tooltip
+    $: tooltip = tooltip ? !Object.keys(pinned).length : false;
 </script>
 
 <div class="flex wrap">
     <div class="mb-20 sidebar-width bottom">
-        {#if semesters.length > 1 && draggable_tooltip}
+        {#if tooltip && active.length > 1}
             <small
                 >Courses are draggable, try moving them between semesters!
             </small>
