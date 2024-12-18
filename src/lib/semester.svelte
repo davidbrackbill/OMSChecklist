@@ -2,23 +2,29 @@
     import { courses } from "$lib/data.js";
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
-    export let codes, index;
+    export let codes, index, pinned;
     export let flipDurationMs = 200;
 
-    let pinned = false;
+    /* Svelte-dnd */
+    $: codes = codes ?? [];
+    console.log("Semester", index, codes);
 
+    // Give codes an id for svelte-dnd to use
     $: items = codes.map((code) => ({ code, id: code }));
+
     const consider = (e) => {
         items = e.detail.items;
     };
+
     const finalize = (e) => {
         items = e.detail.items;
-        console.log(index, e.detail.info.trigger);
-        if (e.detail.info.trigger === "droppedIntoZone")
-            pinned = true;
-        else if (e.detail.info.trigger === "droppedIntoAnother" && items.length === 0)
-            pinned = false;
+        if (items.length === 0) delete pinned[index];
+        else pinned[index] = items.map((o) => o.code);
+        pinned = pinned;
+        console.debug(index, e.detail.info.trigger);
     };
+
+    /* Stats */
 
     function average_difficulty(items) {
         if (items.length === 0) return 0;
@@ -44,7 +50,7 @@
     >
         {#each items as item (item.id)}
             <div animate:flip={{ duration: flipDurationMs }}>
-                {item.code}
+                <div class="course-text">{courses[item.code]["Course"]}</div>
             </div>
         {/each}
     </section>
@@ -55,6 +61,11 @@
 </div>
 
 <style>
+    .course-text {
+        line-height: 90%;
+        font-size: 0.8em;
+        margin-top: 0.3em;
+    }
     .courses {
         margin-bottom: 10px;
     }

@@ -2,16 +2,31 @@
     import Semester from "./semester.svelte";
     export let active_courses;
 
-    const course_load = 1;
+    const max_semesters = 20;
     let draggable_tooltip = true;
+    let pinned = {};
 
-    $: semesters = divide_courses(active_courses, course_load);
-    function divide_courses(active_courses, course_load) {
-        let arr = [...active_courses];
-        let res = [];
-        while (arr.length) {
-            res.push(arr.splice(0, course_load));
+    $: semesters = divide_courses(active_courses);
+    function divide_courses(active_courses) {
+        if (!active_courses.size) return [[]];
+        let seen = new Set();
+        let res = new Array(max_semesters).fill().map((_) => []);
+        for (const [i, courses] of Object.entries(pinned)) {
+            res[i] = courses;
+            for (const course of courses) seen.add(course);
         }
+
+        let i = 0;
+        function add(course) {
+            if (i in pinned || res[i].length) {
+                i++;
+                add(course);
+                }
+            else 
+                res[i++] = [course];
+        }
+        active_courses.difference(seen).forEach(add)
+
         return res;
     }
 </script>
@@ -24,11 +39,13 @@
             </small>
         {/if}
     </div>
-    {#each semesters as codes, i}
+    {#each semesters as codes, index}
+        {#if codes.length}
         <button>
-            <Semester {codes} />
-            <h3>Semester {i + 1}</h3>
+            <Semester bind:pinned {codes} {index} />
+            <h3>Semester {index + 1}</h3>
         </button>
+        {/if}
     {/each}
 </div>
 
