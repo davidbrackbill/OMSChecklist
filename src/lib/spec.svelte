@@ -14,8 +14,7 @@
         {/each}
     </div>
     <div class={active(active_bucket)}>
-        <h3>{category}</h3>
-        <p>&nbsp;{listed.length}/{count}</p>
+        <h3>{category}</h3>&nbsp;{listed.length}/{count}
     </div>
 </button>
 
@@ -23,6 +22,11 @@
     button {
         background-color: transparent;
         border: none;
+        margin-right: 10px;
+    }
+    h3 {
+        justify-self: center;
+        margin: 0.1em;
     }
 
     .center {
@@ -30,9 +34,12 @@
     }
 
     .category {
+        margin-top: 0.3em;
+        margin-bottom: 0.5em;
+        padding: 0.5em;
         display: flex;
         align-items: center;
-        align-content: start;
+        justify-content: center;
         border-radius: 8px;
     }
     .active {

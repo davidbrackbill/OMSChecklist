@@ -5,7 +5,6 @@
     import Table from "$lib/table.svelte";
 
     let active_courses = new Set();
-    let draggable_tooltip = true;
 
     let active_specs = new Set(["Computing Systems"]);
     function toggle_specs(item) {
@@ -27,11 +26,21 @@
             active_table_rows = specs[spec][category]["courses"];
         }
     }
+
+    function clear_specs() {
+        active_specs = new Set();
+        active_bucket = [null, null];
+        active_table_rows = course_codes;
+    }
 </script>
 
-<div class="grid gap">
-    <b>Specializations:</b>
-    <div class="flex wrap gap">
+<div class="specs">
+    <div class="sidebar-basis">
+        <button on:click={clear_specs}
+            >Clear Specializations</button
+        >: {active_specs.size}
+    </div>
+    <div class="flex button-gap wrap">
         {#each Object.keys(specs) as name}
             <button on:click={() => toggle_specs(name)}>{name}</button>
         {/each}
@@ -42,29 +51,16 @@
 {/if}
 
 {#each active_specs as name, i}
-    <Specs
-        {name}
-        {toggle_rows}
-        {active_courses}
-        {active_bucket}
-        {i}
-    />
+    <Specs {name} {toggle_rows} {active_courses} {active_bucket} {i} />
 {/each}
 
-<Semesters bind:tooltip={draggable_tooltip} {active_courses} />
+<Semesters {active_courses} />
 
-{#if draggable_tooltip && active_courses.size > 1}
-    <small>Courses are draggable, try moving them between semesters! </small>
-{/if}
 <Table bind:active_courses {active_table_rows} />
 
 <style>
-    .grid {
-        display: grid;
-        grid-template-columns: 1fr 5fr;
-        align-content: start;
-    }
-    .gap {
-        gap: 0.4em;
+    .specs {
+        display: flex;
+        margin-bottom: 0.5em;
     }
 </style>

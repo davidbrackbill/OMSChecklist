@@ -2,10 +2,6 @@
     import Semester from "./semester.svelte";
     export let active_courses;
 
-    // Once a course has been pinned, hide the tooltip
-    export let tooltip = true;
-    $: tooltip = tooltip ? !Object.keys(pinned).length : false;
-
     const max_semesters = 20;
 
     let pinned = {};
@@ -47,4 +43,13 @@
     {#each active as codes, index}
         <Semester bind:pinned {codes} {index} />
     {/each}
+    {#if !active.length}
+        <Semester codes={[]} index={0}/>
+    {/if}
 </div>
+
+<style>
+    div {
+        margin-left: 0.5em;
+    }
+</style>

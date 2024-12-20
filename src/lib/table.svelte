@@ -28,13 +28,15 @@
     }
 </script>
 
-<div class="flex center mt--10">
-    <b class="m-5">Courses:</b>
-    <p>{active_courses.size}</p>
-    <button class="thickbutton" on:click={clear_courses}>Clear</button>
-    {#each active_courses as Code}
-        <button on:click={() => toggle_courses(Code)}>{Code}</button>
-    {/each}
+<div class="flex wrap">
+    <div class="sidebar-basis">
+        <button on:click={clear_courses}>Clear Courses</button>: {active_courses.size}
+    </div>
+    <div class="flex button-gap wrap">
+        {#each active_courses as Code}
+            <button on:click={() => toggle_courses(Code)}>{Code}</button>
+        {/each}
+    </div>
 </div>
 
 <table cellspacing="0" cellpadding="0">

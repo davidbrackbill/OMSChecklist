@@ -69,6 +69,7 @@
     button {
         background-color: transparent;
         border: none;
+        margin-right: 10px;
     }
     h3 {
         margin-top: -0.2em;

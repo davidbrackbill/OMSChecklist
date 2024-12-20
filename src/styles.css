@@ -19,19 +19,28 @@
     align-items: center;
 }
 
+.justify-c { justify-content: center;}
+
 .bucket {
         padding: 10px;
         border-radius: 4px;
         width: 125px;
         height: 78px;
         border: 1px solid black;
-        margin-right: 10px;
     }
 
 .sidebar-width {
     max-width: 165px;
-    min-width: 166px;
+    min-width: 165px;
 }
+
+.sidebar-basis {
+    flex-basis: 165px;
+}
+
+.button-gap {
+        gap: 0.4em;
+    }
 
 .wrap-t {
     text-wrap: wrap;
@@ -43,4 +52,9 @@
 
 .m-5 {
     margin: 5px;
+}
+
+button {
+    margin: 0px;
+    padding: 0px;
 }
