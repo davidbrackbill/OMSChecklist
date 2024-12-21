@@ -83,6 +83,16 @@
     .courses {
         margin-bottom: 10px;
     }
+    .course-text:hover {
+        mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
+        animation: shimmer 1s infinite;
+        /* background: linear-gradient(#d4ebf2, #0ff); */
+    }
+    @keyframes shimmer {
+        100% {
+            mask-position: left;
+        }
+    }
 
     .stats {
         justify-content: center;

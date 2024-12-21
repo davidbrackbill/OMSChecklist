@@ -48,4 +48,14 @@
             inset 60px 0 120px #d4ebf2,
             inset -60px 0 120px #0ff;
     }
+    .category:hover {
+        mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
+        animation: shimmer 1s infinite;
+        /* background: linear-gradient(#d4ebf2, #0ff); */
+    }
+    @keyframes shimmer {
+        100% {
+            mask-position: left;
+        }
+    }
 </style>
