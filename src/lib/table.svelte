@@ -26,6 +26,17 @@
         if (active_courses.has(code)) return "b-highlight";
         return "";
     }
+
+    function review_url(course_name) {
+        return `https://www.omscentral.com/courses/${kebab_case(course_name)}/reviews`;
+    }
+    function kebab_case(str) {
+        return str
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, "")
+            .trim()
+            .replace(/\s+/g, "-");
+    }
 </script>
 
 <div class="flex wrap">
@@ -40,32 +51,50 @@
 </div>
 
 <table cellspacing="0" cellpadding="0">
-    <tr class="bold">
-        <td on:click={() => sort("Code")}>Code</td>
-        <td on:click={() => sort("Course")}>Course</td>
-        <td on:click={() => sort("Rating")}>Rating</td>
-        <td on:click={() => sort("Difficulty")}>Difficulty</td>
-        <td on:click={() => sort("Workload")}>Workload</td>
-        <td on:click={() => sort("Reviews")}>Reviews</td>
-    </tr>
+    <thead>
+        <tr>
+            <td on:click={() => sort("Code")}>Code</td>
+            <td on:click={() => sort("Course")}>Course</td>
+            <td on:click={() => sort("Rating")}>Rating</td>
+            <td on:click={() => sort("Difficulty")}>Difficulty&#128548</td>
+            <td on:click={() => sort("Workload")}>Workload&#9203</td>
+            <td on:click={() => sort("Reviews")}>Reviews</td>
+        </tr>
+    </thead>
     {#each sorted_courses[sort_criteria.join("_")] as { Course, Code, Rating, Difficulty, Workload, Reviews }}
         {#if active_table_rows.has(Code)}
-            <tr
-                on:click={() => toggle_courses(Code)}
-                class={row_class(Code, active_courses)}
-            >
-                <td><button>{Code}</button></td>
-                <td>{Course}</td>
+            <tr class={row_class(Code, active_courses)}>
+                <td on:click={() => toggle_courses(Code)}
+                    ><button>{Code}</button></td
+                >
+                <td on:click={() => toggle_courses(Code)}>{Course}</td>
                 <td>{Rating}</td>
                 <td>{Difficulty}</td>
                 <td>{Workload}</td>
-                <td>{Reviews}</td>
+                <td
+                    ><a href={review_url(Course)} target="_blank">{Reviews}</a
+                    ></td
+                >
             </tr>
         {/if}
     {/each}
 </table>
 
 <style>
+    thead * {
+        font-weight: bold;
+    }
+
+    thead > * > td:hover {
+        mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
+        animation: shimmer 1s infinite;
+        /* background: linear-gradient(#d4ebf2, #0ff); */
+    }
+    @keyframes shimmer {
+        100% {
+            mask-position: left;
+        }
+    }
     .thickbutton {
         border-width: 2px;
         border-radius: 5px;
