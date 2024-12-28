@@ -1,9 +1,8 @@
 <script>
+    import { active_courses } from "../lib/state.js";
+    import { toggle_rows, active_bucket } from "../lib/state.js";
+
     export let spec, category, count, listed;
-    import {
-        toggle_rows,
-        active_bucket,
-    } from "../lib/state.js";
 
     function active(bucket) {
         if (bucket[spec] === category) return "category active";
@@ -14,7 +13,7 @@
 <button on:click={() => toggle_rows(spec, category)}>
     <div class="flex-cw bucket">
         {#each listed as course}
-            <div>{course}</div>
+            <div on:click={() => active_courses.toggle(course)}>{course}</div>
         {/each}
     </div>
     <div class={active($active_bucket)}>
