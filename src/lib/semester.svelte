@@ -41,7 +41,7 @@
     }
 </script>
 
-<button>
+<div class="mr-4">
     <div class="flex-c courses bucket">
         <section
             use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
@@ -63,14 +63,9 @@
         </div>
     </div>
     <h3>Semester {index + 1}</h3>
-</button>
+</div>
 
 <style>
-    button {
-        background-color: transparent;
-        border: none;
-        margin-right: 10px;
-    }
     h3 {
         margin-top: -0.2em;
         justify-self: center;

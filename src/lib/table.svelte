@@ -1,17 +1,15 @@
 <script>
     import { sorted_courses } from "../lib/data.js";
-    import { active_courses, active_table_rows } from "../lib/state.js";
+    import { active_courses, visible_rows } from "../lib/state.js";
 
-    let sort_criteria = ["Reviews", "desc"];
-    function sort(column) {
-        let [c, s] = sort_criteria;
-        if (c == column) {
-            sort_criteria[1] = s === "desc" ? "asc" : "desc";
-        } else {
-            sort_criteria = [column, "desc"];
-        }
+    let cat = "Reviews";
+    let dir = "desc";
+    function toggle(column) {
+        if (cat == column) dir = dir === "desc" ? "asc" : "desc";
+        else dir = "desc";
+        cat = column;
     }
-    function row_class(code, active_courses) {
+    function active(code, active_courses) {
         if (active_courses.has(code)) return "b-highlight";
         return "";
     }
@@ -28,33 +26,32 @@
     }
 </script>
 
-<table cellspacing="0" cellpadding="0">
+<table class="content-start">
     <thead>
         <tr>
-            <td on:click={() => sort("Code")}>Code</td>
-            <td on:click={() => sort("Course")}>Course</td>
-            <td class="text-right" on:click={() => sort("Rating")}>Rating</td>
-            <td class="text-right" on:click={() => sort("Difficulty")}
-                >Difficulty&#128548</td
-            >
-            <td class="text-right" on:click={() => sort("Workload")}
-                >Workload&#9203</td
-            >
-            <td class="text-right" on:click={() => sort("Reviews")}>Reviews</td>
+            <td on:click={() => toggle("Code")}>Code</td>
+            <td on:click={() => toggle("Course")}>Course</td>
+            <td on:click={() => toggle("Rating")}>Rating</td>
+            <td on:click={() => toggle("Difficulty")}>Difficulty</td>
+            <td on:click={() => toggle("Workload")}>Workload</td>
+            <td on:click={() => toggle("Reviews")}>Reviews</td>
         </tr>
     </thead>
-    {#each sorted_courses[sort_criteria.join("_")] as { Course, Code, Rating, Difficulty, Workload, Reviews }}
-        {#if $active_table_rows.has(Code)}
-            <tr class={row_class(Code, $active_courses)}>
-                <td on:click={() => active_courses.toggle(Code)}
-                    ><button>{Code}</button></td
-                >
+    {#each sorted_courses[`${cat}_${dir}`] as { Course, Code, Rating, Difficulty, Workload, Reviews }}
+        {#if $visible_rows.has(Code)}
+            <tr class={active(Code, $active_courses)}>
+                <td on:click={() => active_courses.toggle(Code)}>{Code}</td>
                 <td on:click={() => active_courses.toggle(Code)}>{Course}</td>
-                <td class="text-right">{Rating}</td>
-                <td class="text-right">{Difficulty}</td>
-                <td class="text-right">{Workload}</td>
-                <td class="text-right"
-                    ><a href={review_url(Course)} target="_blank">{Reviews}</a
+                <td on:click={() => active_courses.toggle(Code)}>{Rating}</td>
+                <td on:click={() => active_courses.toggle(Code)}
+                    >{Difficulty}</td
+                >
+                <td on:click={() => active_courses.toggle(Code)}>{Workload}</td>
+                <td
+                    ><a
+                        class="text-gray-700 underline"
+                        href={review_url(Course)}
+                        target="_blank">{Reviews}</a
                     ></td
                 >
             </tr>
@@ -67,27 +64,22 @@
         font-weight: bold;
     }
 
+    /* Right-align the numbers */
+    td:nth-last-child(-n + 4) {
+        text-align: right;
+    }
+
     thead > * > td:hover {
         mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
         animation: shimmer 1s infinite;
-        /* background: linear-gradient(#d4ebf2, #0ff); */
     }
     @keyframes shimmer {
         100% {
             mask-position: left;
         }
     }
-    .thickbutton {
-        border-width: 2px;
-        border-radius: 5px;
-    }
-
-    td {
-        padding: 2px;
-        min-width: 100px;
-    }
 
     .b-highlight {
-        background-color: #d4ebf2;
+        background-color: hsl(194 54% 89%);
     }
 </style>

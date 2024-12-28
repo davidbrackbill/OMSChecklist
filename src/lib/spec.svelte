@@ -10,33 +10,22 @@
     }
 </script>
 
-<button on:click={() => toggle_rows(spec, category)}>
+<div class="mr-4">
     <div class="flex-cw bucket">
         {#each listed as course}
             <div on:click={() => active_courses.toggle(course)}>{course}</div>
         {/each}
     </div>
-    <div class={active($active_bucket)}>
+    <div
+        on:click={() => toggle_rows(spec, category)}
+        class={active($active_bucket)}
+    >
         <h3>{category}</h3>
         &nbsp;{listed.length}/{count}
     </div>
-</button>
+</div>
 
 <style>
-    button {
-        background-color: transparent;
-        border: none;
-        margin-right: 10px;
-    }
-    h3 {
-        justify-self: center;
-        margin: 0.1em;
-    }
-
-    .center {
-        align-items: center;
-    }
-
     .category {
         margin-top: 0.3em;
         margin-bottom: 0.5em;

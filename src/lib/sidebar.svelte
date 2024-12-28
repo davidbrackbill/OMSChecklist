@@ -17,7 +17,7 @@
     {/each}
 </svelte:head>
 
-<div class="bg-gray-100 drop-shadow p-2">
+<div class="h-screen bg-gray-100 drop-shadow p-2">
     {#each Object.entries(images) as [key, image]}
         <div class="py-2" on:click={() => active_specs.toggle(key)}>
             <img
