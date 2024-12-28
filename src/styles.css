@@ -1,6 +1,6 @@
-.flex {
-    display: flex;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 .flex-c {
     display: flex;
@@ -48,10 +48,6 @@
 
 .bold * {
     font-weight: bold;
-}
-
-.m-5 {
-    margin: 5px;
 }
 
 button {
