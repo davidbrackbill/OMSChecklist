@@ -2,6 +2,17 @@
     import { sorted_courses } from "../lib/data.js";
     import { active_courses, visible_rows } from "../lib/state.js";
 
+    const columns = [
+        "Code",
+        "Course",
+        "Rating",
+        "Difficulty",
+        "Workload",
+        "Reviews",
+    ];
+
+    const cell = "border-b-2 border-gray-200";
+
     let cat = "Reviews";
     let dir = "desc";
     function toggle(column) {
@@ -10,8 +21,8 @@
         cat = column;
     }
     function active(code, active_courses) {
-        if (active_courses.has(code)) return "b-highlight";
-        return "";
+        if (active_courses.has(code)) return cell + " b-highlight";
+        return cell;
     }
 
     function review_url(course_name) {
@@ -26,47 +37,48 @@
     }
 </script>
 
-<table class="content-start">
-    <thead>
-        <tr>
-            <td on:click={() => toggle("Code")}>Code</td>
-            <td on:click={() => toggle("Course")}>Course</td>
-            <td on:click={() => toggle("Rating")}>Rating</td>
-            <td on:click={() => toggle("Difficulty")}>Difficulty</td>
-            <td on:click={() => toggle("Workload")}>Workload</td>
-            <td on:click={() => toggle("Reviews")}>Reviews</td>
-        </tr>
-    </thead>
-    {#each sorted_courses[`${cat}_${dir}`] as { Course, Code, Rating, Difficulty, Workload, Reviews }}
-        {#if $visible_rows.has(Code)}
-            <tr class={active(Code, $active_courses)}>
-                <td on:click={() => active_courses.toggle(Code)}>{Code}</td>
-                <td on:click={() => active_courses.toggle(Code)}>{Course}</td>
-                <td on:click={() => active_courses.toggle(Code)}>{Rating}</td>
-                <td on:click={() => active_courses.toggle(Code)}
-                    >{Difficulty}</td
-                >
-                <td on:click={() => active_courses.toggle(Code)}>{Workload}</td>
-                <td
-                    ><a
-                        class="text-gray-700 underline"
-                        href={review_url(Course)}
-                        target="_blank">{Reviews}</a
-                    ></td
-                >
+<div class="rounded-lg border-2 border-gray-300">
+    <table>
+        <thead>
+            <tr class={`bg-gray-100 ${cell}`}>
+                {#each columns as column}
+                    <td
+                        class="text-gray-600 font-normal"
+                        on:click={() => toggle(column)}>{column}</td
+                    >
+                {/each}
             </tr>
-        {/if}
-    {/each}
-</table>
+        </thead>
+        {#each sorted_courses[`${cat}_${dir}`] as course}
+            {#if $visible_rows.has(course.Code)}
+                <tr class={active(course.Code, $active_courses)}>
+                    {#each columns.slice(0, -1) as column}
+                        <td on:click={() => active_courses.toggle(course.Code)}
+                            >{course[column]}</td
+                        >
+                    {/each}
+                    <td
+                        ><a
+                            class="text-gray-700 underline"
+                            href={review_url(course.Course)}
+                            target="_blank">{course.Reviews}</a
+                        ></td
+                    >
+                </tr>
+            {/if}
+        {/each}
+    </table>
+</div>
 
 <style>
-    thead * {
-        font-weight: bold;
-    }
-
     /* Right-align the numbers */
     td:nth-last-child(-n + 4) {
         text-align: right;
+    }
+
+    td {
+        min-width: 100px;
+        padding: 10px;
     }
 
     thead > * > td:hover {
