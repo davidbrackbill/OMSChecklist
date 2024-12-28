@@ -39,6 +39,7 @@
     }
 </script>
 
+<h2>Semesters</h2>
 <div class="flex wrap">
     {#each active as codes, index}
         <Semester bind:pinned {codes} {index} />
@@ -47,4 +48,3 @@
         <Semester codes={[]} index={0} />
     {/if}
 </div>
-

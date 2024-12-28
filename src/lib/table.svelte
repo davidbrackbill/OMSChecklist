@@ -28,47 +28,56 @@
     }
 </script>
 
-<div class="flex wrap">
-    <div class="sidebar-basis">
+<div>
+    <div class="flex wrap">
         <button on:click={active_courses.clear}>Clear Courses</button>
         : {$active_courses.size}
-    </div>
-    <div class="flex button-gap wrap">
         {#each $active_courses as Code}
             <button on:click={() => active_courses.toggle(Code)}>{Code}</button>
         {/each}
     </div>
-</div>
 
-<table cellspacing="0" cellpadding="0">
-    <thead>
-        <tr>
-            <td on:click={() => sort("Code")}>Code</td>
-            <td on:click={() => sort("Course")}>Course</td>
-            <td on:click={() => sort("Rating")}>Rating</td>
-            <td on:click={() => sort("Difficulty")}>Difficulty&#128548</td>
-            <td on:click={() => sort("Workload")}>Workload&#9203</td>
-            <td on:click={() => sort("Reviews")}>Reviews</td>
-        </tr>
-    </thead>
-    {#each sorted_courses[sort_criteria.join("_")] as { Course, Code, Rating, Difficulty, Workload, Reviews }}
-        {#if $active_table_rows.has(Code)}
-            <tr class={row_class(Code, $active_courses)}>
-                <td on:click={() => active_courses.toggle(Code)}
-                    ><button>{Code}</button></td
+    <table cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <td on:click={() => sort("Code")}>Code</td>
+                <td on:click={() => sort("Course")}>Course</td>
+                <td class="text-right" on:click={() => sort("Rating")}
+                    >Rating</td
                 >
-                <td on:click={() => active_courses.toggle(Code)}>{Course}</td>
-                <td>{Rating}</td>
-                <td>{Difficulty}</td>
-                <td>{Workload}</td>
-                <td
-                    ><a href={review_url(Course)} target="_blank">{Reviews}</a
-                    ></td
+                <td class="text-right" on:click={() => sort("Difficulty")}
+                    >Difficulty&#128548</td
+                >
+                <td class="text-right" on:click={() => sort("Workload")}
+                    >Workload&#9203</td
+                >
+                <td class="text-right" on:click={() => sort("Reviews")}
+                    >Reviews</td
                 >
             </tr>
-        {/if}
-    {/each}
-</table>
+        </thead>
+        {#each sorted_courses[sort_criteria.join("_")] as { Course, Code, Rating, Difficulty, Workload, Reviews }}
+            {#if $active_table_rows.has(Code)}
+                <tr class={row_class(Code, $active_courses)}>
+                    <td on:click={() => active_courses.toggle(Code)}
+                        ><button>{Code}</button></td
+                    >
+                    <td on:click={() => active_courses.toggle(Code)}
+                        >{Course}</td
+                    >
+                    <td class="text-right">{Rating}</td>
+                    <td class="text-right">{Difficulty}</td>
+                    <td class="text-right">{Workload}</td>
+                    <td class="text-right"
+                        ><a href={review_url(Course)} target="_blank"
+                            >{Reviews}</a
+                        ></td
+                    >
+                </tr>
+            {/if}
+        {/each}
+    </table>
+</div>
 
 <style>
     thead * {

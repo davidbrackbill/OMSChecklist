@@ -6,7 +6,7 @@
     import Table from "$lib/table.svelte";
 </script>
 
-<div>
+<div class="flex gap-8">
     <Sidebar />
 
     <div>

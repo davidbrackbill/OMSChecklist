@@ -1,10 +1,10 @@
 <script>
     export let spec, category, count, listed;
-
     import {
         toggle_rows,
         active_bucket,
     } from "../lib/state.js";
+
     function active(bucket) {
         if (bucket[spec] === category) return "category active";
         return "category";

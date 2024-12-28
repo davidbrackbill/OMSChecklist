@@ -31,18 +31,9 @@
     }
 </script>
 
-<div class="flex wrap">
-    <div class="sidebar-width">
-        <h2 class="wrap-t">{name}</h2>
-    </div>
+<h2>{name}</h2>
+<div class="flex wrap basis-32 grow">
     {#each Object.values(buckets) as { category, count }, i}
         <Spec spec={name} {category} {count} listed={bucket_courses[i]} />
     {/each}
 </div>
-
-<style>
-    h2 {
-        margin-top: 0.4em;
-        margin-bottom: 0.1em;
-    }
-</style>
