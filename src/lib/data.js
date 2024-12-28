@@ -861,7 +861,7 @@ export const specs = {
 			"courses": course_codes
 		}
 	},
-	"HCI": {
+	"Human Computer Interaction": {
 		"Mobile": {
 			"category": "Mobile",
 			"count": 1,
@@ -942,7 +942,7 @@ export const specs = {
 			"courses": course_codes
 		}
 	},
-	"ML": {
+	"Machine Learning": {
 		"Algorithms": {
 			"category": "Algorithms",
 			"count": 1,

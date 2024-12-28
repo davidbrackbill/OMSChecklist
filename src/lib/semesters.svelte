@@ -1,11 +1,11 @@
 <script>
     import Semester from "./semester.svelte";
-    export let active_courses;
+    import { active_courses } from "../lib/state.js";
 
     const max_semesters = 20;
 
     let pinned = {};
-    $: semesters = update_semesters(active_courses);
+    $: semesters = update_semesters($active_courses);
     $: active = semesters.filter((a) => a.length);
     function update_semesters(active_courses) {
         if (!active_courses.size) {
@@ -44,7 +44,7 @@
         <Semester bind:pinned {codes} {index} />
     {/each}
     {#if !active.length}
-        <Semester codes={[]} index={0}/>
+        <Semester codes={[]} index={0} />
     {/if}
 </div>
 

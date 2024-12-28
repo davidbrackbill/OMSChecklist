@@ -1,8 +1,12 @@
 <script>
-    export let spec, category, count, listed, active_bucket, toggle_rows;
+    export let spec, category, count, listed;
 
-    function active([s, c]) {
-        if (s === spec && c === category) return "category active";
+    import {
+        toggle_rows,
+        active_bucket,
+    } from "../lib/state.js";
+    function active(bucket) {
+        if (bucket[spec] === category) return "category active";
         return "category";
     }
 </script>
@@ -13,8 +17,9 @@
             <div>{course}</div>
         {/each}
     </div>
-    <div class={active(active_bucket)}>
-        <h3>{category}</h3>&nbsp;{listed.length}/{count}
+    <div class={active($active_bucket)}>
+        <h3>{category}</h3>
+        &nbsp;{listed.length}/{count}
     </div>
 </button>
 
