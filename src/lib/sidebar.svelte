@@ -1,25 +1,40 @@
 <script>
-    import { specs } from "../lib/data.js";
     import { active_specs } from "../lib/state.js";
-    const images = [
-        "/ml.png",
-        "/graphics.png",
-        "/robotics.png",
-        "/computing-systems.png",
-        "/hci.png",
-        "/interactive-intelligence.png",
-        "/favicon.png",
-    ];
+    const images = {
+        "Machine Learning": "/ml.png",
+        "Computer Graphics": "/graphics.png",
+        Robotics: "/robotics.png",
+        "Computing Systems": "/computing-systems.png",
+        "Human Computer Interaction": "/hci.png",
+        "Interactive Intelligence": "/interactive-intelligence.png",
+        GT: "/favicon.png",
+    };
 </script>
 
 <svelte:head>
-    {#each images as image}
+    {#each Object.values(images) as image}
         <link rel="preload" href={image} as="image" type="image/png" />
     {/each}
 </svelte:head>
 
-<div>
-    {#each Object.keys(specs) as name}
-        <button on:click={() => active_specs.toggle(name)}>{name}</button>
+<div class="inline-flex grow-0">
+    {#each Object.entries(images) as [key, image]}
+        <div on:click={() => active_specs.toggle(key)}>
+            <img
+                style={$active_specs.has(key) ? "opacity:1" : ""}
+                src={image}
+                alt={image}
+            />
+        </div>
     {/each}
 </div>
+
+<style>
+    img {
+        width: 8vh;
+        opacity: 0.3;
+    }
+    img:hover {
+        opacity: 0.6;
+    }
+</style>

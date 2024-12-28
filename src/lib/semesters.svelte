@@ -48,8 +48,3 @@
     {/if}
 </div>
 
-<style>
-    div {
-        margin-left: 0.5em;
-    }
-</style>
