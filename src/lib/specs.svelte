@@ -1,8 +1,6 @@
 <script>
     import { specs } from "../lib/data.js";
-    import {
-        active_courses,
-    } from "../lib/state.js";
+    import { active_courses } from "../lib/state.js";
     import Spec from "../lib/spec.svelte";
 
     export let name;
@@ -38,12 +36,7 @@
         <h2 class="wrap-t">{name}</h2>
     </div>
     {#each Object.values(buckets) as { category, count }, i}
-        <Spec
-            spec={name}
-            {category}
-            {count}
-            listed={bucket_courses[i]}
-        />
+        <Spec spec={name} {category} {count} listed={bucket_courses[i]} />
     {/each}
 </div>
 
