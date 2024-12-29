@@ -26,15 +26,6 @@
 </div>
 
 <style>
-    .category {
-        margin-top: 0.3em;
-        margin-bottom: 0.5em;
-        padding: 0.5em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-    }
     .active {
         box-shadow:
             /* left magenta, right cyan */

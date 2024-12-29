@@ -41,8 +41,9 @@
     }
 </script>
 
-<div class="flex-c bucket shadow-md mb-2 mr-4">
+<div class="flex flex-col mr-4">
     <section
+        class="bucket shadow-md"
         use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
         on:consider={consider}
         on:finalize={finalize}
@@ -56,7 +57,7 @@
             </div>
         {/each}
     </section>
-    <div class="flex justify-center mt-auto gap-2">
+    <div class="category gap-2">
         <div>&#128548{average_difficulty(items)}</div>
         <div>&#9203{workload(items)}</div>
     </div>
@@ -71,7 +72,6 @@
     .course-text:hover {
         mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
         animation: shimmer 1s infinite;
-        /* background: linear-gradient(#d4ebf2, #0ff); */
     }
     @keyframes shimmer {
         100% {

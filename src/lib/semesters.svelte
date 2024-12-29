@@ -39,7 +39,7 @@
 </script>
 
 <h2 class="font-medium text-lg">Semesters</h2>
-<div class="flex wrap">
+<div class="flex flex-wrap">
     {#each active as codes, index}
         <Semester bind:pinned {codes} {index} />
     {/each}

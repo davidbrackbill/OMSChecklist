@@ -40,7 +40,7 @@
 </script>
 
 <h2 class="font-medium text-lg" style={`color: ${colors[name]};`}>{name}</h2>
-<div class="flex wrap">
+<div class="flex flex-wrap">
     {#each Object.values(buckets) as { category, count }, i}
         <Spec spec={name} {category} {count} listed={bucket_courses[i]} />
     {/each}
