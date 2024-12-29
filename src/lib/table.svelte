@@ -36,10 +36,10 @@
 </script>
 
 <table
-    class="basis-1/2 shrink justify-self-end max-h-screen overflow-y-auto rounded-lg border-2 border-gray-300"
+    class="basis-1/2 shrink self-baseline justify-self-end max-h-screen overflow-y-auto rounded-lg border-2 border-gray-300"
 >
-    <thead>
-        <tr class="bg-gray-100">
+    <thead class="bg-gray-100">
+        <tr>
             {#each columns as column}
                 <th
                     align="left"
@@ -49,27 +49,32 @@
             {/each}
         </tr>
     </thead>
-    {#each sorted_courses[`${cat}_${dir}`] as course}
-        {#if $visible_rows.has(course.Code)}
-            <tr class={active(course.Code, $active_courses)}>
-                {#each columns.slice(0, -1) as column}
-                    <td on:click={() => active_courses.toggle(course.Code)}
-                        >{course[column]}</td
+    <tbody>
+        {#each sorted_courses[`${cat}_${dir}`] as course}
+            {#if $visible_rows.has(course.Code)}
+                <tr class={active(course.Code, $active_courses)}>
+                    {#each columns.slice(0, -1) as column}
+                        <td on:click={() => active_courses.toggle(course.Code)}
+                            >{course[column]}</td
+                        >
+                    {/each}
+                    <td
+                        ><a
+                            class="text-gray-700 underline"
+                            href={review_url(course.Course)}
+                            target="_blank">{course.Reviews}</a
+                        ></td
                     >
-                {/each}
-                <td
-                    ><a
-                        class="text-gray-700 underline"
-                        href={review_url(course.Course)}
-                        target="_blank">{course.Reviews}</a
-                    ></td
-                >
-            </tr>
-        {/if}
-    {/each}
+                </tr>
+            {/if}
+        {/each}
+    </tbody>
 </table>
 
 <style>
+    table td {
+        vertical-align: top;
+    }
     table {
         border-collapse: separate;
         border-spacing: 0;
