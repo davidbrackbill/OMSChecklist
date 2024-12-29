@@ -17,7 +17,7 @@
     {/each}
 </svelte:head>
 
-<div class="h-screen bg-gray-100 drop-shadow p-2">
+<div class="h-screen bg-gray-100 drop-shadow p-2 w-20">
     {#each Object.entries(images) as [key, image]}
         <div class="py-4" on:click={() => active_specs.toggle(key)}>
             <img
@@ -32,7 +32,7 @@
 
 <style>
     img {
-        width: 6vh;
+        max-width: 6vh;
         opacity: 0.3;
     }
     img:hover {
