@@ -37,7 +37,7 @@
     }
 </script>
 
-<div class="rounded-lg border-2 border-gray-300">
+<div class="sb-width rounded-lg border-2 border-gray-300 max-h-screen overflow-y-auto">
     <table>
         <thead>
             <tr class={`bg-gray-100 ${cell}`}>
@@ -53,7 +53,7 @@
             {#if $visible_rows.has(course.Code)}
                 <tr class={active(course.Code, $active_courses)}>
                     {#each columns.slice(0, -1) as column}
-                        <td on:click={() => active_courses.toggle(course.Code)}
+                        <td on:click={() => active_courses.toggle(course.Code)} 
                             >{course[column]}</td
                         >
                     {/each}
@@ -71,6 +71,8 @@
 </div>
 
 <style>
+    .sb-width { scrollbar-width: none;}
+    
     /* Right-align the numbers */
     td:nth-last-child(-n + 4) {
         text-align: right;
