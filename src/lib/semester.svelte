@@ -4,8 +4,8 @@
     import { dndzone } from "svelte-dnd-action";
     export let codes, index, pinned;
 
-    const flipDurationMs = 100;
-    const dropTargetStyle = {
+    export let flipDurationMs = 100;
+    export let dropTargetStyle = {
         border: "solid rgba(0, 255, 255, 0.2)",
         "border-radius": "4px",
     };

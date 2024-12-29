@@ -39,7 +39,7 @@
 
 <table>
     <div
-        class="basis-1/2 shrink justify-self-end no-sb rounded-lg border-2 border-gray-300 max-h-screen overflow-y-auto"
+        class="basis-1/2 shrink justify-self-end  rounded-lg border-2 border-gray-300 max-h-screen overflow-y-auto"
     >
         <thead>
             <tr class={`bg-gray-100 ${cell}`}>
