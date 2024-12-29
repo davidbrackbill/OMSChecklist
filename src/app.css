@@ -11,6 +11,10 @@
     flex-direction: column;
 }
 
+.mt-auto {
+    margin-top: auto;
+}
+
 .flex-cw {
     display: flex;
     flex-direction: column;
@@ -30,8 +34,7 @@
         border-radius: 4px;
         width: 125px;
         height: 78px;
-        border: 1px solid black;
-    }
+}
 
 .sidebar-width {
     max-width: 165px;

@@ -41,42 +41,32 @@
     }
 </script>
 
-<div class="mr-4">
-    <div class="flex-c courses bucket">
-        <section
-            use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
-            on:consider={consider}
-            on:finalize={finalize}
-            style="flex-basis: 75px;"
-        >
-            {#each items as item (item.id)}
-                <div animate:flip={{ duration: flipDurationMs }}>
-                    <div class="course-text">
-                        {courses[item.code]["Course"]}
-                    </div>
+<div class="flex-c bucket shadow-md mb-2 mr-4">
+    <section
+        use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
+        on:consider={consider}
+        on:finalize={finalize}
+        style="flex-basis: 75px;"
+    >
+        {#each items as item (item.id)}
+            <div animate:flip={{ duration: flipDurationMs }}>
+                <div class="course-text">
+                    {courses[item.code]["Course"]}
                 </div>
-            {/each}
-        </section>
-        <div class="flex stats">
-            <div>&#128548{average_difficulty(items)}</div>
-            <div>&#9203{workload(items)}</div>
-        </div>
+            </div>
+        {/each}
+    </section>
+    <div class="flex justify-center mt-auto gap-2">
+        <div>&#128548{average_difficulty(items)}</div>
+        <div>&#9203{workload(items)}</div>
     </div>
-    <h3>Semester {index + 1}</h3>
 </div>
 
 <style>
-    h3 {
-        margin-top: -0.2em;
-        justify-self: center;
-    }
     .course-text {
         line-height: 90%;
         font-size: 0.8em;
         margin-top: 0.3em;
-    }
-    .courses {
-        margin-bottom: 10px;
     }
     .course-text:hover {
         mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
@@ -87,11 +77,5 @@
         100% {
             mask-position: left;
         }
-    }
-
-    .stats {
-        justify-content: center;
-        margin-top: auto;
-        gap: 6%;
     }
 </style>

@@ -11,7 +11,7 @@
 </script>
 
 <div class="mr-4">
-    <div class="flex-cw bucket">
+    <div class="flex-cw bucket shadow-md">
         {#each listed as course}
             <div on:click={() => active_courses.toggle(course)}>{course}</div>
         {/each}
