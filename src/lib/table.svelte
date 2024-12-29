@@ -37,8 +37,10 @@
     }
 </script>
 
-<div class="sb-width rounded-lg border-2 border-gray-300 max-h-screen overflow-y-auto">
-    <table>
+<table class="basis-3/5 shrink">
+    <div
+        class="justify-self-end no-sb rounded-lg border-2 border-gray-300 max-h-screen overflow-y-auto"
+    >
         <thead>
             <tr class={`bg-gray-100 ${cell}`}>
                 {#each columns as column}
@@ -53,7 +55,7 @@
             {#if $visible_rows.has(course.Code)}
                 <tr class={active(course.Code, $active_courses)}>
                     {#each columns.slice(0, -1) as column}
-                        <td on:click={() => active_courses.toggle(course.Code)} 
+                        <td on:click={() => active_courses.toggle(course.Code)}
                             >{course[column]}</td
                         >
                     {/each}
@@ -67,20 +69,17 @@
                 </tr>
             {/if}
         {/each}
-    </table>
-</div>
+    </div>
+</table>
 
 <style>
-    .sb-width { scrollbar-width: none;}
-    
+    .no-sb {
+        scrollbar-width: none;
+    }
+
     /* Right-align the numbers */
     td:nth-last-child(-n + 4) {
         text-align: right;
-    }
-
-    td {
-        min-width: 100px;
-        padding: 10px;
     }
 
     thead > * > td:hover {

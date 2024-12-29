@@ -17,10 +17,11 @@
     {/each}
 </svelte:head>
 
-<div class="h-screen bg-gray-100 drop-shadow p-2 w-20">
+<div class="h-screen basis-20 shrink p-2 bg-gray-100 drop-shadow">
     {#each Object.entries(images) as [key, image]}
         <div class="py-4" on:click={() => active_specs.toggle(key)}>
             <img
+                class="opacity-30 hover:opacity-60"
                 style={$active_specs.has(key) ? "opacity:1" : ""}
                 src={image}
                 alt={image}
@@ -30,12 +31,3 @@
     <button on:click={active_specs.clear}>Clear</button>
 </div>
 
-<style>
-    img {
-        max-width: 6vh;
-        opacity: 0.3;
-    }
-    img:hover {
-        opacity: 0.6;
-    }
-</style>

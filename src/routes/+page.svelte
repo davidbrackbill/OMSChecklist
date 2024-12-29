@@ -9,7 +9,7 @@
 <div class="flex gap-8">
     <Sidebar />
 
-    <div>
+    <div class="basis-1/3 grow">
         {#each $active_specs as name}
             <Specs {name} />
         {/each}
