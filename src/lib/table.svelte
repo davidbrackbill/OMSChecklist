@@ -37,39 +37,37 @@
     }
 </script>
 
-<table>
-    <div
-        class="basis-1/2 shrink justify-self-end  rounded-lg border-2 border-gray-300 max-h-screen overflow-y-auto"
-    >
-        <thead>
-            <tr class={`bg-gray-100 ${cell}`}>
-                {#each columns as column}
-                    <td
-                        class="text-gray-600 font-normal"
-                        on:click={() => toggle(column)}>{column}</td
+<table
+    class="basis-1/2 shrink justify-self-end rounded-lg border-2 border-gray-300 max-h-screen overflow-y-auto"
+>
+    <thead>
+        <tr class={`bg-gray-100 ${cell}`}>
+            {#each columns as column}
+                <td
+                    class="text-gray-600 font-normal"
+                    on:click={() => toggle(column)}>{column}</td
+                >
+            {/each}
+        </tr>
+    </thead>
+    {#each sorted_courses[`${cat}_${dir}`] as course}
+        {#if $visible_rows.has(course.Code)}
+            <tr class={active(course.Code, $active_courses)}>
+                {#each columns.slice(0, -1) as column}
+                    <td on:click={() => active_courses.toggle(course.Code)}
+                        >{course[column]}</td
                     >
                 {/each}
+                <td
+                    ><a
+                        class="text-gray-700 underline"
+                        href={review_url(course.Course)}
+                        target="_blank">{course.Reviews}</a
+                    ></td
+                >
             </tr>
-        </thead>
-        {#each sorted_courses[`${cat}_${dir}`] as course}
-            {#if $visible_rows.has(course.Code)}
-                <tr class={active(course.Code, $active_courses)}>
-                    {#each columns.slice(0, -1) as column}
-                        <td on:click={() => active_courses.toggle(course.Code)}
-                            >{course[column]}</td
-                        >
-                    {/each}
-                    <td
-                        ><a
-                            class="text-gray-700 underline"
-                            href={review_url(course.Course)}
-                            target="_blank">{course.Reviews}</a
-                        ></td
-                    >
-                </tr>
-            {/if}
-        {/each}
-    </div>
+        {/if}
+    {/each}
 </table>
 
 <style>
