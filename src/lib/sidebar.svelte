@@ -19,7 +19,7 @@
 
 <div class="h-screen bg-gray-100 drop-shadow p-2">
     {#each Object.entries(images) as [key, image]}
-        <div class="py-2" on:click={() => active_specs.toggle(key)}>
+        <div class="py-4" on:click={() => active_specs.toggle(key)}>
             <img
                 style={$active_specs.has(key) ? "opacity:1" : ""}
                 src={image}
@@ -27,11 +27,12 @@
             />
         </div>
     {/each}
+    <button on:click={active_specs.clear}>Clear</button>
 </div>
 
 <style>
     img {
-        width: 8vh;
+        width: 6vh;
         opacity: 0.3;
     }
     img:hover {
