@@ -38,13 +38,13 @@
 </script>
 
 <table
-    class="basis-1/2 shrink justify-self-end rounded-lg border-2 border-gray-300 max-h-screen overflow-y-auto"
+    class="basis-1/2 shrink justify-self-end max-h-screen overflow-y-auto rounded-lg border-2 border-gray-300"
 >
     <thead>
-        <tr class={`bg-gray-100 ${cell}`}>
+        <tr class={`bg-gray-100 rounded-lg ${cell}`}>
             {#each columns as column}
                 <td
-                    class="text-gray-600 font-normal"
+                    class="text-gray-600 font-normal shimmer"
                     on:click={() => toggle(column)}>{column}</td
                 >
             {/each}
@@ -76,7 +76,7 @@
         text-align: right;
     }
 
-    thead > * > td:hover {
+    .shimmer:hover {
         mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
         animation: shimmer 1s infinite;
     }
@@ -87,6 +87,6 @@
     }
 
     .b-highlight {
-        background-color: hsl(194 54% 89%);
+        background-color: hsl(194 54% 95%);
     }
 </style>
