@@ -11,8 +11,6 @@
         "Reviews",
     ];
 
-    const cell = "border-b-2 border-gray-200";
-
     let cat = "Reviews";
     let dir = "desc";
     function toggle(column) {
@@ -21,8 +19,8 @@
         cat = column;
     }
     function active(code, active_courses) {
-        if (active_courses.has(code)) return cell + " b-highlight";
-        return cell;
+        if (active_courses.has(code)) return "b-highlight";
+        return "";
     }
 
     function review_url(course_name) {
@@ -41,7 +39,7 @@
     class="basis-1/2 shrink justify-self-end max-h-screen overflow-y-auto rounded-lg border-2 border-gray-300"
 >
     <thead>
-        <tr class={`bg-gray-100 rounded-lg ${cell}`}>
+        <tr class="bg-gray-100">
             {#each columns as column}
                 <th
                     align="left"
@@ -72,6 +70,16 @@
 </table>
 
 <style>
+    table {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    td,
+    th {
+        border-bottom: solid #e5e7eb 2px;
+    }
+
     /* Right-align the numbers */
     td:nth-last-child(-n + 4) {
         text-align: right;
