@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.no-sb {
+    scrollbar-width: none;
+}
+
 .flex-c {
     display: flex;
     flex-direction: column;

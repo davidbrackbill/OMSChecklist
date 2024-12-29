@@ -73,10 +73,6 @@
 </table>
 
 <style>
-    .no-sb {
-        scrollbar-width: none;
-    }
-
     /* Right-align the numbers */
     td:nth-last-child(-n + 4) {
         text-align: right;
