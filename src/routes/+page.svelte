@@ -11,12 +11,13 @@
 
     <div class="basis-1/3 grow">
         {#each $active_sections as name}
-            {#if name === "Semesters"}
-                <Semesters />
-            {:else}
+            {#if name !== "Semesters"}
                 <Specs {name} />
             {/if}
         {/each}
+        {#if $active_sections.has("Semesters")}
+            <Semesters />
+        {/if}
     </div>
 
     <Table />

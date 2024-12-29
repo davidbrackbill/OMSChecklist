@@ -1,7 +1,7 @@
 <script>
+    import Spec from "../lib/spec.svelte";
     import { specs } from "../lib/data.js";
     import { active_courses } from "../lib/state.js";
-    import Spec from "../lib/spec.svelte";
 
     export let name;
 
@@ -29,10 +29,18 @@
         });
         return courses;
     }
+    const colors = {
+        "Machine Learning": "hsl(178, 50%, 60%)",
+        "Computer Graphics": "hsl(184, 100%, 29%)",
+        Robotics: "hsl(77, 64%, 51%)",
+        "Computing Systems": "hsl(48, 100%, 50%)",
+        "Human Computer Interaction": "hsl(8, 73%, 55%)",
+        "Interactive Intelligence": "hsl(269, 63%, 38%)",
+    };
 </script>
 
-<h2>{name}</h2>
-<div class="flex wrap basis-32 grow">
+<h2 class="font-medium text-lg" style={`color: ${colors[name]};`}>{name}</h2>
+<div class="flex wrap">
     {#each Object.values(buckets) as { category, count }, i}
         <Spec spec={name} {category} {count} listed={bucket_courses[i]} />
     {/each}

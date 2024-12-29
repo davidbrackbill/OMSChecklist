@@ -3,7 +3,6 @@
     import { active_courses } from "../lib/state.js";
 
     const max_semesters = 20;
-
     let pinned = {};
     $: semesters = update_semesters($active_courses);
     $: active = semesters.filter((a) => a.length);
@@ -39,7 +38,7 @@
     }
 </script>
 
-<h2>Semesters</h2>
+<h2 class="font-medium text-lg">Semesters</h2>
 <div class="flex wrap">
     {#each active as codes, index}
         <Semester bind:pinned {codes} {index} />
@@ -48,3 +47,9 @@
         <Semester codes={[]} index={0} />
     {/if}
 </div>
+
+<style>
+    h2 {
+        color: hsl(46, 31%, 52%);
+    }
+</style>
