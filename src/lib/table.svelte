@@ -43,9 +43,10 @@
     <thead>
         <tr class={`bg-gray-100 rounded-lg ${cell}`}>
             {#each columns as column}
-                <td
-                    class="text-gray-600 font-normal shimmer"
-                    on:click={() => toggle(column)}>{column}</td
+                <th
+                    align="left"
+                    class="text-gray-600 font-normal"
+                    on:click={() => toggle(column)}>{column}</th
                 >
             {/each}
         </tr>
@@ -76,7 +77,7 @@
         text-align: right;
     }
 
-    .shimmer:hover {
+    th:hover {
         mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
         animation: shimmer 1s infinite;
     }
