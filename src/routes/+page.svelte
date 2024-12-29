@@ -1,5 +1,5 @@
 <script>
-    import { active_specs } from "../lib/state.js";
+    import { active_sections } from "../lib/state.js";
     import Sidebar from "$lib/sidebar.svelte";
     import Specs from "$lib/specs.svelte";
     import Semesters from "$lib/semesters.svelte";
@@ -10,11 +10,13 @@
     <Sidebar />
 
     <div class="basis-1/3 grow">
-        {#each $active_specs as name}
-            <Specs {name} />
+        {#each $active_sections as name}
+            {#if name === "Semesters"}
+                <Semesters />
+            {:else}
+                <Specs {name} />
+            {/if}
         {/each}
-
-        <Semesters />
     </div>
 
     <Table />

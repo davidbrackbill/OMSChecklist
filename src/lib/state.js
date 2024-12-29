@@ -14,7 +14,7 @@ function toggleable(init) {
 	}
 }
 export const active_courses = toggleable(new Set());
-export const active_specs = toggleable(new Set(["Machine Learning"]));
+export const active_sections = toggleable(new Set(["Machine Learning", "Semesters"]));
 
 export const visible_rows = writable(course_codes);
 export const active_bucket = writable({});
