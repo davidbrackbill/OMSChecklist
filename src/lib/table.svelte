@@ -72,7 +72,7 @@
 </table>
 
 <style>
-    table td {
+    td {
         vertical-align: top;
     }
     table {
@@ -96,10 +96,10 @@
     }
 
     tbody > tr:not(.active):hover {
-        background-color: hsl(46 55% 95%);
+        background-color: hsl(46 50% 95%);
     }
 
     .active > td {
-        background-color: hsl(46 70% 95%);
+        background-color: hsl(46 60% 93%);
     }
 </style>
