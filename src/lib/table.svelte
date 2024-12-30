@@ -19,7 +19,7 @@
         cat = column;
     }
     function active(code, active_courses) {
-        if (active_courses.has(code)) return "b-highlight";
+        if (active_courses.has(code)) return "active";
         return "";
     }
 
@@ -80,11 +80,6 @@
         border-spacing: 0;
     }
 
-    td,
-    th {
-        border-bottom: solid #e5e7eb 2px;
-    }
-
     /* Right-align the numbers */
     td:nth-last-child(-n + 4) {
         text-align: right;
@@ -100,7 +95,11 @@
         }
     }
 
-    .b-highlight {
-        background-color: hsl(194 54% 95%);
+    tbody > tr:not(.active):hover {
+        background-color: hsl(46 55% 95%);
+    }
+
+    .active > td {
+        background-color: hsl(46 70% 95%);
     }
 </style>
