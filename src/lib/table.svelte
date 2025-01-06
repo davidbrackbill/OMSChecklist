@@ -1,7 +1,6 @@
 <script>
     import { sorted_courses } from "../lib/data.js";
     import { active_courses, visible_rows } from "../lib/state.js";
-    import Header from "$lib/header.svelte";
     const arrow = "/arrow.svg";
 
     const columns = [
@@ -49,56 +48,56 @@
     <link rel="preload" href={arrow} as="image" type="image/svg" />
 </svelte:head>
 
-<table
-    class="basis-1/2 shrink grow self-baseline justify-self-end max-h-screen overflow-y-scroll rounded-lg shadow"
->
-    <thead class="bg-gray-100">
-        <tr>
-            {#each columns as column}
-                <th
-                    class="text-gray-600 font-normal text-sm pr-2"
-                    on:click={() => toggle(column)}
-                >
-                    <div
-                        class={`flex grow ${alignments[column] === "right" ? "justify-end" : ""}`}
+<div class="max-h-screen basis-1/2 shrink grow overflow-y-scroll">
+    <table class="self-baseline justify-self-end rounded-lg shadow">
+        <thead class="bg-gray-100">
+            <tr>
+                {#each columns as column}
+                    <th
+                        class="text-gray-600 font-normal text-sm pr-2"
+                        on:click={() => toggle(column)}
                     >
-                        {#if cat === column}
-                            <img
-                                class="w-3"
-                                style={`transform: scaleY(${dir === "desc" ? "-1" : "1"});`}
-                                src={arrow}
-                                alt={arrow}
-                            />
-                        {/if}
-                        <div>
+                        <div
+                            class={`flex grow ${alignments[column] === "right" ? "justify-end" : ""}`}
+                        >
+                            {#if cat === column}
+                                <img
+                                    class="w-3"
+                                    style={`transform: scaleY(${dir === "desc" ? "-1" : "1"});`}
+                                    src={arrow}
+                                    alt={arrow}
+                                />
+                            {/if}
                             {column}
                         </div>
-                    </div>
-                </th>
-            {/each}
-        </tr>
-    </thead>
-    <tbody>
-        {#each sorted_courses[`${cat}_${dir}`] as course}
-            {#if $visible_rows.has(course.Code)}
-                <tr class={active(course.Code, $active_courses)}>
-                    {#each columns.slice(0, -1) as column}
-                        <td on:click={() => active_courses.toggle(course.Code)}
-                            >{course[column]}</td
+                    </th>
+                {/each}
+            </tr>
+        </thead>
+        <tbody>
+            {#each sorted_courses[`${cat}_${dir}`] as course}
+                {#if $visible_rows.has(course.Code)}
+                    <tr class={active(course.Code, $active_courses)}>
+                        {#each columns.slice(0, -1) as column}
+                            <td
+                                on:click={() =>
+                                    active_courses.toggle(course.Code)}
+                                >{course[column]}</td
+                            >
+                        {/each}
+                        <td
+                            ><a
+                                class="text-gray-700 underline"
+                                href={review_url(course.Course)}
+                                target="_blank">{course.Reviews}</a
+                            ></td
                         >
-                    {/each}
-                    <td
-                        ><a
-                            class="text-gray-700 underline"
-                            href={review_url(course.Course)}
-                            target="_blank">{course.Reviews}</a
-                        ></td
-                    >
-                </tr>
-            {/if}
-        {/each}
-    </tbody>
-</table>
+                    </tr>
+                {/if}
+            {/each}
+        </tbody>
+    </table>
+</div>
 
 <style>
     table {
