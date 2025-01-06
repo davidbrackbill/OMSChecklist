@@ -1,6 +1,7 @@
 <script>
     import { sorted_courses } from "../lib/data.js";
     import { active_courses, visible_rows } from "../lib/state.js";
+    import Header from "$lib/header.svelte";
 
     const columns = [
         "Code",
@@ -38,17 +39,10 @@
 <table
     class="basis-1/2 shrink grow self-baseline justify-self-end max-h-screen overflow-y-scroll no-sb rounded-lg shadow"
 >
-    {#each ["15%", "55%", "10%", "10%", "10%"] as width}
-	<col style={`width:${width}`}>
-    {/each}
     <thead class="bg-gray-100">
         <tr>
-            {#each columns as column, i}
-                <th
-                    align={i < 2 ? "left" : "right"}
-                    class="text-gray-600 font-normal pr-2"
-                    on:click={() => toggle(column)}>{column}</th
-                >
+            {#each columns as column}
+                <Header {column} {toggle} dir={cat === column ? dir : false} />
             {/each}
         </tr>
     </thead>
@@ -95,15 +89,6 @@
         text-align: right;
     }
 
-    th:hover {
-        mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
-        animation: shimmer 1s infinite;
-    }
-    @keyframes shimmer {
-        100% {
-            mask-position: left;
-        }
-    }
 
     tbody > tr:not(.active):hover {
         background-color: hsl(46 50% 95%);
