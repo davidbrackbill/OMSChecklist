@@ -2,6 +2,7 @@
     import { sorted_courses } from "../lib/data.js";
     import { active_courses, visible_rows } from "../lib/state.js";
     import Header from "$lib/header.svelte";
+    const arrow = "/arrow.svg";
 
     const columns = [
         "Code",
@@ -11,6 +12,14 @@
         "Workload",
         "Reviews",
     ];
+    const alignments = {
+        Code: "left",
+        Course: "left",
+        Rating: "right",
+        Difficulty: "right",
+        Workload: "right",
+        Reviews: "right",
+    };
 
     let cat = "Reviews";
     let dir = "desc";
@@ -36,13 +45,36 @@
     }
 </script>
 
+<svelte:head>
+    <link rel="preload" href={arrow} as="image" type="image/svg" />
+</svelte:head>
+
 <table
-    class="basis-1/2 shrink grow self-baseline justify-self-end max-h-screen overflow-y-scroll no-sb rounded-lg shadow"
+    class="basis-1/2 shrink grow self-baseline justify-self-end max-h-screen overflow-y-scroll rounded-lg shadow"
 >
     <thead class="bg-gray-100">
         <tr>
             {#each columns as column}
-                <Header {column} {toggle} dir={cat === column ? dir : false} />
+                <th
+                    class="text-gray-600 font-normal text-sm pr-2"
+                    on:click={() => toggle(column)}
+                >
+                    <div
+                        class={`flex grow ${alignments[column] === "right" ? "justify-end" : ""}`}
+                    >
+                        {#if cat === column}
+                            <img
+                                class="w-3"
+                                style={`transform: scaleY(${dir === "desc" ? "-1" : "1"});`}
+                                src={arrow}
+                                alt={arrow}
+                            />
+                        {/if}
+                        <div>
+                            {column}
+                        </div>
+                    </div>
+                </th>
             {/each}
         </tr>
     </thead>
@@ -89,12 +121,21 @@
         text-align: right;
     }
 
-
     tbody > tr:not(.active):hover {
         background-color: hsl(46 50% 95%);
     }
 
     .active > td {
         background-color: hsl(46 60% 93%);
+    }
+
+    th:hover {
+        mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
+        animation: shimmer 1s infinite;
+    }
+    @keyframes shimmer {
+        100% {
+            mask-position: left;
+        }
     }
 </style>
