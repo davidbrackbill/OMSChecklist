@@ -9,7 +9,7 @@
 <div class="flex">
     <Sidebar />
 
-    <div class="ml-8 basis-1/3 grow max-h-screen overflow-y-scroll">
+    <div class="ml-8 basis-1/3 grow max-h-screen overflow-y-auto">
         {#each $active_sections as name}
             {#if name !== "Semesters"}
                 <Specs {name} />

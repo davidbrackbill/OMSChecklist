@@ -48,7 +48,7 @@
     <link rel="preload" href={arrow} as="image" type="image/svg" />
 </svelte:head>
 
-<div class="max-h-screen basis-1/2 shrink overflow-y-scroll justify-self-end">
+<div class="max-h-screen basis-1/2 shrink overflow-y-auto justify-self-end">
     <table class="self-baseline shrink justify-self-start rounded-lg shadow">
         <thead class="bg-gray-100">
             <tr>
