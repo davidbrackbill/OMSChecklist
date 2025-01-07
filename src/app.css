@@ -2,30 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-.category {
-    margin: 0.3em;
-    padding: 0.2em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
+.shimmer:hover {
+    mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
+    animation: shimmer 1s infinite;
 }
 
-.no-sb {
-    scrollbar-width: none;
-}
-
-.mt-auto {
-    margin-top: auto;
-}
-
-.bucket {
-        padding: 10px;
-        border-radius: 4px;
-        width: 125px;
-        height: 78px;
-}
-
-.bold * {
-    font-weight: bold;
+@keyframes shimmer {
+    100% {
+        mask-position: left;
+    }
 }

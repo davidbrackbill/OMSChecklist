@@ -2,6 +2,7 @@
     import { courses } from "$lib/data.js";
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
+    import Bucket from "$lib/bucket.svelte";
     export let codes, index, pinned;
 
     export let flipDurationMs = 100;
@@ -41,41 +42,26 @@
     }
 </script>
 
-<div class="flex flex-col mr-4">
+<Bucket>
     <section
-        class="bucket shadow-md"
+        slot="inside"
         use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
         on:consider={consider}
         on:finalize={finalize}
-        style="flex-basis: 75px;"
     >
         {#each items as item (item.id)}
-            <div animate:flip={{ duration: flipDurationMs }}>
-                <div class="course-text">
-                    {courses[item.code]["Course"]}
-                </div>
+            <div class="shimmer" animate:flip={{ duration: flipDurationMs }}>
+                {item.code}
             </div>
         {/each}
     </section>
-    <div class="category gap-2">
-        <div>&#128548{average_difficulty(items)}</div>
-        <div>&#9203{workload(items)}</div>
+    <div slot="label">
+        &#128548{average_difficulty(items)}&nbsp;&#9203{workload(items)}
     </div>
-</div>
+</Bucket>
 
 <style>
-    .course-text {
-        line-height: 90%;
-        font-size: 0.8em;
-        margin-top: 0.3em;
-    }
-    .course-text:hover {
-        mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
-        animation: shimmer 1s infinite;
-    }
-    @keyframes shimmer {
-        100% {
-            mask-position: left;
-        }
+    section {
+        flex-basis: 75px;
     }
 </style>
