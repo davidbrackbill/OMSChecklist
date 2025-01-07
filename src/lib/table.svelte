@@ -48,8 +48,8 @@
     <link rel="preload" href={arrow} as="image" type="image/svg" />
 </svelte:head>
 
-<div class="max-h-screen basis-1/2 shrink grow overflow-y-scroll">
-    <table class="self-baseline justify-self-end rounded-lg shadow">
+<div class="max-h-screen basis-1/2 shrink overflow-y-scroll justify-self-end">
+    <table class="self-baseline shrink justify-self-end rounded-lg shadow">
         <thead class="bg-gray-100">
             <tr>
                 {#each columns as column}

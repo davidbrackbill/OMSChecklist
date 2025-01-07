@@ -6,10 +6,10 @@
     import Table from "$lib/table.svelte";
 </script>
 
-<div class="flex gap-8">
+<div class="flex">
     <Sidebar />
 
-    <div class="basis-1/3 grow">
+    <div class="ml-8 basis-1/3 grow max-h-screen overflow-y-scroll">
         {#each $active_sections as name}
             {#if name !== "Semesters"}
                 <Specs {name} />

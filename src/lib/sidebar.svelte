@@ -28,6 +28,8 @@
             />
         </div>
     {/each}
+    <div class="flex justify-center">
     <button on:click={active_sections.clear}>Clear</button>
+    </div>
 </div>
 
