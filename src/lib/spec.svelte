@@ -12,9 +12,11 @@
 </script>
 
 <Bucket>
-    <div slot="inside" class="flex-cw">
+    <div slot="inside">
         {#each listed as course}
-            <div on:click={() => active_courses.toggle(course)}>{course}</div>
+            <div class="shimmer" on:click={() => active_courses.toggle(course)}>
+                {course}
+            </div>
         {/each}
     </div>
     <div
@@ -22,7 +24,7 @@
         on:click={() => toggle_rows(spec, category)}
         class={active($active_bucket)}
     >
-        {category}&nbsp;{listed.length}/{count}
+        {category}&nbsp;({listed.length}/{count})
     </div>
 </Bucket>
 
