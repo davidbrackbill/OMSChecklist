@@ -17,9 +17,9 @@
     {/each}
 </svelte:head>
 
-<div class="h-screen basis-20 shrink p-2 bg-gray-50 drop-shadow-md">
+<div class="h-screen basis-16 shrink p-2 bg-gray-50 drop-shadow-md">
     {#each Object.entries(images) as [key, image]}
-        <div class="py-4" on:click={() => active_sections.toggle(key)}>
+        <div title={key} class="py-4" on:click={() => active_sections.toggle(key)}>
             <img
                 class="opacity-30 hover:opacity-60"
                 style={$active_sections.has(key) ? "opacity:1" : ""}
@@ -28,8 +28,10 @@
             />
         </div>
     {/each}
-    <div class="flex justify-center">
-    <button on:click={active_sections.clear}>Clear</button>
+    <div title="Clear all selections" class="flex justify-center">
+        <button
+            class="text-gray-600 text-sm"
+            on:click={active_sections.clear}>Clear</button
+        >
     </div>
 </div>
-
