@@ -1,19 +1,19 @@
 <script>
     import { sorted_courses } from "../lib/data.js";
-    import { active_courses, visible_rows } from "../lib/state.js";
+    import { active_courses, active_rows } from "../lib/state.js";
     const arrow = "/arrow.svg";
 
     const columns = [
-        "Code",
         "Course",
+        "Code",
         "Rating",
         "Difficulty",
         "Workload",
         "Reviews",
     ];
     const alignments = {
-        Code: "left",
         Course: "left",
+        Code: "left",
         Rating: "right",
         Difficulty: "right",
         Workload: "right",
@@ -48,13 +48,15 @@
     <link rel="preload" href={arrow} as="image" type="image/svg" />
 </svelte:head>
 
-<div class="max-h-screen basis-1/2 shrink overflow-y-auto justify-self-end">
+<div
+    class="max-h-screen basis-1/2 shrink overflow-y-auto justify-self-end pt-2"
+>
     <table class="self-baseline shrink justify-self-start rounded-lg shadow">
         <thead class="bg-gray-100">
             <tr>
                 {#each columns as column}
                     <th
-                        class="text-gray-600 font-normal text-sm pr-2"
+                        class="font-normal text-sm pr-2"
                         on:click={() => toggle(column)}
                     >
                         <div
@@ -74,9 +76,9 @@
                 {/each}
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-[14px]">
             {#each sorted_courses[`${cat}_${dir}`] as course}
-                {#if $visible_rows.has(course.Code)}
+                {#if $active_rows.has(course.Code)}
                     <tr class={active(course.Code, $active_courses)}>
                         {#each columns.slice(0, -1) as column}
                             <td
@@ -121,11 +123,11 @@
     }
 
     tbody > tr:not(.active):hover {
-        background-color: hsl(46 50% 95%);
+        background-color: hsl(0 0% 96%);
     }
 
     .active > td {
-        background-color: hsl(46 60% 93%);
+        background-color: hsl(0 0% 92%);
     }
 
     th:hover {

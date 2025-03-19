@@ -48,6 +48,7 @@
         use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
         on:consider={consider}
         on:finalize={finalize}
+        class="basis-[75px]"
     >
         {#each items as item (item.id)}
             <div class="shimmer" animate:flip={{ duration: flipDurationMs }}>
@@ -59,9 +60,3 @@
         &#128548{average_difficulty(items)}&nbsp;&#9203{workload(items)}
     </div>
 </Bucket>
-
-<style>
-    section {
-        flex-basis: 75px;
-    }
-</style>

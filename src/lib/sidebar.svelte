@@ -1,5 +1,5 @@
 <script>
-    import { active_sections } from "../lib/state.js";
+    import { active_sections, clear } from "../lib/state.js";
     const images = {
         "Machine Learning": "/ml.png",
         "Computer Graphics": "/graphics.png",
@@ -19,7 +19,11 @@
 
 <div class="h-screen basis-16 shrink p-2 bg-gray-50 drop-shadow-md">
     {#each Object.entries(images) as [key, image]}
-        <div title={key} class="py-4" on:click={() => active_sections.toggle(key)}>
+        <div
+            title={key}
+            class="py-4"
+            on:click={() => active_sections.toggle(key)}
+        >
             <img
                 class="opacity-30 hover:opacity-60"
                 style={$active_sections.has(key) ? "opacity:1" : ""}
@@ -29,9 +33,6 @@
         </div>
     {/each}
     <div title="Clear all selections" class="flex justify-center">
-        <button
-            class="text-gray-600 text-sm"
-            on:click={active_sections.clear}>Clear</button
-        >
+        <button class="text-sm" on:click={clear}>Clear</button>
     </div>
 </div>

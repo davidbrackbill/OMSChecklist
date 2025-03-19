@@ -38,8 +38,8 @@
     }
 </script>
 
-<h2 class="font-medium text-lg">Semesters</h2>
-<div class="flex flex-wrap">
+<h2 class="font-medium text-lg text-center">Semesters</h2>
+<div class="flex flex-wrap justify-center">
     {#each active as codes, index}
         <Semester bind:pinned {codes} {index} />
     {/each}
