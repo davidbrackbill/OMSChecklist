@@ -1,6 +1,62 @@
+/*CSS that cannot be defined in-line*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    /* UI Colors */
+    --color-sidebar-bg: rgb(249 250 251);
+    --color-table-header: rgb(243 244 246);
+    
+    /* Active bucket shadows */
+    --shadow-active: inset 60px 0 120px #d4ebf2, inset -60px 0 120px #0ff;
+    
+    /* Drop target shadow */
+    --shadow-drop-target: 0 8px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    
+    /* Component sizes */
+    --bucket-width: 16rem;
+    --bucket-height: 8rem;
+    --sidebar-width: 4rem;
+}
+
+/* Shared component classes */
+@layer components {
+    .track-container {
+        @apply mb-4 p-4;
+    }
+
+    .track-icon {
+        @apply w-6 h-6 object-contain;
+    }
+
+
+    .course-container {
+        @apply p-2 rounded-lg border shadow-md flex flex-col overflow-hidden;
+        width: var(--bucket-width);
+        min-width: var(--bucket-width);
+        min-height: var(--bucket-height);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .course-item {
+        @apply cursor-pointer;
+        margin-bottom: var(--spacing-xs);
+        padding: var(--spacing-xs) 0;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        line-height: 1.2;
+    }
+}
 
 .shimmer:hover {
     mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;

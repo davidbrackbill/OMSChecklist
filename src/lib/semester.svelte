@@ -1,25 +1,24 @@
 <script>
-    import { courses } from "$lib/data.js";
+    import { courses } from "./fallback.js";
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
-    import Bucket from "$lib/bucket.svelte";
+    import Tooltip from "./tooltip.svelte";
     export let codes, index, pinned;
 
     export let flipDurationMs = 100;
     export let dropTargetStyle = {
-        border: "solid rgba(0, 255, 255, 0.2)",
-        "border-radius": "4px",
+        "box-shadow": "var(--shadow-drop-target)",
     };
 
     /* Svelte-dnd */
     // Give codes an id for svelte-dnd to use
     $: items = codes.map((code) => ({ code, id: code }));
 
-    const consider = (e) => {
+    const dndConsider = (e) => {
         items = e.detail.items;
     };
 
-    const finalize = (e) => {
+    const dndFinalize = (e) => {
         items = e.detail.items;
         if (items.length === 0) delete pinned[index];
         else pinned[index] = items.map((o) => o.code);
@@ -27,36 +26,72 @@
     };
 
     /* Stats */
-    function average_difficulty(items) {
+    function getDifficulty(items) {
         if (items.length === 0) return 0;
         let codes = items.map((o) => o.code);
-        let sum = codes.reduce((a, b) => a + courses[b]["Difficulty"], 0);
+        let sum = codes.reduce((a, b) => a + courses[b]["difficulty"], 0);
         return (sum / codes.length).toFixed(1);
     }
 
-    function workload(items) {
+    function getWorkload(items) {
         let codes = items.map((o) => o.code);
         return Math.floor(
-            codes.reduce((a, b) => a + courses[b]["Workload"], 0),
+            codes.reduce((a, b) => a + courses[b]["workload"], 0),
         );
+    }
+
+    function getWorkloadEmoji(workload) {
+        if (workload < 11) return "💨";
+        if (workload < 17) return "⌚";
+        if (workload < 25) return "⌛";
+        return "⏳";
+    }
+
+    function getDifficultyEmoji(difficulty) {
+        if (difficulty < 2.8) return "😴";
+        if (difficulty < 3.5) return "🤓";
+        if (difficulty < 4.3) return "😤";
+        return "🫠";
     }
 </script>
 
-<Bucket>
-    <section
-        slot="inside"
-        use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
-        on:consider={consider}
-        on:finalize={finalize}
-        class="basis-[75px]"
-    >
-        {#each items as item (item.id)}
-            <div class="shimmer" animate:flip={{ duration: flipDurationMs }}>
-                {item.code}
+<div class="flex flex-col mr-4 text-sm mb-0.5">
+    <div class="relative group">
+        <section
+            class="course-container border border-black hover:border-2 mt-2"
+            use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
+            on:consider={dndConsider}
+            on:finalize={dndFinalize}
+        >
+            {#each items as item (item.id)}
+                <div
+                    class="course-item hover:border rounded-lg "
+                    animate:flip={{ duration: flipDurationMs }}
+                >
+                    {courses[item.code]["name"]}
+                </div>
+            {/each}
+        </section>
+        <Tooltip multiline={true} position="bottom-right">
+            <div class="w-40 flex-col content-center justify-center">
+              <div class="font-semibold mb-1 text-center">
+                  Semester {index + 1}
+              </div>
+              <div class="mb-1 text-center">
+                  {getDifficulty(items)}
+                  average difficulty {getDifficultyEmoji(
+                      getDifficulty(items),
+                  )}
+              </div>
+              <div class="text-center">
+                  {getWorkload(items)}
+                  hours per week {getWorkloadEmoji(getWorkload(items))}
+              </div>
             </div>
-        {/each}
-    </section>
-    <div slot="label">
-        &#128548{average_difficulty(items)}&nbsp;&#9203{workload(items)}
+        </Tooltip>
     </div>
-</Bucket>
+    <div class="semester-stats flex items-center gap-1 text-xs -mt-1">
+        <div>{getDifficultyEmoji(getDifficulty(items))}{getDifficulty(items)}</div>
+        <div>{getWorkloadEmoji(getWorkload(items))}{getWorkload(items)}</div>
+    </div>
+</div>

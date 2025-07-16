@@ -1,142 +1,643 @@
+<!-- Right-most table for selecting courses -->
 <script>
-    import { sorted_courses } from "../lib/data.js";
-    import { active_courses, active_rows } from "../lib/state.js";
+    import { courses } from "./fallback.js";
+    import {
+        activeCourses,
+        toggleCourse,
+        activeRows,
+        getFromStorage,
+        setToStorage,
+        activeReq,
+        activeSections,
+        clearCourses,
+    } from "./state.js";
+    import { specs } from "./data.js";
+    import { trackTailwindColors } from "./icon.js";
     const arrow = "/arrow.svg";
 
+    // NAMES
+
     const columns = [
-        "Course",
-        "Code",
-        "Rating",
-        "Difficulty",
-        "Workload",
-        "Reviews",
+        "name",
+        "id",
+        "rating",
+        "difficulty",
+        "workload",
+        "numReviews",
     ];
-    const alignments = {
-        Course: "left",
-        Code: "left",
-        Rating: "right",
-        Difficulty: "right",
-        Workload: "right",
-        Reviews: "right",
+
+    // Display names for columns
+    const columnLabels = {
+        name: "Course",
+        id: "Code",
+        rating: "Rating",
+        difficulty: "Difficulty",
+        workload: "Workload",
+        numReviews: "Reviews",
     };
 
-    let cat = "Reviews";
-    let dir = "desc";
-    function toggle(column) {
-        if (cat == column) dir = dir === "desc" ? "asc" : "desc";
-        else dir = "desc";
-        cat = column;
-    }
-    function active(code, active_courses) {
-        if (active_courses.has(code)) return "active";
-        return "";
+    const rightAlignedColumns = new Set([
+        "rating",
+        "difficulty",
+        "workload",
+        "numReviews",
+    ]);
+
+    // Columns that should default to ascending sort
+    const ascendingDefaultColumns = new Set([
+        "workload",
+        "id", // course code
+        "name",
+        "difficulty",
+    ]);
+
+    // SORTING
+
+    const initialSort = getFromStorage("tableSort", {
+        column: "numReviews",
+        direction: "desc",
+    });
+    let sortColumn = initialSort.column;
+    let sortDirection = initialSort.direction;
+
+    function toggleSort(column) {
+        if (sortColumn === column) {
+            sortDirection = sortDirection === "asc" ? "desc" : "asc";
+        } else {
+            sortColumn = column;
+            sortDirection = ascendingDefaultColumns.has(column) ? "asc" : "desc";
+        }
+        setToStorage("tableSort", {
+            column: sortColumn,
+            direction: sortDirection,
+        });
     }
 
-    function review_url(course_name) {
-        return `https://www.omscentral.com/courses/${kebab_case(course_name)}/reviews`;
+    $: sortedCourses = Object.values(courses).sort((A, B) => {
+        const a = A[sortColumn];
+        const b = B[sortColumn];
+
+        const comparison = typeof a === "string" ? a.localeCompare(b) : a - b;
+
+        return sortDirection === "asc" ? comparison : -comparison;
+    });
+
+    // CSS
+
+    $: activeColor = `bg-${trackTailwindColors[$activeReq.track] || "gray"}-100`;
+
+    // Mobile column selection
+    let showColumnMenu = false;
+    let visibleColumns = new Set(["name", "id"]); // Default columns for mobile
+
+    function toggleColumn(column) {
+        if (visibleColumns.has(column)) {
+            visibleColumns.delete(column);
+        } else {
+            visibleColumns.add(column);
+        }
+        visibleColumns = visibleColumns; // Trigger reactivity
     }
-    function kebab_case(str) {
+
+    // No more JS column hiding - using CSS instead
+
+    function clearFilter() {
+        activeReq.set({});
+    }
+
+    // URLS
+
+    function reviewURL(course_name) {
+        return `https://www.omscentral.com/courses/${kebabCase(course_name)}/reviews`;
+    }
+    function kebabCase(str) {
         return str
             .toLowerCase()
             .replace(/[^a-z0-9\s]/g, "")
             .trim()
             .replace(/\s+/g, "-");
     }
+
+    function exportData() {
+        // Get current state
+        const activeSpecializations = Array.from($activeSections).filter(
+            (s) => s !== "Semesters",
+        );
+        const selectedCourses = Array.from($activeCourses);
+
+        // Organize courses by specializations and buckets
+        const specializationPlans = {};
+
+        activeSpecializations.forEach((specName) => {
+            const specData = specs[specName];
+            if (!specData) return;
+
+            const buckets = Object.keys(specData);
+            const bucketSets = buckets.map(
+                (category) => new Set(specData[category]["courses"]),
+            );
+
+            // Divide courses into buckets (similar logic to spec.svelte)
+            const bucketCourses = buckets.map(() => []);
+            const electiveIndex = buckets.findIndex(
+                (key) => key === "Electives",
+            );
+
+            for (const courseCode of selectedCourses) {
+                let assignedToCategory = false;
+
+                // First, try to assign to specific categories (non-electives)
+                for (let i = 0; i < buckets.length; i++) {
+                    const category = buckets[i];
+                    if (category === "Electives") continue;
+
+                    const isInCategory = bucketSets[i].has(courseCode);
+                    const hasSpace =
+                        bucketCourses[i].length < specData[category].count;
+
+                    if (isInCategory && hasSpace) {
+                        bucketCourses[i].push(courseCode);
+                        assignedToCategory = true;
+                        break;
+                    }
+                }
+
+                // If not assigned to any specific category, add to electives
+                if (!assignedToCategory && electiveIndex !== -1) {
+                    bucketCourses[electiveIndex].push(courseCode);
+                }
+            }
+
+            // Build the specialization plan
+            specializationPlans[specName] = {};
+            buckets.forEach((category, i) => {
+                specializationPlans[specName][category] = {
+                    required: specData[category].count,
+                    selected: bucketCourses[i].length,
+                    courses: bucketCourses[i].map((code) => courses[code].name),
+                };
+            });
+        });
+
+        // Get semester planning data
+        let semesterPlan = {};
+        try {
+            const storedPinned = localStorage.getItem("pinnedSemesters");
+            const pinnedSemesters = storedPinned
+                ? JSON.parse(storedPinned)
+                : {};
+
+            // Calculate semester statistics
+            Object.entries(pinnedSemesters).forEach(
+                ([semesterIndex, courseCodes]) => {
+                    if (courseCodes.length > 0) {
+                        const semesterCourses = courseCodes
+                            .map((code) => courses[code])
+                            .filter(Boolean);
+                        const avgDifficulty =
+                            semesterCourses.reduce(
+                                (sum, course) => sum + course.difficulty,
+                                0,
+                            ) / semesterCourses.length;
+                        const totalWorkload = semesterCourses.reduce(
+                            (sum, course) => sum + course.workload,
+                            0,
+                        );
+
+                        semesterPlan[
+                            `Semester ${parseInt(semesterIndex) + 1}`
+                        ] = {
+                            courses: semesterCourses.map(
+                                (course) => course.name,
+                            ),
+                            courseCount: semesterCourses.length,
+                            averageDifficulty:
+                                Math.round(avgDifficulty * 10) / 10,
+                            totalWorkload: Math.round(totalWorkload * 10) / 10,
+                        };
+                    }
+                },
+            );
+        } catch (e) {
+            console.warn("Failed to load semester data:", e);
+        }
+
+        // Build export data - flatten specialization plans to top level
+        const exportDataObj = {
+            ...specializationPlans,
+            semesterPlan: semesterPlan,
+        };
+
+        // Create formatted JSON
+        const jsonString = JSON.stringify(exportDataObj, null, 2);
+
+        // Open in new tab
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
+
+        // Clean up the URL after a short delay
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
 </script>
 
 <svelte:head>
-    <link rel="preload" href={arrow} as="image" type="image/svg" />
+    <link rel="preload" href={arrow} as="image" type="image/svg+xml" />
 </svelte:head>
 
-<div
-    class="max-h-screen basis-1/2 shrink overflow-y-auto justify-self-end pt-2"
->
-    <table class="self-baseline shrink justify-self-start rounded-lg shadow">
-        <thead class="bg-gray-100">
-            <tr>
-                {#each columns as column}
-                    <th
-                        class="font-normal text-sm pr-2"
-                        on:click={() => toggle(column)}
-                    >
-                        <div
-                            class={`flex grow ${alignments[column] === "right" ? "justify-end" : ""}`}
+<div class="h-full flex flex-col">
+    <!-- Desktop: Column selector and action buttons -->
+    <div
+        class="mb-3 px-4 flex justify-between items-center flex-shrink-0 hidden lg:flex"
+    >
+        <div class="flex items-center gap-3">
+
+            <button
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium {activeColor} border border-gray-300 hover:bg-opacity-80 transition-colors"
+                class:invisible={!$activeReq.track}
+                on:click={clearFilter}
+                title="Clear filter"
+            >
+                {$activeReq.track}: {$activeReq.req}
+                <span class="text-gray-500 hover:text-gray-700">✕</span>
+            </button>
+        </div>
+
+        <div class="flex gap-2">
+            <button
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-gray-100 border border-gray-300 hover:bg-gray-200 transition-colors"
+                on:click={exportData}
+                title="Export currently shown tabs as JSON"
+            >
+                📄 Export as JSON
+            </button>
+
+            <button
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-gray-100 border border-gray-300 hover:bg-red-100 transition-colors"
+                on:click={clearCourses}
+                title="Clear course selections"
+            >
+                Clear Courses
+                <span class="text-gray-500 hover:text-gray-700">✕</span>
+            </button>
+        </div>
+
+        {#if showColumnMenu}
+            <!-- Modal overlay -->
+            <div
+                class="fixed inset-0 bg-black/50 z-30"
+                on:click={() => (showColumnMenu = false)}
+            ></div>
+
+            <!-- Modal content -->
+            <div
+                class="fixed inset-x-4 top-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg border border-gray-300 z-40 p-4"
+            >
+                <div class="text-center mb-4">
+                    <h3 class="font-medium text-gray-900 mb-1">
+                        Select Columns
+                    </h3>
+                    <p class="text-xs text-gray-600">Click to toggle columns</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    {#each columns as column}
+                        <button
+                            class="px-3 py-2 rounded-lg text-sm font-medium transition-colors border {visibleColumns.has(
+                                column,
+                            )
+                                ? 'bg-gray-100 border-gray-300 text-gray-900'
+                                : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}"
+                            on:click={() => toggleColumn(column)}
                         >
-                            {#if cat === column}
+                            {columnLabels[column]}
+                        </button>
+                    {/each}
+                </div>
+
+                <button
+                    class="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-900 py-2 rounded-lg text-sm font-medium transition-colors"
+                    on:click={() => (showColumnMenu = false)}
+                >
+                    Done
+                </button>
+            </div>
+        {/if}
+    </div>
+
+    <!-- Mobile: Column selector and action buttons -->
+    <div class="lg:hidden px-4 mb-2 flex justify-between items-center gap-2">
+        <div class="flex items-center gap-2">
+            <button
+                class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 border border-gray-300 hover:bg-gray-200 transition-colors"
+                on:click={() => (showColumnMenu = !showColumnMenu)}
+            >
+                <span class="text-xs">☰</span>
+                {visibleColumns.size}
+            </button>
+
+            <button
+                class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium {activeColor} border border-gray-300 hover:bg-opacity-80 transition-colors"
+                class:invisible={!$activeReq.track}
+                on:click={clearFilter}
+                title="Clear filter"
+            >
+                {$activeReq.track}: {$activeReq.req}
+                <span class="text-gray-500 hover:text-gray-700">✕</span>
+            </button>
+        </div>
+
+        <div class="flex gap-1">
+            <button
+                class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 border border-gray-300 hover:bg-red-100 transition-colors"
+                on:click={clearCourses}
+                title="Clear course selections"
+            >
+                Clear
+                <span class="text-gray-500 hover:text-gray-700">✕</span>
+            </button>
+        </div>
+
+        {#if showColumnMenu}
+            <!-- Modal overlay -->
+            <div
+                class="fixed inset-0 bg-black/50 z-30"
+                on:click={() => (showColumnMenu = false)}
+            ></div>
+
+            <!-- Modal content -->
+            <div
+                class="fixed inset-x-4 top-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg border border-gray-300 z-40 p-4"
+            >
+                <div class="text-center mb-4">
+                    <h3 class="font-medium text-gray-900 mb-1">
+                        Select Columns
+                    </h3>
+                    <p class="text-xs text-gray-600">Tap to toggle columns</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    {#each columns as column}
+                        <button
+                            class="px-3 py-2 rounded-lg text-sm font-medium transition-colors border {visibleColumns.has(
+                                column,
+                            )
+                                ? 'bg-gray-100 border-gray-300 text-gray-900'
+                                : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}"
+                            on:click={() => toggleColumn(column)}
+                        >
+                            {columnLabels[column]}
+                        </button>
+                    {/each}
+                </div>
+
+                <button
+                    class="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-900 py-2 rounded-lg text-sm font-medium transition-colors"
+                    on:click={() => (showColumnMenu = false)}
+                >
+                    Done
+                </button>
+            </div>
+        {/if}
+    </div>
+
+    <div class="block px-4 flex-1 min-h-0 overflow-y-auto">
+        <table class="w-full rounded-lg shadow">
+            <thead class="sticky top-0">
+                <tr>
+                    {#each columns as column}
+                        <th
+                            class="{activeColor}
+                          first:rounded-tl-lg last:rounded-tr-lg
+                          first:border-l-black last:border-r-black
+                          font-medium text-sm
+                          p-[var(--spacing-sm)] cursor-pointer
+                          whitespace-nowrap overflow-hidden text-ellipsis w-auto
+                          relative
+                          border border-x-gray-400 border-y-black"
+                            class:text-right={rightAlignedColumns.has(column)}
+                            on:click={() => toggleSort(column)}
+                        >
+                            <div class="flex {rightAlignedColumns.has(column) ? 'justify-end' : 'justify-start'} items-center">
+                                {#if !rightAlignedColumns.has(column)}
+                                    {columnLabels[column]}
+                                {/if}
+
                                 <img
-                                    class="w-3"
-                                    style={`transform: scaleY(${dir === "desc" ? "-1" : "1"});`}
+                                    class="sort-arrow {sortColumn === column ? sortDirection : (ascendingDefaultColumns.has(column) ? 'asc' : 'desc')}"
+                                    data-active={sortColumn === column}
                                     src={arrow}
-                                    alt={arrow}
+                                    alt="Sort direction"
                                 />
-                            {/if}
-                            {column}
-                        </div>
-                    </th>
-                {/each}
-            </tr>
-        </thead>
-        <tbody class="text-[14px]">
-            {#each sorted_courses[`${cat}_${dir}`] as course}
-                {#if $active_rows.has(course.Code)}
-                    <tr class={active(course.Code, $active_courses)}>
-                        {#each columns.slice(0, -1) as column}
-                            <td
-                                on:click={() =>
-                                    active_courses.toggle(course.Code)}
-                                >{course[column]}</td
-                            >
-                        {/each}
-                        <td
-                            ><a
-                                class="text-gray-700 underline"
-                                href={review_url(course.Course)}
-                                target="_blank">{course.Reviews}</a
-                            ></td
+
+                                {#if rightAlignedColumns.has(column)}
+                                    {columnLabels[column]}
+                                {/if}
+                            </div>
+                        </th>
+                    {/each}
+                </tr>
+            </thead>
+            <tbody class="table-body">
+                {#each sortedCourses as course}
+                    {#if $activeRows.has(course.id)}
+                        <tr
+                            class="data-[active=true]:font-semibold > first:td"
+                            data-active={$activeCourses.has(course.id)}
                         >
-                    </tr>
-                {/if}
-            {/each}
-        </tbody>
-    </table>
+                            {#each columns.slice(0, -1) as column, i}
+                                <td
+                                    class="table-cell"
+                                    class:text-right={rightAlignedColumns.has(
+                                        column,
+                                    )}
+                                    on:click={() => toggleCourse(course.id)}
+                                    title={typeof course[column] === "number"
+                                        ? course[column].toFixed(1)
+                                        : course[column]}
+                                >
+                                    {typeof course[column] === "number"
+                                        ? course[column].toFixed(1)
+                                        : course[column]}
+                                </td>
+                            {/each}
+                            <td class="table-cell text-right" title={course.numReviews}>
+                                <a
+                                    class="review-link"
+                                    href={reviewURL(course.name)}
+                                    target="_blank">{course.numReviews}</a
+                                >
+                            </td>
+                        </tr>
+                    {/if}
+                {/each}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <style>
+    thead {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+    }
+
     table {
         border-collapse: separate;
         border-spacing: 0;
+        table-layout: auto;
+        width: 100%;
     }
 
-    td,
-    th {
-        padding: 0 0.5rem;
-        max-width: 20rem;
+    /* Flexible column sizing - no horizontal scrollbar */
+    th:nth-child(1) {
+        /* name */
+        width: 40%;
+        max-width: 300px;
+        min-width: 120px;
+    }
+    th:nth-child(2) {
+        /* id */
+        width: 12%;
+        max-width: 80px;
+        min-width: 60px;
+    }
+    th:nth-child(3) {
+        /* rating */
+        width: 12%;
+        max-width: 70px;
+        min-width: 50px;
+    }
+    th:nth-child(4) {
+        /* difficulty */
+        width: 12%;
+        max-width: 80px;
+        min-width: 60px;
+    }
+    th:nth-child(5) {
+        /* workload */
+        width: 12%;
+        max-width: 80px;
+        min-width: 60px;
+    }
+    th:nth-child(6) {
+        /* numReviews */
+        width: 12%;
+        max-width: 70px;
+        min-width: 50px;
+    }
+
+    /* Responsive column hiding with CSS - hide in order: workload, difficulty,
+     * rating, reviews */
+    @media (max-width: 900px) {
+        th:nth-child(5), /* workload */
+        td:nth-child(5) {
+            display: none;
+        }
+    }
+
+    @media (max-width: 750px) {
+        th:nth-child(4), /* difficulty */
+        td:nth-child(4) {
+            display: none;
+        }
+    }
+
+    @media (max-width: 600px) {
+        th:nth-child(3), /* rating */
+        td:nth-child(3) {
+            display: none;
+        }
+    }
+
+    @media (max-width: 450px) {
+        th:nth-child(6), /* numReviews */
+        td:nth-child(6) {
+            display: none;
+        }
+    }
+
+    .text-right {
+        justify-content: flex-end;
+    }
+
+    .sort-arrow {
+        width: 0.75rem;
+        transition: opacity 0.2s ease;
+        opacity: 0;
+    }
+
+    .sort-arrow.desc {
+        transform: scaleY(-1);
+    }
+
+    /* Show arrow when active */
+    .sort-arrow[data-active="true"] {
+        opacity: 1;
+    }
+
+    /* Show preview arrow on hover */
+    th:hover .sort-arrow[data-active="false"] {
+        opacity: 0.5;
+    }
+
+    .table-body {
+        font-size: 0.875rem;
+    }
+
+    .table-cell {
+        padding: var(--spacing-xs) var(--spacing-sm);
         vertical-align: top;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        cursor: pointer;
+        border-right: 1px solid #e5e7eb;
+        border-bottom: 1px solid #f3f4f6;
+        position: relative;
+        max-width: 0; /* Forces ellipsis truncation */
     }
 
-    /* Right-align the numbers */
-    td:nth-last-child(-n + 4) {
-        text-align: right;
+    .table-cell:last-child {
+        border-right: none;
     }
 
-    tbody > tr:not(.active):hover {
-        background-color: hsl(0 0% 96%);
+    .review-link {
+        color: rgb(55 65 81);
+        text-decoration: underline;
     }
 
-    .active > td {
-        background-color: hsl(0 0% 92%);
+    .column-resize-handle {
+        position: absolute;
+        top: 0;
+        right: -4px;
+        width: 8px;
+        height: 100%;
+        background-color: transparent;
+        cursor: col-resize;
+        z-index: 10;
     }
 
-    th:hover {
-        mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/350% 100%;
-        animation: shimmer 1s infinite;
-    }
-    @keyframes shimmer {
-        100% {
-            mask-position: left;
+    /* Mobile-friendly resize handles */
+    @media (max-width: 1023px) {
+        .column-resize-handle {
+            width: 16px;
+            right: -8px;
         }
+
+        .column-resize-handle:hover,
+        .column-resize-handle:active {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    }
+
+    /* Round bottom corners on last row */
+    tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 0.5rem;
+    }
+
+    tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 0.5rem;
     }
 </style>
