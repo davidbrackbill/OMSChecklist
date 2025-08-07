@@ -3,16 +3,30 @@
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
     import Tooltip from "./tooltip.svelte";
-    export let codes, index, pinned;
 
-    export let flipDurationMs = 100;
-    export let dropTargetStyle = {
+    /**
+     * @typedef {Object} Props
+     * @property {any} codes
+     * @property {any} index
+     * @property {any} pinned
+     * @property {number} [flipDurationMs]
+     * @property {any} [dropTargetStyle]
+     */
+
+    /** @type {Props} */
+    let {
+        codes,
+        index,
+        pinned = $bindable(),
+        flipDurationMs = 100,
+        dropTargetStyle = {
         "box-shadow": "var(--shadow-drop-target)",
-    };
+    }
+    } = $props();
 
     /* Svelte-dnd */
     // Give codes an id for svelte-dnd to use
-    $: items = codes.map((code) => ({ code, id: code }));
+    let items = $derived(codes.map((code) => ({ code, id: code })));
 
     const dndConsider = (e) => {
         items = e.detail.items;
@@ -60,8 +74,8 @@
         <section
             class="course-container border border-black hover:border-2 mt-2"
             use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
-            on:consider={dndConsider}
-            on:finalize={dndFinalize}
+            onconsider={dndConsider}
+            onfinalize={dndFinalize}
         >
             {#each items as item (item.id)}
                 <div

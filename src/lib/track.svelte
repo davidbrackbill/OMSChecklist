@@ -6,18 +6,9 @@
     import { activeCourses, activeSections } from "./state.js";
     import { trackTailwindColors } from "./icon.js";
 
-    export let track;
+    let { track } = $props();
 
-    // Dynamic content
-    $: requirements = trackRequirements[track];
-    $: keys = Object.keys(requirements);
-    $: reqSets = keys.map(
-        (category) => new Set(requirements[category]["courses"]),
-    );
-    $: reqCourses = divideCourses($activeCourses, $activeSections);
 
-    // Dynamic CSS
-    $: titleColor = `text-${trackTailwindColors[track]}-500`;
 
     function divideCourses(activeCourses, _) {
         const courses = keys.map(() => []);
@@ -50,6 +41,15 @@
 
         return courses;
     }
+    // Dynamic content
+    let requirements = $derived(trackRequirements[track]);
+    let keys = $derived(Object.keys(requirements));
+    let reqSets = $derived(keys.map(
+        (category) => new Set(requirements[category]["courses"]),
+    ));
+    let reqCourses = $derived(divideCourses($activeCourses, $activeSections));
+    // Dynamic CSS
+    let titleColor = $derived(`text-${trackTailwindColors[track]}-500`);
 </script>
 
 <SectionContainer name={track} css={titleColor}>

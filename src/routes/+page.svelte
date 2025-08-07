@@ -1,21 +1,26 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import {
         activeSections,
         pinnedSections,
         getFromStorage,
         setToStorage,
-    } from "./lib/state.js";
-    import { createPanelResizer } from "./lib/resize.js";
-    import Navbar from "./lib/navbar.svelte";
-    import Track from "./lib/track.svelte";
-    import Semesters from "./lib/semesters.svelte";
-    import Table from "./lib/table.svelte";
+    } from "../lib/state.js";
+    import { createPanelResizer } from "../lib/resize.js";
+    import Navbar from "../lib/navbar.svelte";
+    import Track from "../lib/track.svelte";
+    import Semesters from "../lib/semesters.svelte";
+    import Table from "../lib/table.svelte";
 
     // Resizable layout state
     const LEFT_PANEL_WIDTH = 45;
-    let leftPanelWidth = LEFT_PANEL_WIDTH;
+    let leftPanelWidth = $state(LEFT_PANEL_WIDTH);
+    let mounted = $state(false);
+    
     if (typeof window !== "undefined") {
         leftPanelWidth = getFromStorage("leftPanelWidth", LEFT_PANEL_WIDTH);
+        mounted = true;
     }
     const panelResizer = createPanelResizer({
         onResize: (newWidth) => {
@@ -24,17 +29,20 @@
         minPercent: 20,
         maxPercent: 80,
     });
-    $: if (typeof window !== "undefined" && !panelResizer.isResizing()) {
-        setToStorage("leftPanelWidth", leftPanelWidth);
-    }
+    run(() => {
+        if (typeof window !== "undefined" && !panelResizer.isResizing()) {
+            setToStorage("leftPanelWidth", leftPanelWidth);
+        }
+    });
 
-    $: pinned = $pinnedSections.intersection($activeSections);
-    $: nonPinned = $activeSections.difference($pinnedSections);
+    let pinned = $derived($pinnedSections.intersection($activeSections));
+    let nonPinned = $derived($activeSections.difference($pinnedSections));
     
     // Mobile table toggle
-    let showTable = false;
+    let showTable = $state(false);
 </script>
 
+{#if mounted}
 <div class="flex flex-col h-screen">
     <Navbar />
 
@@ -70,7 +78,7 @@
         <div class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200 shadow-lg flex-shrink-0 z-10">
             <button 
                 class="w-full py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50/50 transition-all duration-200 flex items-center justify-center gap-2"
-                on:click={() => showTable = !showTable}
+                onclick={() => showTable = !showTable}
             >
                 <span class="transform transition-transform duration-200 {showTable ? 'rotate-180' : ''} text-xs">▲</span>
                 <span class="text-xs font-medium">{showTable ? 'Hide' : 'Show'} Table</span>
@@ -104,7 +112,7 @@
         <!-- Resizable divider -->
         <button
             class="w-2 cursor-col-resize relative duration-200 flex-shrink-0"
-            on:mousedown={panelResizer.startResize}
+            onmousedown={panelResizer.startResize}
         ></button>
 
         <div
@@ -115,3 +123,4 @@
         </div>
     </div>
 </div>
+{/if}

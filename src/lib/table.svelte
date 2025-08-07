@@ -57,8 +57,8 @@
         column: "numReviews",
         direction: "desc",
     });
-    let sortColumn = initialSort.column;
-    let sortDirection = initialSort.direction;
+    let sortColumn = $state(initialSort.column);
+    let sortDirection = $state(initialSort.direction);
 
     function toggleSort(column) {
         if (sortColumn === column) {
@@ -73,22 +73,22 @@
         });
     }
 
-    $: sortedCourses = Object.values(courses).sort((A, B) => {
+    let sortedCourses = $derived(Object.values(courses).sort((A, B) => {
         const a = A[sortColumn];
         const b = B[sortColumn];
 
         const comparison = typeof a === "string" ? a.localeCompare(b) : a - b;
 
         return sortDirection === "asc" ? comparison : -comparison;
-    });
+    }));
 
     // CSS
 
-    $: activeColor = `bg-${trackTailwindColors[$activeReq.track] || "gray"}-100`;
+    let activeColor = $derived(`bg-${trackTailwindColors[$activeReq.track] || "gray"}-100`);
 
     // Mobile column selection
-    let showColumnMenu = false;
-    let visibleColumns = new Set(["name", "id"]); // Default columns for mobile
+    let showColumnMenu = $state(false);
+    let visibleColumns = $state(new Set(["name", "id"])); // Default columns for mobile
 
     function toggleColumn(column) {
         if (visibleColumns.has(column)) {
@@ -255,7 +255,7 @@
             <button
                 class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium {activeColor} border border-gray-300 hover:bg-opacity-80 transition-colors"
                 class:invisible={!$activeReq.track}
-                on:click={clearFilter}
+                onclick={clearFilter}
                 title="Clear filter"
             >
                 {$activeReq.track}: {$activeReq.req}
@@ -266,7 +266,7 @@
         <div class="flex gap-2">
             <button
                 class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-gray-100 border border-gray-300 hover:bg-gray-200 transition-colors"
-                on:click={exportData}
+                onclick={exportData}
                 title="Export currently shown tabs as JSON"
             >
                 📄 Export as JSON
@@ -274,7 +274,7 @@
 
             <button
                 class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-gray-100 border border-gray-300 hover:bg-red-100 transition-colors"
-                on:click={clearCourses}
+                onclick={clearCourses}
                 title="Clear course selections"
             >
                 Clear Courses
@@ -286,7 +286,7 @@
             <!-- Modal overlay -->
             <div
                 class="fixed inset-0 bg-black/50 z-30"
-                on:click={() => (showColumnMenu = false)}
+                onclick={() => (showColumnMenu = false)}
             ></div>
 
             <!-- Modal content -->
@@ -308,7 +308,7 @@
                             )
                                 ? 'bg-gray-100 border-gray-300 text-gray-900'
                                 : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}"
-                            on:click={() => toggleColumn(column)}
+                            onclick={() => toggleColumn(column)}
                         >
                             {columnLabels[column]}
                         </button>
@@ -317,7 +317,7 @@
 
                 <button
                     class="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-900 py-2 rounded-lg text-sm font-medium transition-colors"
-                    on:click={() => (showColumnMenu = false)}
+                    onclick={() => (showColumnMenu = false)}
                 >
                     Done
                 </button>
@@ -330,7 +330,7 @@
         <div class="flex items-center gap-2">
             <button
                 class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 border border-gray-300 hover:bg-gray-200 transition-colors"
-                on:click={() => (showColumnMenu = !showColumnMenu)}
+                onclick={() => (showColumnMenu = !showColumnMenu)}
             >
                 <span class="text-xs">☰</span>
                 {visibleColumns.size}
@@ -339,7 +339,7 @@
             <button
                 class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium {activeColor} border border-gray-300 hover:bg-opacity-80 transition-colors"
                 class:invisible={!$activeReq.track}
-                on:click={clearFilter}
+                onclick={clearFilter}
                 title="Clear filter"
             >
                 {$activeReq.track}: {$activeReq.req}
@@ -350,7 +350,7 @@
         <div class="flex gap-1">
             <button
                 class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 border border-gray-300 hover:bg-red-100 transition-colors"
-                on:click={clearCourses}
+                onclick={clearCourses}
                 title="Clear course selections"
             >
                 Clear
@@ -362,7 +362,7 @@
             <!-- Modal overlay -->
             <div
                 class="fixed inset-0 bg-black/50 z-30"
-                on:click={() => (showColumnMenu = false)}
+                onclick={() => (showColumnMenu = false)}
             ></div>
 
             <!-- Modal content -->
@@ -384,7 +384,7 @@
                             )
                                 ? 'bg-gray-100 border-gray-300 text-gray-900'
                                 : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}"
-                            on:click={() => toggleColumn(column)}
+                            onclick={() => toggleColumn(column)}
                         >
                             {columnLabels[column]}
                         </button>
@@ -393,7 +393,7 @@
 
                 <button
                     class="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-900 py-2 rounded-lg text-sm font-medium transition-colors"
-                    on:click={() => (showColumnMenu = false)}
+                    onclick={() => (showColumnMenu = false)}
                 >
                     Done
                 </button>
@@ -416,7 +416,7 @@
                           relative
                           border border-x-gray-400 border-y-black"
                             class:text-right={rightAlignedColumns.has(column)}
-                            on:click={() => toggleSort(column)}
+                            onclick={() => toggleSort(column)}
                         >
                             <div class="flex {rightAlignedColumns.has(column) ? 'justify-end' : 'justify-start'} items-center">
                                 {#if !rightAlignedColumns.has(column)}
@@ -451,14 +451,14 @@
                                     class:text-right={rightAlignedColumns.has(
                                         column,
                                     )}
-                                    on:click={() => toggleCourse(course.id)}
+                                    onclick={() => toggleCourse(course.id)}
                                     title={typeof course[column] === "number"
                                         ? course[column].toFixed(1)
                                         : course[column]}
                                 >
                                     {typeof course[column] === "number"
                                         ? course[column].toFixed(1)
-                                        : course[column]}
+                                        : course[column] ?? "-"}
                                 </td>
                             {/each}
                             <td class="table-cell text-right" title={course.numReviews}>

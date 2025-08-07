@@ -15,7 +15,7 @@
     <!-- Mobile: Only track tabs -->
     <div class="lg:hidden flex items-center gap-2 mx-2 flex-1 justify-center">
         <div class="relative group">
-            <button class="text-xs px-1 py-1 rounded hover:bg-red-200 transition-colors flex items-center opacity-40" on:click={clearSpecs}>
+            <button class="text-xs px-1 py-1 rounded hover:bg-red-200 transition-colors flex items-center opacity-40" onclick={clearSpecs}>
                 ▼
             </button>
             <Tooltip text="Clear tabs" />
@@ -26,7 +26,7 @@
                 <figure
                     class="flex items-center cursor-pointer hover:opacity-80 transition-opacity relative"
                     data-spec={key}
-                    on:click={(event) => {
+                    onclick={(event) => {
                         if (event.ctrlKey || event.metaKey) {
                             pinSection(key);
                         } else {
@@ -51,7 +51,7 @@
     <!-- Desktop: Full navbar -->
     <div class="hidden lg:flex items-center gap-4 mx-8">
         <div class="relative group">
-            <button class="text-sm px-2 py-1 rounded hover:bg-red-200 transition-colors flex items-center opacity-40" on:click={clearSpecs}>
+            <button class="text-sm px-2 py-1 rounded hover:bg-red-200 transition-colors flex items-center opacity-40" onclick={clearSpecs}>
                 ▼
             </button>
             <Tooltip text="Clear tabs" />
@@ -62,7 +62,7 @@
                 <figure
                     class="flex items-center cursor-pointer hover:opacity-80 transition-opacity relative"
                     data-spec={key}
-                    on:click={(event) => {
+                    onclick={(event) => {
                         if (event.ctrlKey || event.metaKey) {
                             pinSection(key);
                         } else {

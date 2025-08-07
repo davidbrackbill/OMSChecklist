@@ -1,11 +1,20 @@
 <script>
-    export let text = "";
-    export let position = "bottom-center"; // bottom-center, bottom-right, etc.
-    export let multiline = false; // for help tooltip
+    /**
+     * @typedef {Object} Props
+     * @property {string} [text]
+     * @property {string} [position] - bottom-center, bottom-right, etc.
+     * @property {boolean} [multiline] - for help tooltip
+     * @property {import('svelte').Snippet} [children]
+     */
+
+    /** @type {Props} */
+    let {
+        text = "",
+        position = "bottom-center",
+        multiline = false,
+        children
+    } = $props();
     
-    $: positionClasses = getPositionClasses(position);
-    $: containerClasses = multiline ? "px-3 py-2 rounded-lg shadow-lg" : "px-2 py-1 rounded";
-    $: textClasses = multiline ? "" : "whitespace-nowrap";
     
     function getPositionClasses(pos) {
         switch(pos) {
@@ -16,11 +25,14 @@
                 return "top-full left-1/2 transform -translate-x-1/2";
         }
     }
+    let positionClasses = $derived(getPositionClasses(position));
+    let containerClasses = $derived(multiline ? "px-3 py-2 rounded-lg shadow-lg" : "px-2 py-1 rounded");
+    let textClasses = $derived(multiline ? "" : "whitespace-nowrap");
 </script>
 
 <div class="absolute {positionClasses} mt-1 {containerClasses} bg-gray-900 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none {textClasses} z-[9999]">
     {#if multiline}
-        <slot />
+        {@render children?.()}
     {:else}
         {text}
     {/if}

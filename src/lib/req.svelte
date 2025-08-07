@@ -1,26 +1,32 @@
 <!-- Holds courses and # courses fulfilled for each requirement within the spec -->
 <script>
+    import { stopPropagation } from 'svelte/legacy';
+
     import { toggleCourse, toggleRows, activeReq } from "./state.js";
     import { courses } from "./fallback.js";
     import { trackTailwindColors } from "./icon.js";
 
-    export let track, req, count, listed;
-    $: console.log(track, req, count, listed);
+    let {
+        track,
+        req,
+        count,
+        listed
+    } = $props();
 
     // Dynamic content
-    $: isCompleted = listed?.length === count;
-    $: reqCount = isCompleted ? "✓" : `(${listed?.length || 0}/${count})`;
+    let isCompleted = $derived(listed?.length === count);
+    let reqCount = $derived(isCompleted ? "✓" : `(${listed?.length || 0}/${count})`);
 
     // Dynamic CSS
-    $: isActive = $activeReq?.track === track && $activeReq?.req === req;
-    $: borderColor = `border-${trackTailwindColors[track]}-500`;
-    $: activeCSS = isActive ? `border-2 shadow-xl` : "";
-    $: completedBg = isCompleted ? `bg-${trackTailwindColors[track]}-50` : "";
+    let isActive = $derived($activeReq?.track === track && $activeReq?.req === req);
+    let borderColor = $derived(`border-${trackTailwindColors[track]}-500`);
+    let activeCSS = $derived(isActive ? `border-2 shadow-xl` : "");
+    let completedBg = $derived(isCompleted ? `bg-${trackTailwindColors[track]}-50` : "");
 </script>
 
 <button
     class="flex flex-col mr-2 text-sm unstyled-button"
-    on:click={() => toggleRows(track, req)}
+    onclick={() => toggleRows(track, req)}
 >
     <div
         class="flex items-center justify-center gap-2 cursor-pointer
@@ -35,7 +41,7 @@
         {#each listed || [] as course}
             <button
                 class="course-item hover:opacity-70 rounded-md unstyled-button"
-                on:click|stopPropagation={() => toggleCourse(course)}
+                onclick={stopPropagation(() => toggleCourse(course))}
             >
                 {courses[course]?.name || course}
             </button>

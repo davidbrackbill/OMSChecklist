@@ -2,8 +2,15 @@
     import { toggleSection, pinSection, pinnedSections } from "./state.js";
     import { trackIcons } from "./icon.js";
 
-    export let name;
-    export let css = "text-black";
+    /**
+     * @typedef {Object} Props
+     * @property {any} name
+     * @property {string} [css]
+     * @property {import('svelte').Snippet} [children]
+     */
+
+    /** @type {Props} */
+    let { name, css = "text-black", children } = $props();
 </script>
 
 <div class="track-container">
@@ -12,14 +19,14 @@
         transition-opacity flex items-center justify-center gap-2 mb-2
         hover:opacity-80
         {css}"
-        on:click={(event) => {
+        onclick={(event) => {
             if (event.ctrlKey || event.metaKey) {
                 pinSection(name);
             } else {
                 toggleSection(name);
             }
         }}
-        on:dblclick={() => pinSection(name)}
+        ondblclick={() => pinSection(name)}
     >
         <div class="relative">
             <img src={trackIcons[name]} alt="" class="track-icon" />
@@ -30,7 +37,7 @@
         {name}
     </h2>
     <div class="flex flex-wrap justify-center mx-2 track-content">
-        <slot />
+        {@render children?.()}
     </div>
 </div>
 

@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import Semester from "./semester.svelte";
     import SectionContainer from "./section-container.svelte";
     import { activeCourses, getFromStorage, setToStorage } from "./state.js";
@@ -6,14 +8,8 @@
 
     const maxSemesters = 20;
 
-    let pinned = getFromStorage("pinnedSemesters", {});
+    let pinned = $state(getFromStorage("pinnedSemesters", {}));
 
-    // Save to localStorage whenever pinned changes
-    $: if (typeof window !== "undefined") {
-        setToStorage("pinnedSemesters", pinned);
-    }
-    $: semesters = updateSemesters($activeCourses, pinned);
-    $: active = semesters.filter((a) => a.length);
 
     function updateSemesters(activeCourses, pinnedData) {
         if (!activeCourses.size) {
@@ -86,6 +82,14 @@
             pinned = pinned;
         }
     };
+    // Save to localStorage whenever pinned changes
+    run(() => {
+        if (typeof window !== "undefined") {
+            setToStorage("pinnedSemesters", pinned);
+        }
+    });
+    let semesters = $derived(updateSemesters($activeCourses, pinned));
+    let active = $derived(semesters.filter((a) => a.length));
 </script>
 
 <SectionContainer name="Semesters">
@@ -109,9 +113,9 @@
             flipDurationMs: 100,
             dropTargetStyle: { "box-shadow": "var(--shadow-drop-target)" },
         }}
-        on:consider={dndConsider}
-        on:finalize={dndFinalize}
-        on:click={dndClick}
+        onconsider={dndConsider}
+        onfinalize={dndFinalize}
+        onclick={dndClick}
         title="Add new semester bucket or drag courses here"
     >
         <span

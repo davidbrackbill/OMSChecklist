@@ -3,20 +3,23 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite",
+		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview"
 	},
 	"devDependencies": {
-		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@sveltejs/adapter-static": "^3.0.8",
+		"@sveltejs/kit": "^2.27.1",
+		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"autoprefixer": "^10.4.20",
 		"postcss": "^8.4.49",
-		"svelte": "^4.2.7",
+		"svelte": "^5.38.0",
 		"tailwindcss": "^3.4.17",
-		"vite": "^5.0.3"
+		"vite": "^5.4.19"
 	},
 	"type": "module",
 	"dependencies": {
-		"svelte-dnd-action": "^0.9.52"
+		"svelte-dnd-action": "^0.9.52",
+		"svelte-migrate": "^1.10.1"
 	}
 }
