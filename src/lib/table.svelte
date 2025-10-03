@@ -98,6 +98,11 @@
         return sortDirection === "asc" ? comparison : -comparison;
     }));
 
+    // Check if there are any visible courses after filtering
+    let hasVisibleCourses = $derived(
+        sortedCourses.some((course) => $activeRows.has(course.id))
+    );
+
     // CSS
 
     let activeColor = $derived(`bg-${trackTailwindColors[$activeReq.track] || "gray"}-100`);
@@ -523,38 +528,46 @@
                 </tr>
             </thead>
             <tbody class="table-body">
-                {#each sortedCourses as course}
-                    {#if $activeRows.has(course.id)}
-                        <tr
-                            class="data-[active=true]:font-semibold > first:td"
-                            data-active={$activeCourses.has(course.id)}
-                        >
-                            {#each columns.slice(0, -1) as column, i}
-                                <td
-                                    class="table-cell"
-                                    class:text-right={rightAlignedColumns.has(
-                                        column,
-                                    )}
-                                    onclick={() => toggleCourse(course.id)}
-                                    title={typeof course[column] === "number"
-                                        ? course[column].toFixed(1)
-                                        : course[column]}
-                                >
-                                    {typeof course[column] === "number"
-                                        ? course[column].toFixed(1)
-                                        : course[column] ?? "-"}
+                {#if !hasVisibleCourses}
+                    <tr>
+                        <td colspan={columns.length} class="text-center py-8 text-gray-500 border-b border-gray-200">
+                            No results found
+                        </td>
+                    </tr>
+                {:else}
+                    {#each sortedCourses as course}
+                        {#if $activeRows.has(course.id)}
+                            <tr
+                                class="data-[active=true]:font-semibold > first:td"
+                                data-active={$activeCourses.has(course.id)}
+                            >
+                                {#each columns.slice(0, -1) as column, i}
+                                    <td
+                                        class="table-cell"
+                                        class:text-right={rightAlignedColumns.has(
+                                            column,
+                                        )}
+                                        onclick={() => toggleCourse(course.id)}
+                                        title={typeof course[column] === "number"
+                                            ? course[column].toFixed(1)
+                                            : course[column]}
+                                    >
+                                        {typeof course[column] === "number"
+                                            ? course[column].toFixed(1)
+                                            : course[column] ?? "-"}
+                                    </td>
+                                {/each}
+                                <td class="table-cell text-right" title={course.numReviews}>
+                                    <a
+                                        class="review-link"
+                                        href={reviewURL(course.name)}
+                                        target="_blank">{course.numReviews}</a
+                                    >
                                 </td>
-                            {/each}
-                            <td class="table-cell text-right" title={course.numReviews}>
-                                <a
-                                    class="review-link"
-                                    href={reviewURL(course.name)}
-                                    target="_blank">{course.numReviews}</a
-                                >
-                            </td>
-                        </tr>
-                    {/if}
-                {/each}
+                            </tr>
+                        {/if}
+                    {/each}
+                {/if}
             </tbody>
         </table>
     </div>
