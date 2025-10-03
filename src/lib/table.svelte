@@ -89,7 +89,7 @@
         })
     );
 
-    let sortedCourses = $derived(filteredCourses.sort((A, B) => {
+    let sortedCourses = $derived([...filteredCourses].sort((A, B) => {
         const a = A[sortColumn];
         const b = B[sortColumn];
 
