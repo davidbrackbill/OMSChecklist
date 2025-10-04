@@ -73,7 +73,23 @@
         });
     }
 
-    let sortedCourses = $derived(Object.values(courses).sort((A, B) => {
+    // SEARCH
+
+    let searchQuery = $state("");
+
+    let filteredCourses = $derived(
+        Object.values(courses).filter((course) => {
+            if (!searchQuery.trim()) return true;
+
+            const query = searchQuery.toLowerCase();
+            return (
+                course.name.toLowerCase().includes(query) ||
+                course.id.toLowerCase().includes(query)
+            );
+        })
+    );
+
+    let sortedCourses = $derived([...filteredCourses].sort((A, B) => {
         const a = A[sortColumn];
         const b = B[sortColumn];
 
@@ -81,6 +97,11 @@
 
         return sortDirection === "asc" ? comparison : -comparison;
     }));
+
+    // Check if there are any visible courses after filtering
+    let hasVisibleCourses = $derived(
+        sortedCourses.some((course) => $activeRows.has(course.id))
+    );
 
     // CSS
 
@@ -325,6 +346,40 @@
         {/if}
     </div>
 
+    <!-- Desktop: Search bar -->
+    <div class="mb-3 px-4 flex-shrink-0 hidden lg:block">
+        <div class="relative">
+            <input
+                type="text"
+                bind:value={searchQuery}
+                placeholder="Search courses by name or code"
+                class="w-full px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            />
+            <svg
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+            </svg>
+            {#if searchQuery}
+                <button
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    onclick={() => (searchQuery = "")}
+                    title="Clear search"
+                >
+                    ✕
+                </button>
+            {/if}
+        </div>
+    </div>
+
     <!-- Mobile: Column selector and action buttons -->
     <div class="lg:hidden px-4 mb-2 flex justify-between items-center gap-2">
         <div class="flex items-center gap-2">
@@ -401,6 +456,40 @@
         {/if}
     </div>
 
+    <!-- Mobile: Search bar -->
+    <div class="lg:hidden px-4 mb-2 flex-shrink-0">
+        <div class="relative">
+            <input
+                type="text"
+                bind:value={searchQuery}
+                placeholder="Search courses by name or code"
+                class="w-full px-3 py-2 pl-9 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            />
+            <svg
+                class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+            </svg>
+            {#if searchQuery}
+                <button
+                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-sm"
+                    onclick={() => (searchQuery = "")}
+                    title="Clear search"
+                >
+                    ✕
+                </button>
+            {/if}
+        </div>
+    </div>
+
     <div class="block px-4 flex-1 min-h-0 overflow-y-auto">
         <table class="w-full rounded-lg shadow">
             <thead class="sticky top-0">
@@ -439,38 +528,46 @@
                 </tr>
             </thead>
             <tbody class="table-body">
-                {#each sortedCourses as course}
-                    {#if $activeRows.has(course.id)}
-                        <tr
-                            class="data-[active=true]:font-semibold > first:td"
-                            data-active={$activeCourses.has(course.id)}
-                        >
-                            {#each columns.slice(0, -1) as column, i}
-                                <td
-                                    class="table-cell"
-                                    class:text-right={rightAlignedColumns.has(
-                                        column,
-                                    )}
-                                    onclick={() => toggleCourse(course.id)}
-                                    title={typeof course[column] === "number"
-                                        ? course[column].toFixed(1)
-                                        : course[column]}
-                                >
-                                    {typeof course[column] === "number"
-                                        ? course[column].toFixed(1)
-                                        : course[column] ?? "-"}
+                {#if !hasVisibleCourses}
+                    <tr>
+                        <td colspan={columns.length} class="text-center py-8 text-gray-500 border-b border-gray-200">
+                            No results found
+                        </td>
+                    </tr>
+                {:else}
+                    {#each sortedCourses as course}
+                        {#if $activeRows.has(course.id)}
+                            <tr
+                                class="data-[active=true]:font-semibold > first:td"
+                                data-active={$activeCourses.has(course.id)}
+                            >
+                                {#each columns.slice(0, -1) as column, i}
+                                    <td
+                                        class="table-cell"
+                                        class:text-right={rightAlignedColumns.has(
+                                            column,
+                                        )}
+                                        onclick={() => toggleCourse(course.id)}
+                                        title={typeof course[column] === "number"
+                                            ? course[column].toFixed(1)
+                                            : course[column]}
+                                    >
+                                        {typeof course[column] === "number"
+                                            ? course[column].toFixed(1)
+                                            : course[column] ?? "-"}
+                                    </td>
+                                {/each}
+                                <td class="table-cell text-right" title={course.numReviews}>
+                                    <a
+                                        class="review-link"
+                                        href={reviewURL(course.name)}
+                                        target="_blank">{course.numReviews}</a
+                                    >
                                 </td>
-                            {/each}
-                            <td class="table-cell text-right" title={course.numReviews}>
-                                <a
-                                    class="review-link"
-                                    href={reviewURL(course.name)}
-                                    target="_blank">{course.numReviews}</a
-                                >
-                            </td>
-                        </tr>
-                    {/if}
-                {/each}
+                            </tr>
+                        {/if}
+                    {/each}
+                {/if}
             </tbody>
         </table>
     </div>
