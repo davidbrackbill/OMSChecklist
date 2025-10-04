@@ -75,6 +75,7 @@
 
     // SEARCH
 
+    const SEARCH_PLACEHOLDER = "Search by course or code";
     let searchQuery = $state("");
 
     let filteredCourses = $derived(
@@ -267,22 +268,88 @@
 </svelte:head>
 
 <div class="h-full flex flex-col">
-    <!-- Desktop: Column selector and action buttons -->
+    <!-- Desktop: Column selector, search bar, and action buttons -->
     <div
-        class="mb-3 px-4 flex justify-between items-center flex-shrink-0 hidden lg:flex"
+        class="mb-3 px-4 flex justify-between items-center gap-4 flex-shrink-0 hidden lg:flex"
     >
-        <div class="flex items-center gap-3">
-
-            <button
-                class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium {activeColor} border border-gray-300 hover:bg-opacity-80 transition-colors"
-                class:invisible={!$activeReq.track}
-                onclick={clearFilter}
-                title="Clear filter"
-            >
-                {$activeReq.track}: {$activeReq.req}
-                <span class="text-gray-500 hover:text-gray-700">✕</span>
-            </button>
+        <div class="flex items-center gap-3 {$activeReq.track ? 'flex-shrink-0' : 'flex-1'}">
+            {#if $activeReq.track}
+                <button
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium {activeColor} border border-gray-300 hover:bg-opacity-80 transition-colors"
+                    onclick={clearFilter}
+                    title="Clear filter"
+                >
+                    {$activeReq.track}: {$activeReq.req}
+                    <span class="text-gray-500 hover:text-gray-700">✕</span>
+                </button>
+            {:else}
+                <div class="relative w-full max-w-md">
+                    <input
+                        type="text"
+                        bind:value={searchQuery}
+                        placeholder={SEARCH_PLACEHOLDER}
+                        class="w-full px-4 py-1 pl-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                    <svg
+                        class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                    </svg>
+                    {#if searchQuery}
+                        <button
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                            onclick={() => (searchQuery = "")}
+                            title="Clear search"
+                        >
+                            ✕
+                        </button>
+                    {/if}
+                </div>
+            {/if}
         </div>
+
+        {#if $activeReq.track}
+            <div class="flex-1 max-w-md">
+                <div class="relative">
+                    <input
+                        type="text"
+                        bind:value={searchQuery}
+                        placeholder={SEARCH_PLACEHOLDER}
+                        class="w-full px-4 py-1 pl-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                    <svg
+                        class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                    </svg>
+                    {#if searchQuery}
+                        <button
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                            onclick={() => (searchQuery = "")}
+                            title="Clear search"
+                        >
+                            ✕
+                        </button>
+                    {/if}
+                </div>
+            </div>
+        {/if}
 
         <div class="flex gap-2">
             <button
@@ -344,40 +411,6 @@
                 </button>
             </div>
         {/if}
-    </div>
-
-    <!-- Desktop: Search bar -->
-    <div class="mb-3 px-4 flex-shrink-0 hidden lg:block">
-        <div class="relative">
-            <input
-                type="text"
-                bind:value={searchQuery}
-                placeholder="Search courses by name or code"
-                class="w-full px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            />
-            <svg
-                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-            </svg>
-            {#if searchQuery}
-                <button
-                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    onclick={() => (searchQuery = "")}
-                    title="Clear search"
-                >
-                    ✕
-                </button>
-            {/if}
-        </div>
     </div>
 
     <!-- Mobile: Column selector and action buttons -->
@@ -462,8 +495,8 @@
             <input
                 type="text"
                 bind:value={searchQuery}
-                placeholder="Search courses by name or code"
-                class="w-full px-3 py-2 pl-9 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder={SEARCH_PLACEHOLDER}
+                class="w-full px-3 py-2 pl-9 text-sm rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
             <svg
                 class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
