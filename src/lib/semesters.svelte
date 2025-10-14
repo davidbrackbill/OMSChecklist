@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import Semester from "./semester.svelte";
     import SectionContainer from "./section-container.svelte";
@@ -9,7 +9,6 @@
     const maxSemesters = 20;
 
     let pinned = $state(getFromStorage("pinnedSemesters", {}));
-
 
     function updateSemesters(activeCourses, pinnedData) {
         if (!activeCourses.size) {

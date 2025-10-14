@@ -8,8 +8,6 @@
 
     let { track } = $props();
 
-
-
     function divideCourses(activeCourses, _) {
         const courses = keys.map(() => []);
         const electiveIndex = keys.findIndex((key) => key === "Electives");
@@ -44,9 +42,9 @@
     // Dynamic content
     let requirements = $derived(trackRequirements[track]);
     let keys = $derived(Object.keys(requirements));
-    let reqSets = $derived(keys.map(
-        (category) => new Set(requirements[category]["courses"]),
-    ));
+    let reqSets = $derived(
+        keys.map((category) => new Set(requirements[category]["courses"])),
+    );
     let reqCourses = $derived(divideCourses($activeCourses, $activeSections));
     // Dynamic CSS
     let titleColor = $derived(`text-${trackTailwindColors[track]}-500`);

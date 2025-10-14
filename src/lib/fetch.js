@@ -1,5 +1,5 @@
 
-async function getHub() {
+export async function getHub() {
   const url = 'https://www.omshub.org';
   const selector = '#__NEXT_DATA__';
 
@@ -7,9 +7,11 @@ async function getHub() {
   if (!res.ok)
     throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
 
-  const dom = new DOMParser().parseFromString(await res.text(), 'text/html');
+  // Use jsdom for Node.js compatibility
+  const { JSDOM } = await import('jsdom');
+  const dom = new JSDOM(await res.text());
   const data = JSON.parse(
-    dom.querySelector(selector)
+    dom.window.document.querySelector(selector)
       ?.textContent)
     ?.props
     ?.pageProps
@@ -21,7 +23,7 @@ async function getHub() {
   return data;
 }
 
-async function getCentral() {
+export async function getCentral() {
   const url = "https://www.omscentral.com";
   const selector = 'body > script:last-of-type';
   const regex_idx = 1;
@@ -31,8 +33,10 @@ async function getCentral() {
   if (!res.ok)
     throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
 
-  const dom = new DOMParser().parseFromString(await res.text(), 'text/html');
-  const sanitized = dom.querySelector(selector)
+  // Use jsdom for Node.js compatibility
+  const { JSDOM } = await import('jsdom');
+  const dom = new JSDOM(await res.text());
+  const sanitized = dom.window.document.querySelector(selector)
     ?.textContent
     .match(/__next_f\.push\(\[(.*?)\]\);?/s)[regex_idx]
     .replace(/^1,\s*"5:\s*/, '')
@@ -48,7 +52,7 @@ async function getCentral() {
   return data;
 }
 
-function parseHub(hubData) {
+export function parseHub(hubData) {
   return Object.entries(hubData).map(([id, data]) => ({
     id,
     name: data.name,
@@ -62,7 +66,7 @@ function parseHub(hubData) {
   }));
 }
 
-function parseCentral(centralData) {
+export function parseCentral(centralData) {
   return centralData.map(course => ({
     id: course.codes[0],
     name: course.name,
@@ -76,7 +80,7 @@ function parseCentral(centralData) {
   }));
 }
 
-function mergeCourses(hubData, centralData) {
+export function mergeCourses(hubData, centralData) {
 
   const courses = new Map();
   hubData.forEach(course => {
@@ -96,7 +100,7 @@ function mergeCourses(hubData, centralData) {
     if (total === 0) return 0;
     return (a * wa + b * wb) / total;
   };
-  
+
 
   centralData.forEach(centralCourse => {
     const existing = courses.get(centralCourse.id);
@@ -105,16 +109,45 @@ function mergeCourses(hubData, centralData) {
       return;
     }
 
+    // Prefer Central class info to Hub's
+    const name = centralCourse.name || existing.name;
+    const aliases = Array.from(new Set([...existing.aliases, ...centralCourse.aliases]));
+    const codes = Array.from(new Set([...existing.codes, ...centralCourse.codes]));
+
+    // Combine Central + Hub ratings
+    const numReviews = (existing.numReviews || 0) + (centralCourse.numReviews || 0);
+    const rating = clamp(
+      weighted(
+        existing.rating,
+        centralCourse.rating,
+        existing.numReviews,
+        centralCourse.numReviews)
+    );
+    const difficulty = clamp(
+      weighted(
+        existing.difficulty,
+        centralCourse.difficulty,
+        existing.numReviews,
+        centralCourse.numReviews)
+    );
+    const workload = weighted(
+      existing.workload,
+      centralCourse.workload,
+      existing.numReviews,
+      centralCourse.numReviews
+    );
+
+
     const merged = {
       id: centralCourse.id,
-      name: centralCourse.name || existing.name,
-      aliases: Array.from(new Set([...existing.aliases, ...centralCourse.aliases])),
+      name,
+      aliases,
       description: centralCourse.description,
-      codes: Array.from(new Set([...existing.codes, ...centralCourse.codes])),
-      numReviews: (existing.numReviews || 0) + (centralCourse.numReviews || 0),
-      rating: clamp(weighted(existing.rating, centralCourse.rating, existing.numReviews, centralCourse.numReviews)),
-      difficulty: clamp(weighted(existing.difficulty, centralCourse.difficulty, existing.numReviews, centralCourse.numReviews)),
-      workload: weighted(existing.workload, centralCourse.workload, existing.numReviews, centralCourse.numReviews)
+      codes,
+      numReviews,
+      rating,
+      difficulty,
+      workload,
     };
 
     courses.set(centralCourse.id, merged);

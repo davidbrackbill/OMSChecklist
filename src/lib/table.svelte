@@ -1,6 +1,6 @@
 <!-- Right-most table for selecting courses -->
 <script>
-    import { courses } from "./fallback.js";
+    import { courses } from "./data.js";
     import {
         activeCourses,
         toggleCourse,
@@ -14,6 +14,8 @@
     import { specs } from "./data.js";
     import { trackTailwindColors } from "./icon.js";
     const arrow = "/arrow.svg";
+
+    let showTable = $state(true);
 
     // NAMES
 
@@ -65,7 +67,9 @@
             sortDirection = sortDirection === "asc" ? "desc" : "asc";
         } else {
             sortColumn = column;
-            sortDirection = ascendingDefaultColumns.has(column) ? "asc" : "desc";
+            sortDirection = ascendingDefaultColumns.has(column)
+                ? "asc"
+                : "desc";
         }
         setToStorage("tableSort", {
             column: sortColumn,
@@ -87,26 +91,31 @@
                 course.name.toLowerCase().includes(query) ||
                 course.id.toLowerCase().includes(query)
             );
-        })
+        }),
     );
 
-    let sortedCourses = $derived([...filteredCourses].sort((A, B) => {
-        const a = A[sortColumn];
-        const b = B[sortColumn];
+    let sortedCourses = $derived(
+        [...filteredCourses].sort((A, B) => {
+            const a = A[sortColumn];
+            const b = B[sortColumn];
 
-        const comparison = typeof a === "string" ? a.localeCompare(b) : a - b;
+            const comparison =
+                typeof a === "string" ? a.localeCompare(b) : a - b;
 
-        return sortDirection === "asc" ? comparison : -comparison;
-    }));
+            return sortDirection === "asc" ? comparison : -comparison;
+        }),
+    );
 
     // Check if there are any visible courses after filtering
     let hasVisibleCourses = $derived(
-        sortedCourses.some((course) => $activeRows.has(course.id))
+        sortedCourses.some((course) => $activeRows.has(course.id)),
     );
 
     // CSS
 
-    let activeColor = $derived(`bg-${trackTailwindColors[$activeReq.track] || "gray"}-100`);
+    let activeColor = $derived(
+        `bg-${trackTailwindColors[$activeReq.track] || "gray"}-100`,
+    );
 
     // Mobile column selection
     let showColumnMenu = $state(false);
@@ -120,8 +129,6 @@
         }
         visibleColumns = visibleColumns; // Trigger reactivity
     }
-
-    // No more JS column hiding - using CSS instead
 
     function clearFilter() {
         activeReq.set({});
@@ -263,6 +270,46 @@
     }
 </script>
 
+{#snippet columnModal()}
+    <!-- Modal overlay -->
+    <div
+        class="fixed inset-0 bg-black/50 z-30"
+        onclick={() => (showColumnMenu = false)}
+    ></div>
+
+    <!-- Modal content -->
+    <div
+        class="fixed inset-x-4 top-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg border border-gray-300 z-40 p-4"
+    >
+        <div class="text-center mb-4">
+            <h3 class="font-medium text-gray-900 mb-1">Select Columns</h3>
+            <p class="text-xs text-gray-600">Click to toggle columns</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 mb-4">
+            {#each columns as column}
+                <button
+                    class="px-3 py-2 rounded-lg text-sm font-medium transition-colors border {visibleColumns.has(
+                        column,
+                    )
+                        ? 'bg-gray-100 border-gray-300 text-gray-900'
+                        : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}"
+                    onclick={() => toggleColumn(column)}
+                >
+                    {columnLabels[column]}
+                </button>
+            {/each}
+        </div>
+
+        <button
+            class="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-900 py-2 rounded-lg text-sm font-medium transition-colors"
+            onclick={() => (showColumnMenu = false)}
+        >
+            Done
+        </button>
+    </div>
+{/snippet}
+
 <svelte:head>
     <link rel="preload" href={arrow} as="image" type="image/svg+xml" />
 </svelte:head>
@@ -272,7 +319,11 @@
     <div
         class="mb-3 px-4 flex justify-between items-center gap-4 flex-shrink-0 hidden lg:flex"
     >
-        <div class="flex items-center gap-3 {$activeReq.track ? 'flex-shrink-0' : 'flex-1'}">
+        <div
+            class="flex items-center gap-3 {$activeReq.track
+                ? 'flex-shrink-0'
+                : 'flex-1'}"
+        >
             {#if $activeReq.track}
                 <button
                     class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium {activeColor} border border-gray-300 hover:bg-opacity-80 transition-colors"
@@ -371,239 +422,203 @@
         </div>
 
         {#if showColumnMenu}
-            <!-- Modal overlay -->
-            <div
-                class="fixed inset-0 bg-black/50 z-30"
-                onclick={() => (showColumnMenu = false)}
-            ></div>
-
-            <!-- Modal content -->
-            <div
-                class="fixed inset-x-4 top-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg border border-gray-300 z-40 p-4"
-            >
-                <div class="text-center mb-4">
-                    <h3 class="font-medium text-gray-900 mb-1">
-                        Select Columns
-                    </h3>
-                    <p class="text-xs text-gray-600">Click to toggle columns</p>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2 mb-4">
-                    {#each columns as column}
-                        <button
-                            class="px-3 py-2 rounded-lg text-sm font-medium transition-colors border {visibleColumns.has(
-                                column,
-                            )
-                                ? 'bg-gray-100 border-gray-300 text-gray-900'
-                                : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}"
-                            onclick={() => toggleColumn(column)}
-                        >
-                            {columnLabels[column]}
-                        </button>
-                    {/each}
-                </div>
-
-                <button
-                    class="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-900 py-2 rounded-lg text-sm font-medium transition-colors"
-                    onclick={() => (showColumnMenu = false)}
-                >
-                    Done
-                </button>
-            </div>
+            {@render columnModal()}
         {/if}
     </div>
 
     <!-- Mobile: Column selector and action buttons -->
-    <div class="lg:hidden px-4 mb-2 flex justify-between items-center gap-2">
-        <div class="flex items-center gap-2">
-            <button
-                class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 border border-gray-300 hover:bg-gray-200 transition-colors"
-                onclick={() => (showColumnMenu = !showColumnMenu)}
-            >
-                <span class="text-xs">☰</span>
-                {visibleColumns.size}
-            </button>
-
-            <button
-                class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium {activeColor} border border-gray-300 hover:bg-opacity-80 transition-colors"
-                class:invisible={!$activeReq.track}
-                onclick={clearFilter}
-                title="Clear filter"
-            >
-                {$activeReq.track}: {$activeReq.req}
-                <span class="text-gray-500 hover:text-gray-700">✕</span>
-            </button>
-        </div>
-
-        <div class="flex gap-1">
-            <button
-                class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 border border-gray-300 hover:bg-red-100 transition-colors"
-                onclick={clearCourses}
-                title="Clear course selections"
-            >
-                Clear
-                <span class="text-gray-500 hover:text-gray-700">✕</span>
-            </button>
-        </div>
-
-        {#if showColumnMenu}
-            <!-- Modal overlay -->
-            <div
-                class="fixed inset-0 bg-black/50 z-30"
-                onclick={() => (showColumnMenu = false)}
-            ></div>
-
-            <!-- Modal content -->
-            <div
-                class="fixed inset-x-4 top-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg border border-gray-300 z-40 p-4"
-            >
-                <div class="text-center mb-4">
-                    <h3 class="font-medium text-gray-900 mb-1">
-                        Select Columns
-                    </h3>
-                    <p class="text-xs text-gray-600">Tap to toggle columns</p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 mb-4">
-                    {#each columns as column}
-                        <button
-                            class="px-3 py-2 rounded-lg text-sm font-medium transition-colors border {visibleColumns.has(
-                                column,
-                            )
-                                ? 'bg-gray-100 border-gray-300 text-gray-900'
-                                : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'}"
-                            onclick={() => toggleColumn(column)}
-                        >
-                            {columnLabels[column]}
-                        </button>
-                    {/each}
-                </div>
+    {#if showTable}
+        <div
+            class="lg:hidden px-4 mb-2 flex justify-between items-center gap-2"
+        >
+            <div class="flex items-center gap-2">
+                <button
+                    class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 border border-gray-300 hover:bg-gray-200 transition-colors"
+                    onclick={() => (showColumnMenu = !showColumnMenu)}
+                >
+                    <span class="text-xs">☰</span>
+                    {visibleColumns.size}
+                </button>
 
                 <button
-                    class="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-900 py-2 rounded-lg text-sm font-medium transition-colors"
-                    onclick={() => (showColumnMenu = false)}
+                    class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium {activeColor} border border-gray-300 hover:bg-opacity-80 transition-colors"
+                    class:invisible={!$activeReq.track}
+                    onclick={clearFilter}
+                    title="Clear filter"
                 >
-                    Done
+                    {$activeReq.track}: {$activeReq.req}
+                    <span class="text-gray-500 hover:text-gray-700">✕</span>
                 </button>
             </div>
-        {/if}
-    </div>
 
-    <!-- Mobile: Search bar -->
-    <div class="lg:hidden px-4 mb-2 flex-shrink-0">
-        <div class="relative">
-            <input
-                type="text"
-                bind:value={searchQuery}
-                placeholder={SEARCH_PLACEHOLDER}
-                class="w-full px-3 py-2 pl-9 text-sm rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            />
-            <svg
-                class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-            >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-            </svg>
-            {#if searchQuery}
+            <div class="flex gap-1">
                 <button
-                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-sm"
-                    onclick={() => (searchQuery = "")}
-                    title="Clear search"
+                    class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 border border-gray-300"
+                    onclick={() => (showTable = !showTable)}
+                    title="Hide table popup"
                 >
-                    ✕
+                    Hide Table ↓
                 </button>
+                <button
+                    class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 border border-gray-300 hover:bg-red-100 transition-colors"
+                    onclick={clearCourses}
+                    title="Clear course selections"
+                >
+                    Clear
+                    <span class="text-gray-500 hover:text-gray-700">✕</span>
+                </button>
+            </div>
+
+            {#if showColumnMenu}
+                {@render columnModal()}
             {/if}
         </div>
-    </div>
 
-    <div class="block px-4 flex-1 min-h-0 overflow-y-auto">
-        <table class="w-full rounded-lg shadow">
-            <thead class="sticky top-0">
-                <tr>
-                    {#each columns as column}
-                        <th
-                            class="{activeColor}
-                          first:rounded-tl-lg last:rounded-tr-lg
-                          first:border-l-black last:border-r-black
-                          font-medium text-sm
-                          p-[var(--spacing-sm)] cursor-pointer
-                          whitespace-nowrap overflow-hidden text-ellipsis w-auto
-                          relative
-                          border border-x-gray-400 border-y-black"
-                            class:text-right={rightAlignedColumns.has(column)}
-                            onclick={() => toggleSort(column)}
-                        >
-                            <div class="flex {rightAlignedColumns.has(column) ? 'justify-end' : 'justify-start'} items-center">
-                                {#if !rightAlignedColumns.has(column)}
-                                    {columnLabels[column]}
-                                {/if}
-
-                                <img
-                                    class="sort-arrow {sortColumn === column ? sortDirection : (ascendingDefaultColumns.has(column) ? 'asc' : 'desc')}"
-                                    data-active={sortColumn === column}
-                                    src={arrow}
-                                    alt="Sort direction"
-                                />
-
-                                {#if rightAlignedColumns.has(column)}
-                                    {columnLabels[column]}
-                                {/if}
-                            </div>
-                        </th>
-                    {/each}
-                </tr>
-            </thead>
-            <tbody class="table-body">
-                {#if !hasVisibleCourses}
-                    <tr>
-                        <td colspan={columns.length} class="text-center py-8 text-gray-500 border-b border-gray-200">
-                            No results found
-                        </td>
-                    </tr>
-                {:else}
-                    {#each sortedCourses as course}
-                        {#if $activeRows.has(course.id)}
-                            <tr
-                                class="data-[active=true]:font-semibold > first:td"
-                                data-active={$activeCourses.has(course.id)}
-                            >
-                                {#each columns.slice(0, -1) as column, i}
-                                    <td
-                                        class="table-cell"
-                                        class:text-right={rightAlignedColumns.has(
-                                            column,
-                                        )}
-                                        onclick={() => toggleCourse(course.id)}
-                                        title={typeof course[column] === "number"
-                                            ? course[column].toFixed(1)
-                                            : course[column]}
-                                    >
-                                        {typeof course[column] === "number"
-                                            ? course[column].toFixed(1)
-                                            : course[column] ?? "-"}
-                                    </td>
-                                {/each}
-                                <td class="table-cell text-right" title={course.numReviews}>
-                                    <a
-                                        class="review-link"
-                                        href={reviewURL(course.name)}
-                                        target="_blank">{course.numReviews}</a
-                                    >
-                                </td>
-                            </tr>
-                        {/if}
-                    {/each}
+        <!-- Mobile: Search bar -->
+        <div class="lg:hidden px-4 mb-2 flex-shrink-0">
+            <div class="relative">
+                <input
+                    type="text"
+                    bind:value={searchQuery}
+                    placeholder={SEARCH_PLACEHOLDER}
+                    class="w-full px-3 py-2 pl-9 text-sm rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                />
+                <svg
+                    class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                </svg>
+                {#if searchQuery}
+                    <button
+                        class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-sm"
+                        onclick={() => (searchQuery = "")}
+                        title="Clear search"
+                    >
+                        ✕
+                    </button>
                 {/if}
-            </tbody>
-        </table>
-    </div>
+            </div>
+        </div>
+
+        <div class="block px-4 flex-1 min-h-0 overflow-y-auto">
+            <table class="w-full rounded-lg shadow">
+                <thead class="sticky top-0">
+                    <tr>
+                        {#each columns as column}
+                            <th
+                                class="{activeColor}
+                            first:rounded-tl-lg last:rounded-tr-lg
+                            first:border-l-black last:border-r-black
+                            font-medium text-sm
+                            p-[var(--spacing-sm)] cursor-pointer
+                            whitespace-nowrap overflow-hidden text-ellipsis w-auto
+                            relative
+                            border border-x-gray-400 border-y-black"
+                                class:text-right={rightAlignedColumns.has(
+                                    column,
+                                )}
+                                onclick={() => toggleSort(column)}
+                            >
+                                <div
+                                    class="flex {rightAlignedColumns.has(column)
+                                        ? 'justify-end'
+                                        : 'justify-start'} items-center"
+                                >
+                                    {#if !rightAlignedColumns.has(column)}
+                                        {columnLabels[column]}
+                                    {/if}
+
+                                    <img
+                                        class="sort-arrow {sortColumn === column
+                                            ? sortDirection
+                                            : ascendingDefaultColumns.has(
+                                                    column,
+                                                )
+                                              ? 'asc'
+                                              : 'desc'}"
+                                        data-active={sortColumn === column}
+                                        src={arrow}
+                                        alt="Sort direction"
+                                    />
+
+                                    {#if rightAlignedColumns.has(column)}
+                                        {columnLabels[column]}
+                                    {/if}
+                                </div>
+                            </th>
+                        {/each}
+                    </tr>
+                </thead>
+                <tbody class="table-body">
+                    {#if !hasVisibleCourses}
+                        <tr>
+                            <td
+                                colspan={columns.length}
+                                class="text-center py-8 text-gray-500 border-b border-gray-200"
+                            >
+                                No results found
+                            </td>
+                        </tr>
+                    {:else}
+                        {#each sortedCourses as course}
+                            {#if $activeRows.has(course.id)}
+                                <tr
+                                    class="data-[active=true]:font-semibold > first:td"
+                                    data-active={$activeCourses.has(course.id)}
+                                >
+                                    {#each columns.slice(0, -1) as column, i}
+                                        <td
+                                            class="table-cell"
+                                            class:text-right={rightAlignedColumns.has(
+                                                column,
+                                            )}
+                                            onclick={() =>
+                                                toggleCourse(course.id)}
+                                            title={typeof course[column] ===
+                                            "number"
+                                                ? course[column].toFixed(1)
+                                                : course[column]}
+                                        >
+                                            {typeof course[column] === "number"
+                                                ? course[column].toFixed(1)
+                                                : (course[column] ?? "-")}
+                                        </td>
+                                    {/each}
+                                    <td
+                                        class="table-cell text-right"
+                                        title={course.numReviews}
+                                    >
+                                        <a
+                                            class="review-link"
+                                            href={reviewURL(course.name)}
+                                            target="_blank"
+                                            >{course.numReviews}</a
+                                        >
+                                    </td>
+                                </tr>
+                            {/if}
+                        {/each}
+                    {/if}
+                </tbody>
+            </table>
+        </div>
+    {:else}
+        <button
+            class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 border border-gray-300"
+            onclick={() => (showTable = !showTable)}
+            title="Show table popup"
+        >
+            Show Table ↑
+        </button>
+    {/if}
 </div>
 
 <style>

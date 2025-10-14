@@ -47,7 +47,7 @@ function saveSetToStorage(key, set) {
 
 // Initialize stores with localStorage data
 export const activeCourses = writable(getSetFromStorage('activeCourses', new Set()));
-export const activeSections = writable(getSetFromStorage('activeSections', new Set(["Machine Learning"])));
+export const activeSections = writable(getSetFromStorage('activeSections', new Set([])));
 export const pinnedSections = writable(getSetFromStorage('pinnedSections', new Set()));
 
 // Subscribe to changes and save to localStorage

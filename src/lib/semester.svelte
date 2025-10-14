@@ -1,5 +1,5 @@
 <script>
-    import { courses } from "./fallback.js";
+    import { courses } from "./data.js";
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
     import Tooltip from "./tooltip.svelte";
@@ -20,8 +20,8 @@
         pinned = $bindable(),
         flipDurationMs = 100,
         dropTargetStyle = {
-        "box-shadow": "var(--shadow-drop-target)",
-    }
+            "box-shadow": "var(--shadow-drop-target)",
+        },
     } = $props();
 
     /* Svelte-dnd */
@@ -79,7 +79,7 @@
         >
             {#each items as item (item.id)}
                 <div
-                    class="course-item hover:border rounded-lg "
+                    class="course-item hover:border rounded-lg"
                     animate:flip={{ duration: flipDurationMs }}
                 >
                     {courses[item.code]["name"]}
@@ -88,24 +88,26 @@
         </section>
         <Tooltip multiline={true} position="bottom-right">
             <div class="w-40 flex-col content-center justify-center">
-              <div class="font-semibold mb-1 text-center">
-                  Semester {index + 1}
-              </div>
-              <div class="mb-1 text-center">
-                  {getDifficulty(items)}
-                  average difficulty {getDifficultyEmoji(
-                      getDifficulty(items),
-                  )}
-              </div>
-              <div class="text-center">
-                  {getWorkload(items)}
-                  hours per week {getWorkloadEmoji(getWorkload(items))}
-              </div>
+                <div class="font-semibold mb-1 text-center">
+                    Semester {index + 1}
+                </div>
+                <div class="mb-1 text-center">
+                    {getDifficulty(items)}
+                    average difficulty {getDifficultyEmoji(
+                        getDifficulty(items),
+                    )}
+                </div>
+                <div class="text-center">
+                    {getWorkload(items)}
+                    hours per week {getWorkloadEmoji(getWorkload(items))}
+                </div>
             </div>
         </Tooltip>
     </div>
     <div class="semester-stats flex items-center gap-1 text-xs -mt-1">
-        <div>{getDifficultyEmoji(getDifficulty(items))}{getDifficulty(items)}</div>
+        <div>
+            {getDifficultyEmoji(getDifficulty(items))}{getDifficulty(items)}
+        </div>
         <div>{getWorkloadEmoji(getWorkload(items))}{getWorkload(items)}</div>
     </div>
 </div>

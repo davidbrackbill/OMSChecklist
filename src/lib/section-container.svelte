@@ -14,7 +14,7 @@
 </script>
 
 <div class="track-container">
-    <h2 
+    <h2
         class="font-medium text-2xl text-center cursor-pointer
         transition-opacity flex items-center justify-center gap-2 mb-2
         hover:opacity-80
@@ -36,8 +36,7 @@
         </div>
         {name}
     </h2>
-    <div class="flex flex-wrap justify-center mx-2 track-content">
+    <div class="flex flex-wrap justify-center track-content">
         {@render children?.()}
     </div>
 </div>
-
