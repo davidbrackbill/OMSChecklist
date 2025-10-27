@@ -79,7 +79,7 @@
 
     // SEARCH
 
-    const SEARCH_PLACEHOLDER = "Search by course or code";
+    const SEARCH_PLACEHOLDER = "Search by course, code, or alias";
     let searchQuery = $state("");
 
     let filteredCourses = $derived(
@@ -89,7 +89,10 @@
             const query = searchQuery.toLowerCase();
             return (
                 course.name.toLowerCase().includes(query) ||
-                course.id.toLowerCase().includes(query)
+                course.id.toLowerCase().includes(query) ||
+                (course.aliases && course.aliases.some(alias =>
+                    alias.toLowerCase().includes(query)
+                ))
             );
         }),
     );
