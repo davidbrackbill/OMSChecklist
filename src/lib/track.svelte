@@ -51,7 +51,7 @@
 </script>
 
 <SectionContainer name={track} css={titleColor}>
-    {#each Object.values(requirements) as { category: req, count }, i}
-        <Req {track} {req} {count} listed={reqCourses[i]} />
+    {#each Object.values(requirements) as { category: req, count, tooltip }, i}
+        <Req {track} {req} {count} {tooltip} listed={reqCourses[i]} />
     {/each}
 </SectionContainer>
