@@ -2087,33 +2087,6 @@ export const specs = {
         "CS-6750"
       ])
     },
-    "Directives": {
-      "category": "Directives",
-      "count": 3,
-      "courses": new Set([
-        "CS-6010",
-        "CS-6320",
-        "CS-6435",
-        "CS-6455",
-        "CS-6457",
-        "CS-6460",
-        "CS-6465",
-        "CS-6470",
-        "CS-6795",
-        "CS-7465",
-        "CS-7467",
-        "CS-7790",
-        "CS-6440",
-        "CS-6730",
-        "CS-6763",
-        "CS-6770",
-        "CS-7450",
-        "CS-7451",
-        "CS-7460",
-        "CS-7470",
-        "CS-7632"
-      ])
-    },
     "Design": {
       "category": "Design",
       "count": 1,
@@ -2136,6 +2109,34 @@ export const specs = {
       "category": "Interaction",
       "count": 1,
       "courses": new Set([
+        "CS-6440",
+        "CS-6730",
+        "CS-6763",
+        "CS-6770",
+        "CS-7450",
+        "CS-7451",
+        "CS-7460",
+        "CS-7470",
+        "CS-7632"
+      ])
+    },
+    "HCI Elective": {
+      "category": "HCI Elective",
+      "count": 1,
+      "tooltip": "Pick 1 additional course from Design or Interaction. HCI requires 3 total from these sub-areas.",
+      "courses": new Set([
+        "CS-6010",
+        "CS-6320",
+        "CS-6435",
+        "CS-6455",
+        "CS-6457",
+        "CS-6460",
+        "CS-6465",
+        "CS-6470",
+        "CS-6795",
+        "CS-7465",
+        "CS-7467",
+        "CS-7790",
         "CS-6440",
         "CS-6730",
         "CS-6763",

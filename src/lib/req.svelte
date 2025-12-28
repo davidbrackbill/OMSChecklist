@@ -5,8 +5,9 @@
     import { toggleCourse, toggleRows, activeReq } from "./state.js";
     import { courses } from "./data.js";
     import { trackTailwindColors } from "./icon.js";
+    import Tooltip from "./tooltip.svelte";
 
-    let { track, req, count, listed } = $props();
+    let { track, req, count, tooltip, listed } = $props();
 
     // Dynamic content
     let isCompleted = $derived(listed?.length === count);
@@ -30,10 +31,18 @@
     onclick={() => toggleRows(track, req)}
 >
     <div
-        class="flex items-center justify-center gap-2 cursor-pointer
+        class="flex items-center justify-center gap-1 cursor-pointer
     text-base text-shadow-lg pt-[--spacing-xs] pb-[--spacing-sm]"
     >
         {req}&nbsp;{reqCount}
+        {#if tooltip}
+            <span class="relative group" onclick={stopPropagation(() => {})}>
+                <span class="inline-flex items-center justify-center w-4 h-4 text-xs text-gray-500 hover:text-gray-700 rounded-full border border-gray-400 hover:border-gray-600">i</span>
+                <Tooltip multiline={true}>
+                    <div class="w-48 text-center">{tooltip}</div>
+                </Tooltip>
+            </span>
+        {/if}
     </div>
     <div
         data-active={isActive}
