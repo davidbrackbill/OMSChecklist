@@ -41,6 +41,15 @@ export const trackIcons = {
     "Semesters": "/favicon.webp",
 };
 
+export const trackUrls = {
+    "Machine Learning": "https://omscs.gatech.edu/specialization-machine-learning",
+    "Computer Graphics": "https://omscs.gatech.edu/specialization-computer-graphics",
+    "Robotics": "https://omscs.gatech.edu/specialization-computational-perception-and-robotics",
+    "Computing Systems": "https://omscs.gatech.edu/specialization-computing-systems",
+    "Human Computer Interaction": "https://omscs.gatech.edu/specialization-human-computer-interaction",
+    "Artificial Intelligence": "https://omscs.gatech.edu/specialization-interactive-intelligence",
+};
+
 // Generate CSS color styles for each track
 export function generateTrackColorStyles(selector, property = 'color') {
     return trackNames.map(track => 

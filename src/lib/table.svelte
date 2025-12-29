@@ -408,20 +408,20 @@
 
         <div class="flex gap-2">
             <button
-                class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-gray-100 border border-gray-300 hover:bg-gray-200 transition-colors"
-                onclick={exportData}
-                title="Export currently shown tabs as JSON"
-            >
-                📄 Export as JSON
-            </button>
-
-            <button
                 class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-gray-100 border border-gray-300 hover:bg-red-100 transition-colors"
                 onclick={clearCourses}
                 title="Clear course selections"
             >
                 Clear Courses
                 <span class="text-gray-500 hover:text-gray-700">✕</span>
+            </button>
+
+            <button
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium bg-gray-100 border border-gray-300 hover:bg-gray-200 transition-colors"
+                onclick={exportData}
+                title="Export currently shown tabs as JSON"
+            >
+                📄 Export as JSON
             </button>
         </div>
 

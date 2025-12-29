@@ -10,6 +10,18 @@
     import { trackIcons } from "./icon.js";
     const images = trackIcons;
 
+    let showDropdown = $state(false);
+
+    const usefulLinks = [
+        { name: "OMSCS Homepage", url: "https://omscs.gatech.edu/" },
+        { name: "Degree Requirements", url: "https://omscs.gatech.edu/degree-requirements" },
+        { name: "Current Courses", url: "https://omscs.gatech.edu/current-courses" },
+        { name: "Specializations", url: "https://omscs.gatech.edu/program-info/specializations" },
+        { name: "OMSCentral", url: "https://www.omscentral.com/" },
+        { name: "OMSHub", url: "https://www.omshub.org/" },
+        { name: "r/OMSCS", url: "https://www.reddit.com/r/OMSCS/" },
+    ];
+
     // Helper function for icon sizing
     function getIconClasses(key, isMobile = false) {
         const baseSize = isMobile ? "w-6 h-6" : "w-7 h-7";
@@ -96,25 +108,63 @@
     </div>
 
     <!-- Desktop: Right side controls -->
-    <div class="hidden lg:flex items-center gap-4 ml-auto">
-        <div class="flex items-center gap-2 ml-2 mr-2">
-            <div class="relative group">
-                <div class="text-xs mr-2 text-gray-400 cursor-help">
-                    Reviews last updated: 10/14/25
-                </div>
-                <Tooltip text="Aggregates OMSHub and OMSCentral" />
+    <div class="hidden lg:flex items-center gap-3 ml-auto">
+        <div class="relative group">
+            <div class="text-xs text-gray-400 cursor-help">
+                Reviews last updated: 10/14/25
             </div>
-            <div class="relative group">
-                <Tooltip text="Github" />
-                <a
-                    href="https://github.com/davidbrackbill/omscs_spec"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-gray-400 hover:text-gray-600 transition-colors"
+            <Tooltip text="Aggregates OMSHub and OMSCentral" />
+        </div>
+
+        <!-- Useful Links Dropdown -->
+        <div class="relative">
+            <div class="group">
+                <button
+                    class="text-gray-400 hover:text-gray-600 transition-colors flex items-center"
+                    onclick={() => showDropdown = !showDropdown}
+                    onblur={() => setTimeout(() => showDropdown = false, 200)}
                 >
-                    <img src="/github.svg" alt="GitHub" class="w-4 h-4" />
-                </a>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                </button>
+                {#if !showDropdown}
+                    <Tooltip text="Useful Links" />
+                {/if}
             </div>
+            {#if showDropdown}
+                <div class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+                    <div class="py-1">
+                        {#each usefulLinks as link, i}
+                            <a
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                            >
+                                {link.name}
+                            </a>
+                            {#if i < usefulLinks.length - 1}
+                                <hr class="border-gray-200" />
+                            {/if}
+                        {/each}
+                    </div>
+                </div>
+            {/if}
+        </div>
+
+        <div class="relative group">
+            <Tooltip text="Github" />
+            <a
+                href="https://github.com/davidbrackbill/omscs_spec"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-400 hover:text-gray-600 transition-colors flex items-center"
+            >
+                <img src="/github.svg" alt="GitHub" class="w-4 h-4" />
+            </a>
         </div>
     </div>
 </div>
