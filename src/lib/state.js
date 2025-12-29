@@ -1,6 +1,34 @@
 import { writable, get } from 'svelte/store';
 import { specs, course_codes } from "./data.js";
 
+// Migration function to update old specialization names
+function migrateSpecializationNames() {
+	if (typeof window === 'undefined') return;
+
+	const migrations = {
+		"Interactive Intelligence": "Artificial Intelligence"
+	};
+
+	const migrateValue = (value) => {
+		if (typeof value === 'string') return migrations[value] || value;
+		if (Array.isArray(value)) return value.map(v => migrations[v] || v);
+		if (value?.track) return { ...value, track: migrations[value.track] || value.track };
+		return value;
+	};
+
+	['activeSections', 'pinnedSections', 'activeReq'].forEach(key => {
+		try {
+			const stored = localStorage.getItem(key);
+			if (stored) {
+				const migrated = migrateValue(JSON.parse(stored));
+				localStorage.setItem(key, JSON.stringify(migrated));
+			}
+		} catch (e) {}
+	});
+}
+
+migrateSpecializationNames();
+
 export function getFromStorage(key, defaultValue = null) {
 	if (typeof window === 'undefined') return defaultValue;
 

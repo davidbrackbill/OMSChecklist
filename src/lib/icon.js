@@ -2,11 +2,11 @@
 
 export const trackNames = [
     "Machine Learning",
-    "Computer Graphics", 
+    "Computer Graphics",
     "Robotics",
     "Computing Systems",
     "Human Computer Interaction",
-    "Interactive Intelligence",
+    "Artificial Intelligence",
     "Semesters"
 ];
 
@@ -16,7 +16,7 @@ export const trackColors = {
     "Robotics": "var(--color-robotics)",
     "Computing Systems": "var(--color-systems)",
     "Human Computer Interaction": "var(--color-hci)",
-    "Interactive Intelligence": "var(--color-ii)",
+    "Artificial Intelligence": "var(--color-ai)",
     "Semesters": "var(--color-sidebar-bg)",
 };
 
@@ -27,7 +27,7 @@ export const trackTailwindColors = {
     "Robotics": "robotics",
     "Computing Systems": "systems",
     "Human Computer Interaction": "hci",
-    "Interactive Intelligence": "ii",
+    "Artificial Intelligence": "ai",
     "Semesters": "gray",
 };
 
@@ -37,7 +37,7 @@ export const trackIcons = {
     "Robotics": "/robotics.webp",
     "Computing Systems": "/computing-systems.webp",
     "Human Computer Interaction": "/hci.webp",
-    "Interactive Intelligence": "/interactive-intelligence.webp",
+    "Artificial Intelligence": "/artificial-intelligence.webp",
     "Semesters": "/favicon.webp",
 };
 

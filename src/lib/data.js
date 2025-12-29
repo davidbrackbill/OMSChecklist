@@ -1909,9 +1909,10 @@ export const specs = {
         "CS-6400"
       ])
     },
-    "Directives": {
-      "category": "Directives",
+    "Systems Electives": {
+      "category": "Systems Electives",
       "count": 3,
+      "tooltip": "Pick 3 additional courses that count toward the Computing Systems specialization.",
       "courses": new Set([
         "CS-6035",
         "CS-6200",
@@ -1946,6 +1947,7 @@ export const specs = {
     "Electives": {
       "category": "Electives",
       "count": 4,
+      "tooltip": "Any OMSCS courses. Note: Maximum 6 credit hours (2 courses) may have a subject code other than CS or CSE.",
       "courses": course_codes
     }
   },
@@ -1969,25 +1971,6 @@ export const specs = {
       "courses": new Set([
         "CS-6601",
         "CS-7641"
-      ])
-    },
-    "Directives": {
-      "category": "Directives",
-      "count": 3,
-      "courses": new Set([
-        "CS-6475",
-        "CS-6476",
-        "CS-7499",
-        "CS-7636",
-        "CS-7639",
-        "CS-7644",
-        "CS-7650",
-        "CS-7630",
-        "CS-7631",
-        "CS-7633",
-        "CS-7638",
-        "CS-7648",
-        "CS-7649"
       ])
     },
     "Perception": {
@@ -2015,13 +1998,34 @@ export const specs = {
         "CS-7649"
       ])
     },
+    "Robotics Elective": {
+      "category": "Robotics Elective",
+      "count": 1,
+      "tooltip": "Pick 1 additional course from Perception or Robotics. The specialization requires 3 total from these sub-areas.",
+      "courses": new Set([
+        "CS-6475",
+        "CS-6476",
+        "CS-7499",
+        "CS-7636",
+        "CS-7639",
+        "CS-7644",
+        "CS-7650",
+        "CS-7630",
+        "CS-7631",
+        "CS-7633",
+        "CS-7638",
+        "CS-7648",
+        "CS-7649"
+      ])
+    },
     "Electives": {
       "category": "Electives",
       "count": 5,
+      "tooltip": "Any OMSCS courses. Note: Maximum 6 credit hours (2 courses) may have a subject code other than CS or CSE.",
       "courses": course_codes
     }
   },
-  "Interactive Intelligence": {
+  "Artificial Intelligence": {
     "Algorithms": {
       "category": "Algorithms",
       "count": 1,
@@ -2042,9 +2046,10 @@ export const specs = {
         "CS-7641"
       ])
     },
-    "Directives": {
-      "category": "Directives",
+    "AI Electives": {
+      "category": "AI Electives",
       "count": 2,
+      "tooltip": "Pick 2 additional courses that count toward the AI specialization.",
       "courses": new Set([
         "CS-6440",
         "CS-6460",
@@ -2069,6 +2074,7 @@ export const specs = {
     "Electives": {
       "category": "Electives",
       "count": 5,
+      "tooltip": "Any OMSCS courses. Note: Maximum 6 credit hours (2 courses) may have a subject code other than CS or CSE.",
       "courses": course_codes
     }
   },
@@ -2151,6 +2157,7 @@ export const specs = {
     "Electives": {
       "category": "Electives",
       "count": 5,
+      "tooltip": "Any OMSCS courses. Note: Maximum 6 credit hours (2 courses) may have a subject code other than CS or CSE.",
       "courses": course_codes
     }
   },
@@ -2177,9 +2184,10 @@ export const specs = {
         "CSE-6740"
       ])
     },
-    "Directives": {
-      "category": "Directives",
+    "ML Electives": {
+      "category": "ML Electives",
       "count": 3,
+      "tooltip": "Pick 3 courses where at least 1/3 of graded content is Machine Learning based.",
       "courses": new Set([
         "CS-6220",
         "CS-6476",
@@ -2207,6 +2215,7 @@ export const specs = {
     "Electives": {
       "category": "Electives",
       "count": 5,
+      "tooltip": "Any OMSCS courses. Note: Maximum 6 credit hours (2 courses) may have a subject code other than CS or CSE.",
       "courses": course_codes
     }
   },
@@ -2228,9 +2237,10 @@ export const specs = {
         "CS-6515"
       ])
     },
-    "Directives": {
-      "category": "Directives",
+    "Graphics Electives": {
+      "category": "Graphics Electives",
       "count": 3,
+      "tooltip": "Pick 3 additional courses that count toward the Computer Graphics specialization.",
       "courses": new Set([
         "CS-6457",
         "CS-6475",
@@ -2245,6 +2255,7 @@ export const specs = {
     "Electives": {
       "category": "Electives",
       "count": 5,
+      "tooltip": "Any OMSCS courses. Note: Maximum 6 credit hours (2 courses) may have a subject code other than CS or CSE.",
       "courses": course_codes
     }
   }
